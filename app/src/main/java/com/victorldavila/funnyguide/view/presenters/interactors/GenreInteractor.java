@@ -1,13 +1,18 @@
 package com.victorldavila.funnyguide.view.presenters.interactors;
 
+import android.content.Context;
+
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.database.GenreDAO;
 import com.victorldavila.funnyguide.models.Genre;
+import com.victorldavila.funnyguide.models.ResponseTmdb;
 import com.victorldavila.funnyguide.view.OnViewListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmAsyncTask;
 import io.realm.RealmResults;
 import rx.Observable;
 import rx.Observer;
@@ -25,11 +30,12 @@ public class GenreInteractor {
     private GenreDAO genreDAO;
     private Realm realm;
 
-    public GenreInteractor(OnViewListener<Genre> view, FunnyApi api) {
+    public GenreInteractor(Context context, OnViewListener<Genre> view, FunnyApi api) {
         this.view = view;
         this.api = api;
 
-        genreDAO = new GenreDAO();
+        realm.init(context);
+        genreDAO = new GenreDAO(context);
     }
 
     public void bind(){
@@ -41,9 +47,9 @@ public class GenreInteractor {
     }
 
     public Subscription getGenreMovie(){
-        Observable<ArrayList<Genre>> genreResponseObservable = (Observable<ArrayList<Genre>>)api.getPreparedObservable(api.getAPI().getGenreObservable(api.getQueryString()), Genre.class, true, true);
+        Observable<ResponseTmdb> genreResponseObservable = (Observable<ResponseTmdb>)api.getPreparedObservable(api.getAPI().getGenreObservable(api.getQueryString()), Genre.class, true, true);
 
-        return genreResponseObservable.subscribe(new Observer<ArrayList<Genre>>(){
+        return genreResponseObservable.subscribe(new Observer<ResponseTmdb>(){
             @Override
             public void onCompleted(){}
 
@@ -53,15 +59,15 @@ public class GenreInteractor {
             }
 
             @Override
-            public void onNext(ArrayList<Genre> response){
+            public void onNext(ResponseTmdb response){
                 //handle response
-                genreDAO.storeItemList(response);
+                view.onItemList(response.getGenres());
             }
         });
     }
 
-    public void listenGenreDatabase(){
-        realm.where(Genre.class)
+    /*public Subscription listenGenreDatabase(){
+        return realm.where(Genre.class)
                 .findAllAsync()
                 .asObservable()
                 .filter(RealmResults::isLoaded)
@@ -71,14 +77,14 @@ public class GenreInteractor {
                 .subscribe(genres -> {
                     view.onChangeItem(genres);
                 });
-    }
+    }*/
 
-    public Subscription getGenresFromRetrofit() {
+    /*public Subscription getGenresFromRetrofit() {
         return api.getAPI().getGenreObservable(api.getQueryString())
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(genres -> {
-                    return realm.executeTransactionAsync(realm1 -> realm1.copyToRealmOrUpdate(genres));
+                    return realm.executeTransactionAsync(realm1 -> realm1.copyToRealmOrUpdate(genres.getGenres()));
                 }).subscribe();
-    }
+    }*/
 }

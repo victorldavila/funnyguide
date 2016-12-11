@@ -1,5 +1,7 @@
 package com.victorldavila.funnyguide.view.presenters;
 
+import android.content.Context;
+
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.view.OnViewListener;
@@ -21,15 +23,19 @@ public class GenrePresenter implements OnPresenterListener {
     private ArrayList<Subscription> subscriptions;
     private Subscription genreSubscription;
 
-    public GenrePresenter(OnViewListener<Genre> view, FunnyApi api){
+    public GenrePresenter(Context context, OnViewListener<Genre> view, FunnyApi api){
         this.view = view;
-        interactor = new GenreInteractor(view, api);
+
+        subscriptions = new ArrayList<Subscription>();
+        interactor = new GenreInteractor(context, view, api);
     }
 
     @Override
     public void onCreate() {
-        interactor.bind();
-        interactor.listenGenreDatabase();
+        if(interactor != null) {
+            interactor.bind();
+            getGenre();
+        }
     }
 
     @Override
@@ -45,12 +51,13 @@ public class GenrePresenter implements OnPresenterListener {
     @Override
     public void onDestroy() {
         rxUnSubscribe();
-        interactor.unbind();
+        if(interactor != null)
+            interactor.unbind();
     }
 
     public void getGenre(){
         rxUnSubscribe(genreSubscription);
-        genreSubscription = interactor.getGenresFromRetrofit();
+        genreSubscription = interactor.getGenreMovie();
         subscriptions.add(genreSubscription);
     }
 

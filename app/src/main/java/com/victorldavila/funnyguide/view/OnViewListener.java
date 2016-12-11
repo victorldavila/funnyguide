@@ -1,6 +1,6 @@
 package com.victorldavila.funnyguide.view;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.RealmResults;
 
@@ -9,7 +9,6 @@ import io.realm.RealmResults;
  */
 
 public interface OnViewListener<T> {
-    void onItemList(ArrayList<T> results);
-    void onChangeItem(RealmResults result);
+    void onItemList(List<T> results);
     void onError(String error);
 }

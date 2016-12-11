@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.victorldavila.funnyguide.R;
-import com.victorldavila.funnyguide.view.fragments.MovieFragment;
+import com.victorldavila.funnyguide.view.fragments.GenreFragment;
 
 /**
  * Created by victo on 10/12/2016.
@@ -38,19 +38,19 @@ public class MainPresenter {
         switch (id) {
             case R.id.action_movies:
                 fragmentName = MOVIE_NAME;
-                fragment = MovieFragment.newInstance();
+                fragment = GenreFragment.newInstance();
                 break;
             case R.id.action_series:
                 fragmentName = SERIES_NAME;
-                fragment = MovieFragment.newInstance();
+                fragment = GenreFragment.newInstance();
                 break;
             case R.id.action_profile:
                 fragmentName = PROFILE_NAME;
-                fragment = MovieFragment.newInstance();
+                fragment = GenreFragment.newInstance();
                 break;
             default:
                 fragmentName = MOVIE_NAME;
-                fragment = MovieFragment.newInstance();
+                fragment = GenreFragment.newInstance();
                 break;
         }
 

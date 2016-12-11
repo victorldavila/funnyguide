@@ -1,0 +1,27 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.victorldavila.funnyguide.view.fragments.GenreFragment">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_movies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout_genres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabBackground="@android:color/white"
+            app:tabMinWidth="?attr/actionBarSize"
+            app:tabTextColor="@android:color/black"
+            android:elevation="6dp"
+            app:tabMode="scrollable"
+            app:tabGravity="center"
+            android:layout_gravity="top" />
+
+    </android.support.v4.view.ViewPager>
+
+</android.support.design.widget.CoordinatorLayout>

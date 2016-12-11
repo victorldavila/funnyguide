@@ -1,5 +1,7 @@
 package com.victorldavila.funnyguide.database;
 
+import android.content.Context;
+
 import com.victorldavila.funnyguide.models.Genre;
 
 import java.util.List;
@@ -12,9 +14,15 @@ import io.realm.Realm;
 
 public class GenreDAO implements OnDAOListener<Genre> {
 
+    private Realm realm;
+
+    public GenreDAO(Context context) {
+        realm.init(context);
+    }
+
     @Override
     public List<Genre> getItemList() {
-        Realm realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
         List<Genre> genreList = realm.copyFromRealm(realm.where(Genre.class).findAll());
         realm.close();
         return genreList;
@@ -32,7 +40,7 @@ public class GenreDAO implements OnDAOListener<Genre> {
 
     @Override
     public void storeItemList(final List<Genre> items) {
-        Realm realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -49,7 +57,7 @@ public class GenreDAO implements OnDAOListener<Genre> {
 
     @Override
     public void clearDatabase() {
-        Realm realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

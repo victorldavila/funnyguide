@@ -2,6 +2,7 @@ package com.victorldavila.funnyguide.api;
 
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Genre;
+import com.victorldavila.funnyguide.models.ResponseTmdb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,5 +19,5 @@ import rx.Observable;
 public interface TmdbAPI {
 
     @GET(FunnyApi.EndPoint.GENRE + "/" + FunnyApi.EndPoint.MOVIE + "/" + FunnyApi.EndPoint.LIST)
-    Observable<ArrayList<Genre>> getGenreObservable( @QueryMap Map<String, String> options);
+    Observable<ResponseTmdb> getGenreObservable(@QueryMap Map<String, String> options);
 }
