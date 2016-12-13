@@ -22,8 +22,6 @@ import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
-    private static final int MAIN_FRAGMENT = 0;
-
     private MainPresenter presenter;
 
     @Override
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         initViews();
 
         presenter = new MainPresenter(this);
-        presenter.fragmentChange(MAIN_FRAGMENT);
+        presenter.fragmentChange(MainPresenter.FIRST_FRAGMENT);
     }
 
     private void initViews() {

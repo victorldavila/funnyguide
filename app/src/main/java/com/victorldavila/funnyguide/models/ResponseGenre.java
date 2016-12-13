@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by victo on 11/12/2016.
  */
 
-public class ResponseTmdb {
+public class ResponseGenre {
 
     private ArrayList<Genre> genres;
 

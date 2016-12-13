@@ -29,6 +29,7 @@ public class FunnyApi {
     public class EndPoint{
         public static final String GENRE = "genre";
         public static final String MOVIE = "movie";
+        public static final String MOVIES = "movies";
         public static final String LIST = "list";
     }
 

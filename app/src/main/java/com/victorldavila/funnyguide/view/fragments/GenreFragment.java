@@ -55,7 +55,7 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
         super.onCreate(savedInstanceState);
 
         FunnyApi api = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
-        presenter = new GenrePresenter(getActivity(), this, api);
+        presenter = new GenrePresenter(this, api);
         presenter.onCreate();
     }
 
@@ -101,9 +101,15 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStart() {
+        super.onStart();
+        if(presenter != null)
+            presenter.getGenre();
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
         if(presenter != null)
             presenter.onDestroy();
     }

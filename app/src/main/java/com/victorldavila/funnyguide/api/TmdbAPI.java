@@ -1,14 +1,11 @@
 package com.victorldavila.funnyguide.api;
 
-import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Genre;
-import com.victorldavila.funnyguide.models.ResponseTmdb;
+import com.victorldavila.funnyguide.models.ResponseGenre;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
@@ -19,5 +16,8 @@ import rx.Observable;
 public interface TmdbAPI {
 
     @GET(FunnyApi.EndPoint.GENRE + "/" + FunnyApi.EndPoint.MOVIE + "/" + FunnyApi.EndPoint.LIST)
-    Observable<ResponseTmdb> getGenreObservable(@QueryMap Map<String, String> options);
+    Observable<ResponseGenre> getGenreObservable(@QueryMap Map<String, String> options);
+
+    @GET(FunnyApi.EndPoint.GENRE + "/{genre_id}" + FunnyApi.EndPoint.MOVIES)
+    Observable<ResponseGenre> getMoviesGenreObservable(@Path("genre_id") int genreId, @QueryMap Map<String, String> options);
 }

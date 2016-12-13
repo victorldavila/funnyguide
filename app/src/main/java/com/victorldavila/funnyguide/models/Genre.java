@@ -10,7 +10,6 @@ import io.realm.annotations.PrimaryKey;
 public class Genre extends RealmObject {
     @PrimaryKey
     private int id;
-
     private String name;
 
     public int getId() {

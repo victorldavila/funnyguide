@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
+/*
 buildscript {
     repositories {
         jcenter()
@@ -9,6 +10,7 @@ buildscript {
         classpath "io.realm:realm-gradle-plugin:2.2.1"
     }
 }
+*/
 
 android {
     compileSdkVersion 25
@@ -53,6 +55,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.facebook.fresco:fresco:0.14.1'
     compile 'com.android.support:support-v4:25.0.1'
     testCompile 'junit:junit:4.12'
 }

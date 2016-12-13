@@ -16,10 +16,6 @@ public class GenreDAO implements OnDAOListener<Genre> {
 
     private Realm realm;
 
-    public GenreDAO(Context context) {
-        realm.init(context);
-    }
-
     @Override
     public List<Genre> getItemList() {
         realm = Realm.getDefaultInstance();

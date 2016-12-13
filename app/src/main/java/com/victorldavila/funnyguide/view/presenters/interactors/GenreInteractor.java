@@ -1,24 +1,14 @@
 package com.victorldavila.funnyguide.view.presenters.interactors;
 
-import android.content.Context;
-
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.database.GenreDAO;
 import com.victorldavila.funnyguide.models.Genre;
-import com.victorldavila.funnyguide.models.ResponseTmdb;
+import com.victorldavila.funnyguide.models.ResponseGenre;
 import com.victorldavila.funnyguide.view.OnViewListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
-import io.realm.RealmAsyncTask;
-import io.realm.RealmResults;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by victo on 10/12/2016.
@@ -30,12 +20,11 @@ public class GenreInteractor {
     private GenreDAO genreDAO;
     private Realm realm;
 
-    public GenreInteractor(Context context, OnViewListener<Genre> view, FunnyApi api) {
+    public GenreInteractor(OnViewListener<Genre> view, FunnyApi api) {
         this.view = view;
         this.api = api;
 
-        realm.init(context);
-        genreDAO = new GenreDAO(context);
+        genreDAO = new GenreDAO();
     }
 
     public void bind(){
@@ -47,23 +36,10 @@ public class GenreInteractor {
     }
 
     public Subscription getGenreMovie(){
-        Observable<ResponseTmdb> genreResponseObservable = (Observable<ResponseTmdb>)api.getPreparedObservable(api.getAPI().getGenreObservable(api.getQueryString()), Genre.class, true, true);
+        Observable<ResponseGenre> genreResponseObservable = (Observable<ResponseGenre>)api.getPreparedObservable(api.getAPI().getGenreObservable(api.getQueryString()), Genre.class, true, true);
 
-        return genreResponseObservable.subscribe(new Observer<ResponseTmdb>(){
-            @Override
-            public void onCompleted(){}
-
-            @Override
-            public void onError(Throwable e){
-                //handle error
-            }
-
-            @Override
-            public void onNext(ResponseTmdb response){
-                //handle response
-                view.onItemList(response.getGenres());
-            }
-        });
+        return genreResponseObservable.subscribe(responseTmdb ->
+                view.onItemList(responseTmdb.getGenres()));
     }
 
     /*public Subscription listenGenreDatabase(){
@@ -86,5 +62,26 @@ public class GenreInteractor {
                 .map(genres -> {
                     return realm.executeTransactionAsync(realm1 -> realm1.copyToRealmOrUpdate(genres.getGenres()));
                 }).subscribe();
+    }*/
+
+    /*public Observable<RealmResults<Genre>> getGenres() {
+        // Realm will automatically notify this observable whenever data is saved from the network
+        return realm.where(Genre.class).findAllAsync().asObservable()
+                .filter(RealmResults::isLoaded)
+                .doOnNext(results -> {
+                    if (results.size() == 0) {
+                        loadGenreFromNetwork();
+                    }
+                });
+    }
+
+    private void loadGenreFromNetwork() {
+        api.getAPI().getGenreObservable(api.getQueryString())
+                .subscribeOn(Schedulers.io())
+                .subscribe(response -> {
+                    try(Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(r -> r.insertOrUpdate(response.getGenres()));
+                    } // auto-close
+                });
     }*/
 }

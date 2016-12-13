@@ -23,33 +23,32 @@ public class GenrePresenter implements OnPresenterListener {
     private ArrayList<Subscription> subscriptions;
     private Subscription genreSubscription;
 
-    public GenrePresenter(Context context, OnViewListener<Genre> view, FunnyApi api){
+    public GenrePresenter(OnViewListener<Genre> view, FunnyApi api){
         this.view = view;
 
         subscriptions = new ArrayList<Subscription>();
-        interactor = new GenreInteractor(context, view, api);
+        interactor = new GenreInteractor(view, api);
     }
 
     @Override
     public void onCreate() {
         if(interactor != null) {
             interactor.bind();
-            getGenre();
         }
     }
 
     @Override
-    public void onStop() {
-
-    }
-
-    @Override
-    public void onResume() {
+    public void onStart() {
         getGenre();
     }
 
     @Override
     public void onDestroy() {
+
+    }
+
+    @Override
+    public void onStop() {
         rxUnSubscribe();
         if(interactor != null)
             interactor.unbind();

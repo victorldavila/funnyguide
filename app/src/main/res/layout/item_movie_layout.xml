@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/item_poster_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        fresco:fadeDuration="300"
+        fresco:actualImageScaleType="fitCenter"
+        fresco:failureImage="@drawable/ic_sync_item"
+        fresco:failureImageScaleType="centerInside" />
+
+    <RelativeLayout
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:padding="20dp"
+        android:background="@drawable/background_info_poster"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <TextView
+            android:id="@+id/item_poster_name"
+            android:text="Test tile"
+            style="@style/title_poster"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@+id/item_poster_name"
+            android:id="@+id/item_vote_count"
+            android:text="7.8"
+            style="@style/text_poster"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@+id/item_vote_count"
+            android:id="@+id/item_date_release"
+            android:text="2016"
+            style="@style/text_poster"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</FrameLayout>

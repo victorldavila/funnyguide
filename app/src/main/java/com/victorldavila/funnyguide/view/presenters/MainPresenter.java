@@ -23,6 +23,8 @@ public class MainPresenter {
     private static final String SERIES_NAME = "SERIES";
     private static final String PROFILE_NAME = "PROFILE";
 
+    public static final int FIRST_FRAGMENT = 0;
+
     Context context;
 
     public MainPresenter(Context context) {
@@ -59,8 +61,11 @@ public class MainPresenter {
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.content, fragment);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            // Add to backstack
-            ft.addToBackStack(fragmentName);
+
+            if(id != FIRST_FRAGMENT) {
+                // Add to backstack
+                ft.addToBackStack(fragmentName);
+            }
             ft.commit();
 
             return true;
