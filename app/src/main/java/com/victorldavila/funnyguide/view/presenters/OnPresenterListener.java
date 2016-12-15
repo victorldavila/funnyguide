@@ -5,8 +5,6 @@ package com.victorldavila.funnyguide.view.presenters;
  */
 
 public interface OnPresenterListener {
-    void onCreate();
     void onStop();
     void onStart();
-    void onDestroy();
 }

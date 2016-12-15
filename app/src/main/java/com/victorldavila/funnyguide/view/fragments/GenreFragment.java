@@ -3,6 +3,8 @@ package com.victorldavila.funnyguide.view.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -34,6 +36,7 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
 
     private TabLayout tabBarGenre;
     private ViewPager moviesViewPager;
+    private CoordinatorLayout coordinatorLayoutGenre;
 
     public GenreFragment() {
         // Required empty public constructor
@@ -56,7 +59,6 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
 
         FunnyApi api = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
         presenter = new GenrePresenter(this, api);
-        presenter.onCreate();
     }
 
     @Override
@@ -74,6 +76,7 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     }
 
     private void initView(View view) {
+        coordinatorLayoutGenre = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout_genre);
         tabBarGenre = (TabLayout) view.findViewById(R.id.tab_layout_genres);
         moviesViewPager = (ViewPager) view.findViewById(R.id.view_pager_movies);
         tabBarGenre.setupWithViewPager(moviesViewPager);
@@ -82,11 +85,15 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if(presenter != null)
+            presenter.bind();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        if(presenter != null)
+            presenter.unbind();
     }
 
     @Override
@@ -97,7 +104,8 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
 
     @Override
     public void onError(String error) {
-
+        Snackbar snackbar = Snackbar.make(coordinatorLayoutGenre, error, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
@@ -111,6 +119,6 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     public void onStop() {
         super.onStop();
         if(presenter != null)
-            presenter.onDestroy();
+            presenter.onStop();
     }
 }

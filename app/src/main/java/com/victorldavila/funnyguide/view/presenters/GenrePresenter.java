@@ -15,7 +15,7 @@ import rx.Subscription;
  * Created by victor on 10/12/2016.
  */
 
-public class GenrePresenter implements OnPresenterListener {
+public class GenrePresenter implements OnFragmentPresenterListener {
 
     private OnViewListener<Genre> view;
     private GenreInteractor interactor;
@@ -31,33 +31,21 @@ public class GenrePresenter implements OnPresenterListener {
     }
 
     @Override
-    public void onCreate() {
-        if(interactor != null) {
-            interactor.bind();
-        }
-    }
-
-    @Override
     public void onStart() {
         getGenre();
     }
 
     @Override
-    public void onDestroy() {
-
-    }
-
-    @Override
     public void onStop() {
         rxUnSubscribe();
-        if(interactor != null)
-            interactor.unbind();
     }
 
     public void getGenre(){
         rxUnSubscribe(genreSubscription);
-        genreSubscription = interactor.getGenreMovie();
-        subscriptions.add(genreSubscription);
+        if(interactor != null) {
+            genreSubscription = interactor.getGenreMovie();
+            subscriptions.add(genreSubscription);
+        }
     }
 
     private void rxUnSubscribe(Subscription subscription){
@@ -70,5 +58,18 @@ public class GenrePresenter implements OnPresenterListener {
             if(subscription!=null && !subscription.isUnsubscribed())
                 subscription.unsubscribe();
         }
+    }
+
+    @Override
+    public void bind() {
+        if(interactor != null) {
+            interactor.bind();
+        }
+    }
+
+    @Override
+    public void unbind() {
+        if(interactor != null)
+            interactor.unbind();
     }
 }
