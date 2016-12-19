@@ -35,7 +35,7 @@ public class ResponseListItem<T> {
         return results;
     }
 
-    public void setResults(ArrayList<T> results) {
+    public void setResults(List<T> results) {
         this.results = results;
     }
 

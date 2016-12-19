@@ -30,7 +30,10 @@ public class GenreViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return MovieFragment.newInstance();
+        if(genres != null)
+            return MovieFragment.newInstance(genres.get(position).getId());
+        else
+            return MovieFragment.newInstance();
     }
 
     @Override

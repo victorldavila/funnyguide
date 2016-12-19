@@ -1,18 +1,12 @@
 package com.victorldavila.funnyguide.view.presenters.interactors;
 
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.database.GenreDAO;
-import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.models.ResponseGenre;
 import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.models.Tv;
 import com.victorldavila.funnyguide.view.OnViewListener;
 import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.victorldavila.funnyguide.view.presenters.TvPresenter;
 
 import io.realm.Realm;
 import rx.Observable;
@@ -20,19 +14,19 @@ import rx.Observer;
 import rx.Subscription;
 
 /**
- * Created by victo on 12/12/2016.
+ * Created by victo on 18/12/2016.
  */
 
-public class MovieInteractor {
+public class TvInteractor {
 
-    private OnViewListener<Movie> view;
-    private final MoviePresenter presenter;
+    private OnViewListener<Tv> view;
+    private final TvPresenter presenter;
     private FunnyApi api;
     private Realm realm;
 
     private boolean isLoad;
 
-    public MovieInteractor(OnViewListener<Movie> view, MoviePresenter presenter, FunnyApi api) {
+    public TvInteractor(OnViewListener<Tv> view, TvPresenter presenter, FunnyApi api) {
         this.view = view;
         this.presenter = presenter;
         this.api = api;
@@ -48,14 +42,14 @@ public class MovieInteractor {
         //realm.close();
     }
 
-    public Subscription getMoviesGenre(int genreId, final int page){
-        Observable<ResponseListItem<Movie>> genreResponseObservable = (Observable<ResponseListItem<Movie>>)api.getPreparedObservable(api.getAPI()
-                .getMoviesGenreObservable(genreId, api.getQueryStringList(page))
-                , Movie.class
+    public Subscription getTvTopRated(final int page){
+        Observable<ResponseListItem<Tv>> genreResponseObservable = (Observable<ResponseListItem<Tv>>)api.getPreparedObservable(api.getAPI()
+                        .getSeriesTopRateObservable(api.getQueryStringList(page))
+                , Tv.class
                 , true
                 , true);
 
-        return genreResponseObservable.subscribe(new Observer<ResponseListItem<Movie>>() {
+        return genreResponseObservable.subscribe(new Observer<ResponseListItem<Tv>>() {
             @Override
             public void onCompleted() {
 
@@ -69,7 +63,7 @@ public class MovieInteractor {
             }
 
             @Override
-            public void onNext(ResponseListItem<Movie> movieResponseListItem) {
+            public void onNext(ResponseListItem<Tv> movieResponseListItem) {
                 if(movieResponseListItem.getResults() != null) {
                     if (movieResponseListItem.getResults().size() == 0 || page == movieResponseListItem.getTotal_pages())
                         isLoad = false;

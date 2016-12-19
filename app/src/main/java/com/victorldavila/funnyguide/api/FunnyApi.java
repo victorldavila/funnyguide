@@ -24,6 +24,7 @@ public class FunnyApi {
 
         public static final String TMDB_KEY = "";
         public static final String LANGUAGE_BR = "pt-br";
+        public static final String PAGE = "page";
     }
 
     public class EndPoint{
@@ -31,9 +32,12 @@ public class FunnyApi {
         public static final String MOVIE = "movie";
         public static final String MOVIES = "movies";
         public static final String LIST = "list";
+        public static final String TV = "tv";
+        public static final String TOP_RATED = "top_rated";
     }
 
     private static final String BASE_URL_TMDB = "https://api.themoviedb.org/3/";
+    public static final String BASE_URL_IMAGE_TMDB = "https://image.tmdb.org/t/p/w500";
 
     private final TmdbAPI tmdbApi;
 
@@ -81,8 +85,15 @@ public class FunnyApi {
 
     public Map<String, String> getQueryString(){
         Map<String, String> options = new HashMap<String, String>();
-        options.put(QueryString.API_KEY, QueryString.TMDB_KEY);
         options.put(QueryString.LANGUAGE, QueryString.LANGUAGE_BR);
+        options.put(QueryString.API_KEY, QueryString.TMDB_KEY);
+
+        return options;
+    }
+
+    public Map<String, String> getQueryStringList(int page){
+        Map<String, String> options = getQueryString();
+        options.put(QueryString.PAGE, String.valueOf(page));
 
         return options;
     }

@@ -1,6 +1,9 @@
 package com.victorldavila.funnyguide.api;
 
+import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.ResponseGenre;
+import com.victorldavila.funnyguide.models.ResponseListItem;
+import com.victorldavila.funnyguide.models.Tv;
 
 import java.util.Map;
 
@@ -18,6 +21,9 @@ public interface TmdbAPI {
     @GET(FunnyApi.EndPoint.GENRE + "/" + FunnyApi.EndPoint.MOVIE + "/" + FunnyApi.EndPoint.LIST)
     Observable<ResponseGenre> getGenreObservable(@QueryMap Map<String, String> options);
 
-    @GET(FunnyApi.EndPoint.GENRE + "/{genre_id}" + FunnyApi.EndPoint.MOVIES)
-    Observable<ResponseGenre> getMoviesGenreObservable(@Path("genre_id") int genreId, @QueryMap Map<String, String> options);
+    @GET(FunnyApi.EndPoint.TV + "/" + FunnyApi.EndPoint.TOP_RATED)
+    Observable<ResponseListItem<Tv>> getSeriesTopRateObservable(@QueryMap Map<String, String> options);
+
+    @GET(FunnyApi.EndPoint.GENRE + "/{genre_id}/" + FunnyApi.EndPoint.MOVIES)
+    Observable<ResponseListItem<Movie>> getMoviesGenreObservable(@Path("genre_id") int genreId, @QueryMap Map<String, String> options);
 }

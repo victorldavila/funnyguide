@@ -2,25 +2,34 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_margin="1dp"
     android:layout_width="match_parent"
     android:layout_height="250dp">
+
+    <ProgressBar
+        android:id="@+id/load_image_poster"
+        android:layout_marginBottom="40dp"
+        android:layout_gravity="center"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/item_poster_img"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         fresco:fadeDuration="300"
-        fresco:actualImageScaleType="fitCenter"
+        fresco:actualImageScaleType="centerCrop"
         fresco:failureImage="@drawable/ic_sync_item"
         fresco:failureImageScaleType="centerInside" />
 
     <RelativeLayout
+        android:id="@+id/layout_info_poster"
         android:layout_gravity="bottom"
         android:gravity="center"
-        android:padding="20dp"
-        android:background="@drawable/background_info_poster"
+        android:padding="10dp"
+        android:background="@color/colorPrimaryAlpha60"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="80dp">
 
         <TextView
             android:id="@+id/item_poster_name"

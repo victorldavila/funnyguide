@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.view.fragments.GenreFragment;
+import com.victorldavila.funnyguide.view.fragments.TvFragment;
 
 /**
  * Created by victo on 10/12/2016.
@@ -44,11 +45,11 @@ public class MainPresenter {
                 break;
             case R.id.action_series:
                 fragmentName = SERIES_NAME;
-                fragment = GenreFragment.newInstance();
+                fragment = TvFragment.newInstance();
                 break;
             case R.id.action_profile:
                 fragmentName = PROFILE_NAME;
-                fragment = GenreFragment.newInstance();
+                fragment = TvFragment.newInstance();
                 break;
             default:
                 fragmentName = MOVIE_NAME;

@@ -1,6 +1,7 @@
 package com.victorldavila.funnyguide.view.fragments;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -15,57 +16,42 @@ import android.view.ViewGroup;
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
+import com.victorldavila.funnyguide.adapter.TvGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.models.ResponseListItem;
+import com.victorldavila.funnyguide.models.Tv;
 import com.victorldavila.funnyguide.view.OnViewListener;
 import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
+import com.victorldavila.funnyguide.view.presenters.TvPresenter;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  *
- * Use the {@link MovieFragment#newInstance} factory method to
+ * Use the {@link TvFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment implements OnViewListener<Movie>{
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_GENRE_ID = "GENRE_ID";
+public class TvFragment extends Fragment implements OnViewListener<Tv> {
 
-    private MoviePresenter presenter;
+    private TvPresenter presenter;
 
-    private RecyclerView movieRecyclerView;
+    private RecyclerView tvRecyclerView;
     private CoordinatorLayout coordinatorLayoutMovie;
-    private MovieGridAdapter movieGridAdapter;
+    private TvGridAdapter tvGridAdapter;
 
-    public MovieFragment() {
+    public TvFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param genreId Parameter 1.
-     * @return A new instance of fragment MovieSerieFragment.
-     */
-    public static MovieFragment newInstance(int genreId) {
-        MovieFragment fragment = new MovieFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_GENRE_ID, genreId);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment.
      *
-     * @return A new instance of fragment MovieSerieFragment.
+     * @return A new instance of fragment TvFragment.
      */
-    public static MovieFragment newInstance() {
-        MovieFragment fragment = new MovieFragment();
+    public static TvFragment newInstance() {
+        TvFragment fragment = new TvFragment();
         return fragment;
     }
 
@@ -74,19 +60,7 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
         super.onCreate(savedInstanceState);
 
         FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
-        presenter = new MoviePresenter(this, api);
-
-        if (getArguments() != null) {
-            int genreId = getArguments().getInt(ARG_GENRE_ID);
-            presenter.setGenreId(genreId);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie_serie, container, false);
+        presenter = new TvPresenter(this, api);
     }
 
     @Override
@@ -96,19 +70,28 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
         initViews(view);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_tv, container, false);
+    }
+
+
+
     private void initViews(View view) {
-        coordinatorLayoutMovie = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout_movie);
-        movieRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_movie_item);
+        coordinatorLayoutMovie = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout_tv);
+        tvRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_tv_item);
 
         configRecycler();
     }
 
     private void configRecycler() {
-        movieGridAdapter =  new MovieGridAdapter(getActivity(), presenter);
-        movieRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        movieRecyclerView.setAdapter(movieGridAdapter);
+        tvGridAdapter =  new TvGridAdapter(getActivity(), presenter);
+        tvRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        tvRecyclerView.setAdapter(tvGridAdapter);
 
-        movieRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        tvRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if(dy > 0) //check for scroll down
@@ -118,7 +101,7 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
                     int pastVisiblesItems = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
                     if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                        presenter.getMoviesGenre();
+                        presenter.getTvTopRated();
                     }
                 }
             }
@@ -136,9 +119,9 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     }
 
     @Override
-    public void onItemList(List<Movie> results) {
-        movieGridAdapter.addList(results);
-        movieGridAdapter.notifyDataSetChanged();
+    public void onItemList(List<Tv> results) {
+        tvGridAdapter.addList(results);
+        tvGridAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -146,7 +129,7 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
         Snackbar snackbar = Snackbar.make(coordinatorLayoutMovie, error, Snackbar.LENGTH_LONG);
         snackbar.show();
 
-        movieGridAdapter.notifyDataSetChanged();
+        tvGridAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.victorldavila.funnyguide.view.OnViewListener;
 
 import io.realm.Realm;
 import rx.Observable;
+import rx.Observer;
 import rx.Subscription;
 
 /**
@@ -28,18 +29,32 @@ public class GenreInteractor {
     }
 
     public void bind(){
-        realm = Realm.getDefaultInstance();
+        //realm = Realm.getDefaultInstance();
     }
 
     public void unbind(){
-        realm.close();
+        //realm.close();
     }
 
     public Subscription getGenreMovie(){
         Observable<ResponseGenre> genreResponseObservable = (Observable<ResponseGenre>)api.getPreparedObservable(api.getAPI().getGenreObservable(api.getQueryString()), Genre.class, true, true);
 
-        return genreResponseObservable.subscribe(responseTmdb ->
-                view.onItemList(responseTmdb.getGenres()));
+        return genreResponseObservable.subscribe(new Observer<ResponseGenre>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                view.onError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(ResponseGenre responseGenre) {
+                view.onItemList(responseGenre.getGenres());
+            }
+        });
     }
 
     /*public Subscription listenGenreDatabase(){

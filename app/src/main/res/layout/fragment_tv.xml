@@ -1,12 +1,12 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_layout_movie"
+    android:id="@+id/coordinator_layout_tv"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.victorldavila.funnyguide.view.fragments.MovieFragment">
+    tools:context="com.victorldavila.funnyguide.view.fragments.TvFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_movie_item"
+        android:id="@+id/recycler_tv_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -1,7 +1,5 @@
 package com.victorldavila.funnyguide.view.presenters;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -9,60 +7,47 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
-import com.facebook.common.executors.CallerThreadExecutor;
-import com.facebook.common.logging.FLog;
-import com.facebook.common.references.CloseableReference;
-import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.Priority;
-import com.facebook.imagepipeline.core.ImagePipeline;
-import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
-import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.image.ImageInfo;
-import com.facebook.imagepipeline.image.QualityInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.models.Movie;
+import com.victorldavila.funnyguide.models.Tv;
 import com.victorldavila.funnyguide.view.OnViewListener;
-import com.victorldavila.funnyguide.view.presenters.interactors.GenreInteractor;
 import com.victorldavila.funnyguide.view.presenters.interactors.MovieInteractor;
+import com.victorldavila.funnyguide.view.presenters.interactors.TvInteractor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import rx.Subscription;
 
 /**
- * Created by victo on 12/12/2016.
+ * Created by victo on 18/12/2016.
  */
-
-public class MoviePresenter implements OnFragmentPresenterListener {
+public class TvPresenter implements OnFragmentPresenterListener{
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private OnViewListener<Movie> view;
-    private MovieInteractor interactor;
+    private OnViewListener<Tv> view;
+    private TvInteractor interactor;
 
     private ArrayList<Subscription> subscriptions;
     private Subscription movieSubscribe;
 
-    private int genreId;
     private int page;
 
-    public MoviePresenter(OnViewListener<Movie> view, FunnyApi api){
+    public TvPresenter(OnViewListener<Tv> view, FunnyApi api){
         this.view = view;
         this.page = 1;
 
         subscriptions = new ArrayList<Subscription>();
-        interactor = new MovieInteractor(view, this, api);
+        interactor = new TvInteractor(view, this, api);
     }
 
     @Override
@@ -73,7 +58,7 @@ public class MoviePresenter implements OnFragmentPresenterListener {
     @Override
     public void onStart() {
         this.page = 1;
-        getMoviesGenre();
+        getTvTopRated();
     }
 
     public boolean isLoad() {
@@ -87,10 +72,10 @@ public class MoviePresenter implements OnFragmentPresenterListener {
             return "";
     }
 
-    public void getMoviesGenre(){
+    public void getTvTopRated(){
         rxUnSubscribe(movieSubscribe);
         if(interactor != null)
-            movieSubscribe = interactor.getMoviesGenre(genreId, page);
+            movieSubscribe = interactor.getTvTopRated(page);
     }
 
     private void rxUnSubscribe(Subscription subscription){
@@ -105,7 +90,7 @@ public class MoviePresenter implements OnFragmentPresenterListener {
         }
     }
 
-    public void loadImage(SimpleDraweeView simpleDraweeView, Movie item, final ProgressBar load){
+    public void loadImage(SimpleDraweeView simpleDraweeView, Tv item, final ProgressBar load){
 
         Uri bmpUri = Uri.parse(FunnyApi.BASE_URL_IMAGE_TMDB + item.getPoster_path());
         ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(bmpUri).build();
@@ -133,14 +118,6 @@ public class MoviePresenter implements OnFragmentPresenterListener {
                 // other setters
                 .build();
         simpleDraweeView.setController(controller);
-    }
-
-    public int getGenreId() {
-        return genreId;
-    }
-
-    public void setGenreId(int genreId) {
-        this.genreId = genreId;
     }
 
     @Override

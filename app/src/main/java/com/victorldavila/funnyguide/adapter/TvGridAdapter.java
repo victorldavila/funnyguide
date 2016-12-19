@@ -5,45 +5,45 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
-import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
+import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.view.presenters.TvPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by victor on 13/12/2016.
+ * Created by victo on 19/12/2016.
  */
 
-public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final int FOOTER_SIZE = 1;
 
     private static final int FOOTER_TYPE = 10;
     private static final int ITEM_TYPE = 20;
 
-    private ArrayList<Movie> items;
+    private ArrayList<Tv> items;
     private Context context;
     private boolean isLoad;
 
-    private MoviePresenter presenter;
+    private TvPresenter presenter;
 
-    public MovieGridAdapter(Context context, MoviePresenter presenter) {
+    public TvGridAdapter(Context context, TvPresenter presenter) {
         this.context = context;
         this.presenter = presenter;
 
-        items = new ArrayList<Movie>();
+        items = new ArrayList<Tv>();
         isLoad = true;
     }
 
-    public void addList(List<Movie> items){
+    public void addList(List<Tv> items){
         this.items.addAll(items);
     }
 
-    public void addItem(Movie item){
+    public void addItem(Tv item){
         this.items.add(item);
     }
 
@@ -70,11 +70,11 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    private void setInfoMovie(PosterViewHolder posterViewHolder, Movie movie) {
-        posterViewHolder.originalTitlePoster.setText(presenter.getText(movie.getTitle()));
-        posterViewHolder.countVotePoster.setText(presenter.getText(String.valueOf(movie.getVote_average())));
-        posterViewHolder.yearReleasePoster.setText(presenter.getText(movie.getRelease_date()));
-        presenter.loadImage(posterViewHolder.imagePosterPoster, movie, posterViewHolder.loadImagePoster);
+    private void setInfoMovie(PosterViewHolder posterViewHolder, Tv tv) {
+        posterViewHolder.originalTitlePoster.setText(presenter.getText(tv.getOriginal_name()));
+        posterViewHolder.countVotePoster.setText(presenter.getText(String.valueOf(tv.getVote_average())));
+        posterViewHolder.yearReleasePoster.setText(presenter.getText(tv.getFirst_air_date()));
+        presenter.loadImage(posterViewHolder.imagePosterPoster, tv, posterViewHolder.loadImagePoster);
     }
 
     private void setLoadVisibility(LoadPosterViewHolder loadPosterViewHolder) {
