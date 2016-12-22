@@ -14,7 +14,7 @@ import java.util.List;
  * Created by victo on 11/12/2016.
  */
 
-public class GenreViewPagerAdapter extends FragmentPagerAdapter {
+public class GenreViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<Genre> genres;
 

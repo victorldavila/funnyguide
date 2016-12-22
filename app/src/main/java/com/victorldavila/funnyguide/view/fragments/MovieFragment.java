@@ -128,6 +128,9 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if(presenter != null)
+            presenter.onStart();
+
     }
 
     @Override
@@ -152,8 +155,7 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     @Override
     public void onStart() {
         super.onStart();
-        if(presenter != null)
-            presenter.onStart();
+
     }
 
     @Override

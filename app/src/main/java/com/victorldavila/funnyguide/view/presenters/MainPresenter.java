@@ -62,11 +62,6 @@ public class MainPresenter {
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.content, fragment);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
-            if(id != FIRST_FRAGMENT) {
-                // Add to backstack
-                ft.addToBackStack(fragmentName);
-            }
             ft.commit();
 
             return true;
