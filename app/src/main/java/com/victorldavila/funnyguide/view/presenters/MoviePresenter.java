@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -135,10 +137,6 @@ public class MoviePresenter implements OnFragmentPresenterListener {
         simpleDraweeView.setController(controller);
     }
 
-    public int getGenreId() {
-        return genreId;
-    }
-
     public void setGenreId(int genreId) {
         this.genreId = genreId;
     }
@@ -157,5 +155,18 @@ public class MoviePresenter implements OnFragmentPresenterListener {
 
     public void countPage() {
         page++;
+    }
+
+    public void verifyScrolled(RecyclerView recyclerView, int dx, int dy) {
+        if(dy > 0) //check for scroll down
+        {
+            int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
+            int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+            int pastVisiblesItems = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+            if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                getMoviesGenre();
+            }
+        }
     }
 }

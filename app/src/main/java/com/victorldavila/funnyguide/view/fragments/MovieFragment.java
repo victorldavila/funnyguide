@@ -1,6 +1,7 @@
 package com.victorldavila.funnyguide.view.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -16,9 +17,11 @@ import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
+import com.victorldavila.funnyguide.models.Item;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.view.OnViewListener;
+import com.victorldavila.funnyguide.view.activities.MainActivity;
 import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
 
 import java.util.List;
@@ -111,16 +114,7 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
         movieRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if(dy > 0) //check for scroll down
-                {
-                    int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
-                    int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                    int pastVisiblesItems = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
-                    if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                        presenter.getMoviesGenre();
-                    }
-                }
+                presenter.verifyScrolled(recyclerView, dx, dy);
             }
         });
     }

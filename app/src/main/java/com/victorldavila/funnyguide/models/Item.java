@@ -1,10 +1,13 @@
 package com.victorldavila.funnyguide.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by victo on 18/12/2016.
  */
 
-public class Item {
+public class Item implements Parcelable {
 
     private String poster_path;
     private String overview;
@@ -87,4 +90,49 @@ public class Item {
     public void setVote_average(double vote_average) {
         this.vote_average = vote_average;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.poster_path);
+        dest.writeString(this.overview);
+        dest.writeIntArray(this.genre_ids);
+        dest.writeInt(this.id);
+        dest.writeString(this.original_language);
+        dest.writeString(this.backdrop_path);
+        dest.writeDouble(this.popularity);
+        dest.writeInt(this.vote_count);
+        dest.writeDouble(this.vote_average);
+    }
+
+    public Item() {
+    }
+
+    protected Item(Parcel in) {
+        this.poster_path = in.readString();
+        this.overview = in.readString();
+        this.genre_ids = in.createIntArray();
+        this.id = in.readInt();
+        this.original_language = in.readString();
+        this.backdrop_path = in.readString();
+        this.popularity = in.readDouble();
+        this.vote_count = in.readInt();
+        this.vote_average = in.readDouble();
+    }
+
+    public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+        @Override
+        public Item createFromParcel(Parcel source) {
+            return new Item(source);
+        }
+
+        @Override
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 }
