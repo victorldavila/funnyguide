@@ -1,16 +1,23 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
+apply plugin: 'me.tatarka.retrolambda'
 
-/*
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
     }
+
     dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.5.0'
         classpath "io.realm:realm-gradle-plugin:2.2.1"
     }
 }
-*/
+
+// Required because retrolambda is on maven central
+repositories {
+    mavenCentral()
+}
 
 android {
     compileSdkVersion 25
@@ -24,9 +31,6 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-/*        jackOptions {
-            enabled true
-        }*/
     }
     buildTypes {
         release {
@@ -35,10 +39,10 @@ android {
         }
     }
 
-    /*compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
-    }*/
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -47,15 +51,19 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
+    //android libs
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:support-v4:25.1.0'
+    //react libs
     compile 'io.reactivex:rxjava:1.0.+'
     compile 'io.reactivex:rxandroid:1.2.1'
+    //retrofit libs
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    //fresco lib
     compile 'com.facebook.fresco:fresco:1.0.0'
-    compile 'com.android.support:support-v4:25.1.0'
+
     testCompile 'junit:junit:4.12'
 }

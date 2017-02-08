@@ -28,7 +28,7 @@ public class MovieInteractor {
     private OnViewListener<Movie> view;
     private final MoviePresenter presenter;
     private FunnyApi api;
-    private Realm realm;
+    //private Realm realm;
 
     private boolean isLoad;
 
@@ -55,32 +55,20 @@ public class MovieInteractor {
                 , true
                 , true);
 
-        return genreResponseObservable.subscribe(new Observer<ResponseListItem<Movie>>() {
-            @Override
-            public void onCompleted() {
+        return genreResponseObservable.subscribe(movieResponseListItem -> {
+            if(movieResponseListItem.getResults() != null) {
+                if (movieResponseListItem.getResults().size() == 0 || page == movieResponseListItem.getTotal_pages())
+                    isLoad = false;
+                else
+                    presenter.countPage();
 
+                view.onItemList(movieResponseListItem.getResults());
+            } else{
+                view.onError("Results null");
             }
-
-            @Override
-            public void onError(Throwable e) {
-                isLoad = false;
-
-                view.onError(e.getMessage());
-            }
-
-            @Override
-            public void onNext(ResponseListItem<Movie> movieResponseListItem) {
-                if(movieResponseListItem.getResults() != null) {
-                    if (movieResponseListItem.getResults().size() == 0 || page == movieResponseListItem.getTotal_pages())
-                        isLoad = false;
-                    else
-                        presenter.countPage();
-
-                    view.onItemList(movieResponseListItem.getResults());
-                } else{
-                    view.onError("Results null");
-                }
-            }
+        }, e -> {
+            isLoad = false;
+            view.onError(e.getMessage());
         });
     }
 

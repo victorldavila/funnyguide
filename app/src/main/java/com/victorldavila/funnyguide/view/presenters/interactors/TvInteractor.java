@@ -49,32 +49,19 @@ public class TvInteractor {
                 , true
                 , true);
 
-        return genreResponseObservable.subscribe(new Observer<ResponseListItem<Tv>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
+        return genreResponseObservable.subscribe(tvResponseListItem -> {
+            if(tvResponseListItem.getResults() != null) {
+            if (tvResponseListItem.getResults().size() == 0 || page == tvResponseListItem.getTotal_pages())
                 isLoad = false;
+            else
+                presenter.countPage();
 
-                view.onError(e.getMessage());
-            }
-
-            @Override
-            public void onNext(ResponseListItem<Tv> movieResponseListItem) {
-                if(movieResponseListItem.getResults() != null) {
-                    if (movieResponseListItem.getResults().size() == 0 || page == movieResponseListItem.getTotal_pages())
-                        isLoad = false;
-                    else
-                        presenter.countPage();
-
-                    view.onItemList(movieResponseListItem.getResults());
-                } else{
-                    view.onError("Results null");
-                }
-            }
+            view.onItemList(tvResponseListItem.getResults());
+        } else{
+            view.onError("Results null");
+        }}, e -> {
+            isLoad = false;
+            view.onError(e.getMessage());
         });
     }
 
