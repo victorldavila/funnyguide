@@ -1,7 +1,5 @@
 package com.victorldavila.funnyguide.view.presenters;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -13,23 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
-import com.facebook.common.executors.CallerThreadExecutor;
-import com.facebook.common.logging.FLog;
-import com.facebook.common.references.CloseableReference;
-import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.Priority;
-import com.facebook.imagepipeline.core.ImagePipeline;
-import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
-import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.image.ImageInfo;
-import com.facebook.imagepipeline.image.QualityInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.victorldavila.funnyguide.R;
@@ -37,10 +25,8 @@ import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.view.OnViewListener;
-import com.victorldavila.funnyguide.view.presenters.interactors.GenreInteractor;
 import com.victorldavila.funnyguide.view.presenters.interactors.MovieInteractor;
 
 import java.util.ArrayList;
@@ -49,7 +35,7 @@ import java.util.List;
 import rx.Subscription;
 
 /**
- * Created by victo on 12/12/2016.
+ * Created by victor on 12/12/2016.
  */
 
 public class MoviePresenter implements OnFragmentPresenterListener {

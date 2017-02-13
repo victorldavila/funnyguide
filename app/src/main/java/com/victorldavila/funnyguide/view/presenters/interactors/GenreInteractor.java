@@ -8,11 +8,10 @@ import com.victorldavila.funnyguide.view.OnViewListener;
 
 import io.realm.Realm;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
 
 /**
- * Created by victo on 10/12/2016.
+ * Created by victor on 10/12/2016.
  */
 
 public class GenreInteractor {

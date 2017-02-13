@@ -13,7 +13,7 @@ import com.victorldavila.funnyguide.view.fragments.GenreFragment;
 import com.victorldavila.funnyguide.view.fragments.TvFragment;
 
 /**
- * Created by victo on 10/12/2016.
+ * Created by victor on 10/12/2016.
  */
 
 public class MainPresenter {

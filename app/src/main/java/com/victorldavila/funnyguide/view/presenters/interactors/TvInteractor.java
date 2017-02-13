@@ -14,7 +14,7 @@ import rx.Observer;
 import rx.Subscription;
 
 /**
- * Created by victo on 18/12/2016.
+ * Created by victor on 18/12/2016.
  */
 
 public class TvInteractor {
