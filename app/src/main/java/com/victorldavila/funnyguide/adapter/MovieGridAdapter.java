@@ -2,10 +2,8 @@ package com.victorldavila.funnyguide.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.models.Movie;
@@ -18,12 +16,12 @@ import java.util.List;
  * Created by victor on 13/12/2016.
  */
 
-public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements MoviePresenter.OnBindMovieGridAdapter {
 
-    private static final int FOOTER_SIZE = 1;
+    public static final int FOOTER_SIZE = 1;
 
-    private static final int FOOTER_TYPE = 10;
-    private static final int ITEM_TYPE = 20;
+    public static final int FOOTER_TYPE = 10;
+    public static final int ITEM_TYPE = 20;
 
     private ArrayList<Movie> items;
     private Context context;
@@ -49,39 +47,30 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        if(viewType == ITEM_TYPE){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie_layout, parent, false);
-            return new PosterViewHolder(view);
-        } else{
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_poster_load, parent, false);
-            return new LoadPosterViewHolder(view);
-        }
+        return presenter.getViewHolder(parent, viewType);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof PosterViewHolder){
-            PosterViewHolder posterViewHolder = (PosterViewHolder) holder;
-            setInfoMovie(posterViewHolder, items.get(position));
-        } else if(holder instanceof LoadPosterViewHolder){
-            LoadPosterViewHolder loadPosterViewHolder = (LoadPosterViewHolder) holder;
-            setLoadVisibility(loadPosterViewHolder);
-        }
+        presenter.bindMovieAdapter(holder, items, position, this);
     }
 
-    private void setInfoMovie(PosterViewHolder posterViewHolder, Movie movie) {
+    @Override
+    public void setInfoMovie(PosterViewHolder posterViewHolder, Movie movie) {
         posterViewHolder.originalTitlePoster.setText(presenter.getText(movie.getTitle()));
         posterViewHolder.countVotePoster.setText(presenter.getText(String.valueOf(movie.getVote_average())));
         posterViewHolder.yearReleasePoster.setText(presenter.getText(movie.getRelease_date()));
         presenter.loadImage(posterViewHolder.imagePosterPoster, movie, posterViewHolder.loadImagePoster);
     }
 
-    private void setLoadVisibility(LoadPosterViewHolder loadPosterViewHolder) {
-        if(presenter.isLoad())
-            loadPosterViewHolder.relativeLayoutLoad.setVisibility(View.VISIBLE);
-        else
-            loadPosterViewHolder.relativeLayoutLoad.setVisibility(View.GONE);
+    @Override
+    public void onEnableLoad(LoadPosterViewHolder loadPosterViewHolder) {
+        loadPosterViewHolder.relativeLayoutLoad.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDisableLoad(LoadPosterViewHolder loadPosterViewHolder) {
+        loadPosterViewHolder.relativeLayoutLoad.setVisibility(View.GONE);
     }
 
     @Override
@@ -91,10 +80,6 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if(position == (getItemCount() - 1)){
-            return FOOTER_TYPE;
-        } else{
-            return ITEM_TYPE;
-        }
+        return presenter.getItemViewType(position, getItemCount());
     }
 }

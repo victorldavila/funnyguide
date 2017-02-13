@@ -3,7 +3,7 @@ package com.victorldavila.funnyguide.models;
 import java.util.ArrayList;
 
 /**
- * Created by victo on 11/12/2016.
+ * Created by victor on 11/12/2016.
  */
 
 public class ResponseGenre {

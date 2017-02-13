@@ -22,8 +22,6 @@ import com.victorldavila.funnyguide.view.presenters.GenrePresenter;
 
 import java.util.List;
 
-import io.realm.RealmResults;
-
 /**
  * A simple {@link Fragment} subclass.
  *
@@ -98,7 +96,7 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
 
     @Override
     public void onItemList(List<Genre> results) {
-        GenreViewPagerAdapter adapter = new GenreViewPagerAdapter(getFragmentManager(), results);
+        GenreViewPagerAdapter adapter = new GenreViewPagerAdapter(getFragmentManager(), results, presenter);
         moviesViewPager.setAdapter(adapter);
     }
 

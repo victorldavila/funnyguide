@@ -1,13 +1,15 @@
 package com.victorldavila.funnyguide.view.presenters;
 
-import android.content.Context;
+import android.support.v4.app.Fragment;
 
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.view.OnViewListener;
+import com.victorldavila.funnyguide.view.fragments.MovieFragment;
 import com.victorldavila.funnyguide.view.presenters.interactors.GenreInteractor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import rx.Subscription;
 
@@ -58,6 +60,13 @@ public class GenrePresenter implements OnFragmentPresenterListener {
             if(subscription!=null && !subscription.isUnsubscribed())
                 subscription.unsubscribe();
         }
+    }
+
+    public Fragment getItemGenre(List<Genre> genres, int position){
+        if(genres != null)
+            return MovieFragment.newInstance(genres.get(position).getId());
+        else
+            return MovieFragment.newInstance();
     }
 
     @Override

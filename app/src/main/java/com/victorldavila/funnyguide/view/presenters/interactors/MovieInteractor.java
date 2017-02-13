@@ -61,11 +61,9 @@ public class MovieInteractor {
                     isLoad = false;
                 else
                     presenter.countPage();
-
                 view.onItemList(movieResponseListItem.getResults());
-            } else{
+            } else
                 view.onError("Results null");
-            }
         }, e -> {
             isLoad = false;
             view.onError(e.getMessage());

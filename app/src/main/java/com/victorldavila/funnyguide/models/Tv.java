@@ -1,7 +1,7 @@
 package com.victorldavila.funnyguide.models;
 
 /**
- * Created by victo on 18/12/2016.
+ * Created by victor on 18/12/2016.
  */
 
 public class Tv extends Item{

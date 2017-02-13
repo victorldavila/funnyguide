@@ -72,7 +72,7 @@ public class FunnyApi {
 
         //we are here because we have never created this observable before or we didn't want to use the cache...
 
-        preparedObservable = unPreparedObservable.subscribeOn(Schedulers.computation())
+        preparedObservable = unPreparedObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         if(cacheObservable){

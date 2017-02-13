@@ -94,16 +94,7 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
         tvRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if(dy > 0) //check for scroll down
-                {
-                    int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
-                    int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                    int pastVisiblesItems = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
-                    if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                        presenter.getTvTopRated();
-                    }
-                }
+                presenter.verifyScroll(dy, dx, recyclerView);
             }
         });
     }

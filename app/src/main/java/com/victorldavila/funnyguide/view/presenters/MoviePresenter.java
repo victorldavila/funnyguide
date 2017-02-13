@@ -9,7 +9,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -30,6 +32,10 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.image.QualityInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.victorldavila.funnyguide.R;
+import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
+import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
+import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.models.Movie;
@@ -87,6 +93,23 @@ public class MoviePresenter implements OnFragmentPresenterListener {
             return text;
         else
             return "";
+    }
+
+    public RecyclerView.ViewHolder getViewHolder(ViewGroup parent, int viewType){
+        if(viewType == MovieGridAdapter.ITEM_TYPE){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie_layout, parent, false);
+            return new PosterViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_poster_load, parent, false);
+            return new LoadPosterViewHolder(view);
+        }
+    }
+
+    public int getItemViewType(int position, int itemCount){
+        if(position == (itemCount - 1))
+            return MovieGridAdapter.FOOTER_TYPE;
+        else
+            return MovieGridAdapter.ITEM_TYPE;
     }
 
     public void getMoviesGenre(){
@@ -158,8 +181,7 @@ public class MoviePresenter implements OnFragmentPresenterListener {
     }
 
     public void verifyScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if(dy > 0) //check for scroll down
-        {
+        if(dy > 0){ //check for scroll down
             int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
             int totalItemCount = recyclerView.getLayoutManager().getItemCount();
             int pastVisiblesItems = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
@@ -168,5 +190,24 @@ public class MoviePresenter implements OnFragmentPresenterListener {
                 getMoviesGenre();
             }
         }
+    }
+
+    public void bindMovieAdapter(RecyclerView.ViewHolder holder, ArrayList<Movie>items, int position, OnBindMovieGridAdapter listener){
+        if(holder instanceof PosterViewHolder){
+            PosterViewHolder posterViewHolder = (PosterViewHolder) holder;
+            listener.setInfoMovie(posterViewHolder, items.get(position));
+        } else if(holder instanceof LoadPosterViewHolder){
+            LoadPosterViewHolder loadPosterViewHolder = (LoadPosterViewHolder) holder;
+            if(isLoad())
+                listener.onEnableLoad(loadPosterViewHolder);
+            else
+                listener.onDisableLoad(loadPosterViewHolder);
+        }
+    }
+
+    public interface OnBindMovieGridAdapter {
+        void setInfoMovie(PosterViewHolder posterViewHolder, Movie movie);
+        void onEnableLoad(LoadPosterViewHolder loadPosterViewHolder);
+        void onDisableLoad(LoadPosterViewHolder loadPosterViewHolder);
     }
 }
