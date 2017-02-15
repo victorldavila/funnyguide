@@ -17,6 +17,7 @@
         android:id="@+id/item_poster_img"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:transitionName="@string/poster_transition"
         fresco:fadeDuration="300"
         fresco:actualImageScaleType="centerCrop"
         fresco:failureImage="@drawable/ic_sync_item"
@@ -24,10 +25,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_info_poster"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:padding="10dp"
-        android:background="@color/colorPrimaryAlpha60"
+        style="@style/footer_poster"
         android:layout_width="match_parent"
         android:layout_height="80dp">
 

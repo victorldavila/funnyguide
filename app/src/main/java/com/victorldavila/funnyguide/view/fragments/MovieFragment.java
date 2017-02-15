@@ -22,6 +22,10 @@ import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * A simple {@link Fragment} subclass.
  *
@@ -30,13 +34,14 @@ import java.util.List;
  */
 public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_GENRE_ID = "GENRE_ID";
+    public static final String ARG_GENRE_ID = "GENRE_ID";
 
-    private MoviePresenter presenter;
+    @BindView(R.id.recycler_movie_item) RecyclerView movieRecyclerView;
+    @BindView(R.id.coordinator_layout_movie) CoordinatorLayout coordinatorLayoutMovie;
 
-    private RecyclerView movieRecyclerView;
-    private CoordinatorLayout coordinatorLayoutMovie;
     private MovieGridAdapter movieGridAdapter;
+    private MoviePresenter presenter;
+    private Unbinder unbinder;
 
     public MovieFragment() {
         // Required empty public constructor
@@ -75,10 +80,7 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
         FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
         presenter = new MoviePresenter(this, api);
 
-        if (getArguments() != null) {
-            int genreId = getArguments().getInt(ARG_GENRE_ID);
-            presenter.setGenreId(genreId);
-        }
+        presenter.verifyArgs(getArguments());
     }
 
     @Override
@@ -91,18 +93,15 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        initViews(view);
-
-        if(presenter != null)
-            presenter.onStart();
-    }
-
-    private void initViews(View view) {
-        coordinatorLayoutMovie = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout_movie);
-        movieRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_movie_item);
+        unbinder = ButterKnife.bind(this, view);
 
         configRecycler();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void configRecycler() {
@@ -119,20 +118,8 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
     public void onItemList(List<Movie> results) {
         movieGridAdapter.addList(results);
-        movieGridAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -144,9 +131,8 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
+    public void onComplete() {
+        movieGridAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -154,5 +140,12 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
         super.onStop();
         if(presenter != null)
             presenter.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(presenter != null)
+            presenter.onStart();
     }
 }

@@ -26,6 +26,10 @@ import com.victorldavila.funnyguide.view.presenters.TvPresenter;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * A simple {@link Fragment} subclass.
  *
@@ -34,11 +38,12 @@ import java.util.List;
  */
 public class TvFragment extends Fragment implements OnViewListener<Tv> {
 
-    private TvPresenter presenter;
+    @BindView(R.id.recycler_tv_item) RecyclerView tvRecyclerView;
+    @BindView(R.id.coordinator_layout_tv) CoordinatorLayout coordinatorLayoutMovie;
 
-    private RecyclerView tvRecyclerView;
-    private CoordinatorLayout coordinatorLayoutMovie;
+    private TvPresenter presenter;
     private TvGridAdapter tvGridAdapter;
+    private Unbinder unbinder;
 
     public TvFragment() {
         // Required empty public constructor
@@ -64,26 +69,23 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        initViews(view);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tv, container, false);
     }
 
-
-
-    private void initViews(View view) {
-        coordinatorLayoutMovie = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout_tv);
-        tvRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_tv_item);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        unbinder = ButterKnife.bind(this, view);
 
         configRecycler();
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void configRecycler() {
@@ -100,19 +102,8 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
     public void onItemList(List<Tv> results) {
         tvGridAdapter.addList(results);
-        tvGridAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -120,6 +111,11 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
         Snackbar snackbar = Snackbar.make(coordinatorLayoutMovie, error, Snackbar.LENGTH_LONG);
         snackbar.show();
 
+        tvGridAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onComplete() {
         tvGridAdapter.notifyDataSetChanged();
     }
 

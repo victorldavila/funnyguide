@@ -6,10 +6,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.victorldavila.funnyguide.view.fragments.GenreFragment">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager_movies"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout_genres"
@@ -18,11 +17,16 @@
             app:tabBackground="@android:color/white"
             app:tabMinWidth="?attr/actionBarSize"
             app:tabTextColor="@android:color/black"
-            android:elevation="6dp"
+            android:elevation="5dp"
             app:tabMode="scrollable"
-            app:tabGravity="center"
-            android:layout_gravity="top" />
+            app:tabGravity="center" />
 
-    </android.support.v4.view.ViewPager>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/view_pager_movies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>

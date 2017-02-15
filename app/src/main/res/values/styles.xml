@@ -8,6 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="footer_poster">
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@color/colorPrimaryAlpha60</item>
+    </style>
+
     <style name="title_poster">
         <item name="android:textSize">11sp</item>
         <item name="android:maxLines">2</item>
@@ -22,5 +29,9 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

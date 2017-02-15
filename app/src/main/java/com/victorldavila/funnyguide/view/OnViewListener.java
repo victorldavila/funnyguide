@@ -11,4 +11,5 @@ import io.realm.RealmResults;
 public interface OnViewListener<T> {
     void onItemList(List<T> results);
     void onError(String error);
+    void onComplete();
 }

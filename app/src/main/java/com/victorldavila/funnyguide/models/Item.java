@@ -124,10 +124,10 @@ public class Item implements Parcelable {
         this.vote_average = in.readDouble();
     }
 
-    public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
         @Override
-        public Item createFromParcel(Parcel source) {
-            return new Item(source);
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
         }
 
         @Override

@@ -67,7 +67,7 @@ public class MovieInteractor {
         }, e -> {
             isLoad = false;
             view.onError(e.getMessage());
-        });
+        }, () -> view.onComplete());
     }
 
     public boolean isLoad() {

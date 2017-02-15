@@ -22,6 +22,10 @@ import com.victorldavila.funnyguide.view.presenters.GenrePresenter;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * A simple {@link Fragment} subclass.
  *
@@ -30,11 +34,12 @@ import java.util.List;
  */
 public class GenreFragment extends Fragment implements OnViewListener<Genre>{
 
-    private GenrePresenter presenter;
+    @BindView(R.id.tab_layout_genres) TabLayout tabBarGenre;
+    @BindView(R.id.view_pager_movies) ViewPager moviesViewPager;
+    @BindView(R.id.coordinator_layout_genre) CoordinatorLayout coordinatorLayoutGenre;
 
-    private TabLayout tabBarGenre;
-    private ViewPager moviesViewPager;
-    private CoordinatorLayout coordinatorLayoutGenre;
+    private GenrePresenter presenter;
+    private Unbinder unbinder;
 
     public GenreFragment() {
         // Required empty public constructor
@@ -69,29 +74,19 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        unbinder = ButterKnife.bind(this, view);
 
-        initView(view);
+        initView();
     }
 
-    private void initView(View view) {
-        coordinatorLayoutGenre = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout_genre);
-        tabBarGenre = (TabLayout) view.findViewById(R.id.tab_layout_genres);
-        moviesViewPager = (ViewPager) view.findViewById(R.id.view_pager_movies);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    private void initView() {
         tabBarGenre.setupWithViewPager(moviesViewPager);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if(presenter != null)
-            presenter.bind();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if(presenter != null)
-            presenter.unbind();
     }
 
     @Override
@@ -107,10 +102,8 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if(presenter != null)
-            presenter.getGenre();
+    public void onComplete() {
+
     }
 
     @Override
@@ -118,5 +111,12 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
         super.onStop();
         if(presenter != null)
             presenter.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(presenter != null)
+            presenter.onStart();
     }
 }

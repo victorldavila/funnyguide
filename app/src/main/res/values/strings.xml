@@ -3,7 +3,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- bottom navigation strings -->
     <string name="text_movie_nav">Filmes</string>
     <string name="text_tv_nav">Series</string>
     <string name="text_profile">Perfil</string>
+
+    <string name="title_activity_detail_item">DetailItemActivity</string>
+
+    <!-- transition strings -->
+    <string name="poster_transition">poster_item_transition</string>
 </resources>

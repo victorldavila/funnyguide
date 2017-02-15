@@ -1,8 +1,17 @@
 package com.victorldavila.funnyguide.view.presenters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.transition.ChangeBounds;
+import android.support.transition.Transition;
+import android.support.transition.TransitionSet;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,7 +24,9 @@ import android.widget.ProgressBar;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.DraweeTransition;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
@@ -27,6 +38,8 @@ import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.view.OnViewListener;
+import com.victorldavila.funnyguide.view.activities.DetailItemActivity;
+import com.victorldavila.funnyguide.view.fragments.MovieFragment;
 import com.victorldavila.funnyguide.view.presenters.interactors.MovieInteractor;
 
 import java.util.ArrayList;
@@ -68,6 +81,13 @@ public class MoviePresenter implements OnFragmentPresenterListener {
     public void onStart() {
         this.page = 1;
         getMoviesGenre();
+    }
+
+    public void verifyArgs(Bundle args){
+        if (args != null) {
+            int genreId = args.getInt(MovieFragment.ARG_GENRE_ID);
+            setGenreId(genreId);
+        }
     }
 
     public boolean isLoad() {
@@ -188,6 +208,24 @@ public class MoviePresenter implements OnFragmentPresenterListener {
                 listener.onEnableLoad(loadPosterViewHolder);
             else
                 listener.onDisableLoad(loadPosterViewHolder);
+        }
+    }
+
+    public void clickPoster(Context context, SimpleDraweeView image, Movie movie) {
+
+        Intent intent = new Intent(context, DetailItemActivity.class);
+        intent.putExtra(DetailItemActivity.MOVIE_ITEM, movie);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation((AppCompatActivity)context, (View)image, context.getString(R.string.poster_transition));
+            context.startActivity(intent, options.toBundle());
+        }
+        else {
+            context.startActivity(intent);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ((AppCompatActivity)context).getWindow().setSharedElementEnterTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP, ScalingUtils.ScaleType.FIT_CENTER));
         }
     }
 
