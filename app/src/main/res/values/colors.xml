@@ -4,4 +4,7 @@
     <color name="colorPrimaryAlpha60">#96009688</color>
     <color name="colorPrimaryDark">#00796D</color>
     <color name="colorAccent">#FF5722</color>
+
+    <color name="darkGreyAlpha60">#96616161</color>
+    <color name="darkGreyAlpha80">#C8616161</color>
 </resources>

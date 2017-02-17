@@ -215,7 +215,7 @@ public class MoviePresenter implements OnFragmentPresenterListener {
 
         Intent intent = new Intent(context, DetailItemActivity.class);
         intent.putExtra(DetailItemActivity.MOVIE_ITEM, movie);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/) {
             ActivityOptionsCompat options = ActivityOptionsCompat.
                     makeSceneTransitionAnimation((AppCompatActivity)context, (View)image, context.getString(R.string.poster_transition));
             context.startActivity(intent, options.toBundle());
@@ -224,9 +224,9 @@ public class MoviePresenter implements OnFragmentPresenterListener {
             context.startActivity(intent);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ((AppCompatActivity)context).getWindow().setSharedElementEnterTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP, ScalingUtils.ScaleType.FIT_CENTER));
-        }
+        }*/
     }
 
     public interface OnBindMovieGridAdapter {

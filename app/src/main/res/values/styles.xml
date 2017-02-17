@@ -8,6 +8,26 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="cardview_info">
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+
+    <style name="text_lbl_poster_info">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/darkGreyAlpha80</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_poster_info">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/darkGreyAlpha60</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
     <style name="footer_poster">
         <item name="android:layout_gravity">bottom</item>
         <item name="android:gravity">center</item>

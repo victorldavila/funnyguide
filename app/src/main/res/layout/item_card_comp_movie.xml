@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/cardview_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp" >
+
+    <RelativeLayout
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lbl_original_title"
+            android:text="@string/lbl_original_title"
+            style="@style/text_lbl_poster_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_toRightOf="@+id/lbl_original_title"
+            android:id="@+id/original_title_info_poster"
+            style="@style/text_poster_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginTop="6dp"
+            android:layout_below="@+id/original_title_info_poster"
+            android:id="@+id/lbl_language"
+            android:text="@string/lbl_language"
+            style="@style/text_lbl_poster_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@+id/original_title_info_poster"
+            android:layout_toRightOf="@+id/lbl_language"
+            android:id="@+id/language_info_poster"
+            style="@style/text_poster_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginTop="6dp"
+            android:layout_below="@+id/lbl_language"
+            android:id="@+id/lbl_genre"
+            android:text="@string/lbl_genre"
+            style="@style/text_lbl_poster_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@+id/lbl_language"
+            android:layout_toRightOf="@+id/language_info_poster"
+            android:id="@+id/genre_info_poster"
+            style="@style/text_poster_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
