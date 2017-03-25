@@ -77,12 +77,16 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
         unbinder = ButterKnife.bind(this, view);
 
         initView();
+
+        presenter.onViewCreated();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+
+        presenter.onDestroyView();
     }
 
     private void initView() {
@@ -104,19 +108,5 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     @Override
     public void onComplete() {
 
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(presenter != null)
-            presenter.onStop();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(presenter != null)
-            presenter.onStart();
     }
 }

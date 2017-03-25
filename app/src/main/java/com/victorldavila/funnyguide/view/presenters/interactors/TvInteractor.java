@@ -1,16 +1,12 @@
 package com.victorldavila.funnyguide.view.presenters.interactors;
 
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.models.Tv;
 import com.victorldavila.funnyguide.view.OnViewListener;
-import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
 import com.victorldavila.funnyguide.view.presenters.TvPresenter;
 
-import io.realm.Realm;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
 
 /**
@@ -22,9 +18,6 @@ public class TvInteractor {
     private OnViewListener<Tv> view;
     private final TvPresenter presenter;
     private FunnyApi api;
-    private Realm realm;
-
-    private boolean isLoad;
 
     public TvInteractor(OnViewListener<Tv> view, TvPresenter presenter, FunnyApi api) {
         this.view = view;

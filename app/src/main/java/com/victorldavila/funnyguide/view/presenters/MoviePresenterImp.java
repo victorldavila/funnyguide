@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.transition.ChangeBounds;
-import android.support.transition.Transition;
-import android.support.transition.TransitionSet;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,9 +21,7 @@ import android.widget.ProgressBar;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.DraweeTransition;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
@@ -37,50 +32,52 @@ import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
+import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.view.OnViewListener;
 import com.victorldavila.funnyguide.view.activities.DetailItemActivity;
 import com.victorldavila.funnyguide.view.fragments.MovieFragment;
 import com.victorldavila.funnyguide.view.presenters.interactors.MovieInteractor;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import rx.Subscriber;
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by victor on 12/12/2016.
  */
 
-public class MoviePresenter implements OnFragmentPresenterListener {
+public class MoviePresenterImp implements FragmentPresenter {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private OnViewListener<Movie> view;
     private MovieInteractor interactor;
 
-    private ArrayList<Subscription> subscriptions;
+    private CompositeSubscription compositeSubscription;
     private Subscription movieSubscribe;
 
     private int genreId;
     private int page;
 
-    public MoviePresenter(OnViewListener<Movie> view, FunnyApi api){
+    public MoviePresenterImp(OnViewListener<Movie> view, FunnyApi api){
         this.view = view;
-        this.page = 1;
 
-        subscriptions = new ArrayList<Subscription>();
-        interactor = new MovieInteractor(view, this, api);
+        compositeSubscription = new CompositeSubscription();
+        interactor = new MovieInteractor(api);
+
+        initPage();
     }
 
     @Override
-    public void onStop() {
-        rxUnSubscribe();
-    }
-
-    @Override
-    public void onStart() {
-        this.page = 1;
+    public void onViewCreated() {
+        initPage();
         getMoviesGenre();
+    }
+
+    @Override
+    public void onDestroyView() {
+        rxUnSubscribe();
     }
 
     public void verifyArgs(Bundle args){
@@ -90,8 +87,8 @@ public class MoviePresenter implements OnFragmentPresenterListener {
         }
     }
 
-    public boolean isLoad() {
-        return interactor.isLoad();
+    private void initPage() {
+        this.page = 1;
     }
 
     public String getText(String text) {
@@ -101,27 +98,12 @@ public class MoviePresenter implements OnFragmentPresenterListener {
             return "";
     }
 
-    public RecyclerView.ViewHolder getViewHolder(ViewGroup parent, int viewType){
-        if(viewType == MovieGridAdapter.ITEM_TYPE){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie_layout, parent, false);
-            return new PosterViewHolder(view);
-        } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_poster_load, parent, false);
-            return new LoadPosterViewHolder(view);
-        }
-    }
-
-    public int getItemViewType(int position, int itemCount){
-        if(position == (itemCount - 1))
-            return MovieGridAdapter.FOOTER_TYPE;
-        else
-            return MovieGridAdapter.ITEM_TYPE;
-    }
-
     public void getMoviesGenre(){
         rxUnSubscribe(movieSubscribe);
-        if(interactor != null)
-            movieSubscribe = interactor.getMoviesGenre(genreId, page);
+        if(interactor != null) {
+            movieSubscribe = interactor.getMoviesGenre(genreId, page, );
+            compositeSubscription.add(movieSubscribe);
+        }
     }
 
     private void rxUnSubscribe(Subscription subscription){
@@ -130,18 +112,27 @@ public class MoviePresenter implements OnFragmentPresenterListener {
     }
 
     public void rxUnSubscribe(){
-        for (Subscription subscription : subscriptions) {
-            if(subscription!=null && !subscription.isUnsubscribed())
-                subscription.unsubscribe();
-        }
+        compositeSubscription.unsubscribe();
     }
 
-    public void loadImage(SimpleDraweeView simpleDraweeView, Movie item, final ProgressBar load){
+    public DraweeController loadImage(String pathPoster, final ProgressBar load){
 
-        Uri bmpUri = Uri.parse(FunnyApi.BASE_URL_IMAGE_TMDB + item.getPoster_path());
+        Uri bmpUri = Uri.parse(FunnyApi.BASE_URL_IMAGE_TMDB + pathPoster);
         ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(bmpUri).build();
 
-        ControllerListener controllerListener = new BaseControllerListener<ImageInfo>() {
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(imageRequest)
+                .setControllerListener(getBaseControllerListener(load))
+                .setAutoPlayAnimations(true)
+                // other setters
+                .build();
+
+        return controller;
+    }
+
+    @NonNull
+    private BaseControllerListener<ImageInfo> getBaseControllerListener(final ProgressBar load) {
+        return new BaseControllerListener<ImageInfo>() {
             @Override
             public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable anim) {
                 load.setVisibility(View.GONE);
@@ -156,46 +147,20 @@ public class MoviePresenter implements OnFragmentPresenterListener {
                 Log.e(getClass().getSimpleName(), throwable.getMessage());
             }
         };
-
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setImageRequest(imageRequest)
-                .setControllerListener(controllerListener)
-                .setAutoPlayAnimations(true)
-                // other setters
-                .build();
-        simpleDraweeView.setController(controller);
     }
 
     public void setGenreId(int genreId) {
         this.genreId = genreId;
     }
 
-    @Override
-    public void bind() {
-        if(interactor != null)
-            interactor.bind();
-    }
-
-    @Override
-    public void unbind() {
-        if(interactor != null)
-            interactor.unbind();
-    }
-
     public void countPage() {
         page++;
     }
 
-    public void verifyScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if(dy > 0){ //check for scroll down
-            int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
-            int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-            int pastVisiblesItems = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
-            if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+    public void verifyScrolled(int visibleItemCount, int totalItemCount, int pastVisiblesItems, int dx, int dy) {
+        if(dy > 0) //check for scroll down
+            if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
                 getMoviesGenre();
-            }
-        }
     }
 
     public void bindMovieAdapter(RecyclerView.ViewHolder holder, ArrayList<Movie>items, int position, OnBindMovieGridAdapter listener){
@@ -209,24 +174,6 @@ public class MoviePresenter implements OnFragmentPresenterListener {
             else
                 listener.onDisableLoad(loadPosterViewHolder);
         }
-    }
-
-    public void clickPoster(Context context, SimpleDraweeView image, Movie movie) {
-
-        Intent intent = new Intent(context, DetailItemActivity.class);
-        intent.putExtra(DetailItemActivity.MOVIE_ITEM, movie);
-        if (false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/) {
-            ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation((AppCompatActivity)context, (View)image, context.getString(R.string.poster_transition));
-            context.startActivity(intent, options.toBundle());
-        }
-        else {
-            context.startActivity(intent);
-        }
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ((AppCompatActivity)context).getWindow().setSharedElementEnterTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP, ScalingUtils.ScaleType.FIT_CENTER));
-        }*/
     }
 
     public interface OnBindMovieGridAdapter {

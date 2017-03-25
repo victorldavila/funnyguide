@@ -22,7 +22,7 @@ import com.victorldavila.funnyguide.models.Movie;
  * Created by victor on 14/02/2017.
  */
 
-public class DetailPresenter implements OnPresenterListener {
+public class DetailPresenter implements ActivityPresenter {
 
     public void loadImage(SimpleDraweeView simpleDraweeView, Movie item, final ProgressBar load){
 
@@ -55,12 +55,12 @@ public class DetailPresenter implements OnPresenterListener {
     }
 
     @Override
-    public void onStop() {
+    public void onCreate() {
 
     }
 
     @Override
-    public void onStart() {
+    public void onDestroy() {
 
     }
 }

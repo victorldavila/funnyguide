@@ -21,15 +21,12 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.victorldavila.funnyguide.R;
-import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.adapter.TvGridAdapter;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.Tv;
 import com.victorldavila.funnyguide.view.OnViewListener;
-import com.victorldavila.funnyguide.view.presenters.interactors.MovieInteractor;
 import com.victorldavila.funnyguide.view.presenters.interactors.TvInteractor;
 
 import java.util.ArrayList;
@@ -39,7 +36,7 @@ import rx.Subscription;
 /**
  * Created by victor on 18/12/2016.
  */
-public class TvPresenter implements OnFragmentPresenterListener{
+public class TvPresenter implements FragmentPresenter {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -53,21 +50,38 @@ public class TvPresenter implements OnFragmentPresenterListener{
 
     public TvPresenter(OnViewListener<Tv> view, FunnyApi api){
         this.view = view;
-        this.page = 1;
 
         subscriptions = new ArrayList<Subscription>();
         interactor = new TvInteractor(view, this, api);
+
+        initPage();
     }
 
     @Override
-    public void onStop() {
+    public void onAttach() {
+        if(interactor != null)
+            interactor.bind();
+    }
+
+    @Override
+    public void onDettach() {
+        if(interactor != null)
+            interactor.unbind();
+    }
+
+    @Override
+    public void onViewCreated() {
+        initPage();
+        getTvTopRated();
+    }
+
+    @Override
+    public void onDestroyView() {
         rxUnSubscribe();
     }
 
-    @Override
-    public void onStart() {
+    private void initPage() {
         this.page = 1;
-        getTvTopRated();
     }
 
     public boolean isLoad() {
@@ -129,18 +143,6 @@ public class TvPresenter implements OnFragmentPresenterListener{
         simpleDraweeView.setController(controller);
     }
 
-    @Override
-    public void bind() {
-        if(interactor != null)
-            interactor.bind();
-    }
-
-    @Override
-    public void unbind() {
-        if(interactor != null)
-            interactor.unbind();
-    }
-
     public RecyclerView.ViewHolder getViewHolder(ViewGroup parent, int viewType){
         if(viewType == TvGridAdapter.ITEM_TYPE){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie_layout, parent, false);
@@ -186,6 +188,8 @@ public class TvPresenter implements OnFragmentPresenterListener{
             }
         }
     }
+
+
 
     public interface OnBindTvGridAdapter {
         void setInfoTv(PosterViewHolder posterViewHolder, Tv movie);

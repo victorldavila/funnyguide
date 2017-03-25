@@ -8,37 +8,49 @@ import com.victorldavila.funnyguide.view.OnViewListener;
 import com.victorldavila.funnyguide.view.fragments.MovieFragment;
 import com.victorldavila.funnyguide.view.presenters.interactors.GenreInteractor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by victor on 10/12/2016.
  */
 
-public class GenrePresenter implements OnFragmentPresenterListener {
+public class GenrePresenter implements FragmentPresenter {
 
     private OnViewListener<Genre> view;
     private GenreInteractor interactor;
 
-    private ArrayList<Subscription> subscriptions;
+    private CompositeSubscription compositeSubscription;
     private Subscription genreSubscription;
 
     public GenrePresenter(OnViewListener<Genre> view, FunnyApi api){
         this.view = view;
 
-        subscriptions = new ArrayList<Subscription>();
+        compositeSubscription = new CompositeSubscription();
         interactor = new GenreInteractor(view, api);
     }
 
     @Override
-    public void onStart() {
+    public void onAttach() {
+        if(interactor != null)
+            interactor.bind();
+    }
+
+    @Override
+    public void onDettach() {
+        if(interactor != null)
+            interactor.unbind();
+    }
+
+    @Override
+    public void onViewCreated() {
         getGenre();
     }
 
     @Override
-    public void onStop() {
+    public void onDestroyView() {
         rxUnSubscribe();
     }
 
@@ -46,7 +58,7 @@ public class GenrePresenter implements OnFragmentPresenterListener {
         rxUnSubscribe(genreSubscription);
         if(interactor != null) {
             genreSubscription = interactor.getGenreMovie();
-            subscriptions.add(genreSubscription);
+            compositeSubscription.add(genreSubscription);
         }
     }
 
@@ -56,10 +68,7 @@ public class GenrePresenter implements OnFragmentPresenterListener {
     }
 
     public void rxUnSubscribe(){
-        for (Subscription subscription : subscriptions) {
-            if(subscription!=null && !subscription.isUnsubscribed())
-                subscription.unsubscribe();
-        }
+        compositeSubscription.unsubscribe();
     }
 
     public Fragment getItemGenre(List<Genre> genres, int position){
@@ -67,18 +76,5 @@ public class GenrePresenter implements OnFragmentPresenterListener {
             return MovieFragment.newInstance(genres.get(position).getId());
         else
             return MovieFragment.newInstance();
-    }
-
-    @Override
-    public void bind() {
-        if(interactor != null) {
-            interactor.bind();
-        }
-    }
-
-    @Override
-    public void unbind() {
-        if(interactor != null)
-            interactor.unbind();
     }
 }

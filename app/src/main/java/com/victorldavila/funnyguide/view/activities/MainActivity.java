@@ -2,22 +2,25 @@ package com.victorldavila.funnyguide.view.activities;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.victorldavila.funnyguide.R;
-import com.victorldavila.funnyguide.view.presenters.MainPresenter;
+import com.victorldavila.funnyguide.view.presenters.MainPresenterImp;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MainActivityView{
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
 
-    private MainPresenter presenter;
+    private MainPresenterImp presenter;
     private Unbinder unbinder;
 
     @Override
@@ -28,8 +31,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         initViews();
 
-        presenter = new MainPresenter(this);
-        presenter.fragmentChange(MainPresenter.FIRST_FRAGMENT);
+        presenter = new MainPresenterImp();
+        presenter.setView(this);
+        presenter.onCreate();
     }
 
     private void initViews() {
@@ -44,6 +48,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         unbinder.unbind();
+    }
+
+    @Override
+    public void changeFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.content, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
     }
 }

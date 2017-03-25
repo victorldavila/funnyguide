@@ -1,7 +1,5 @@
 package com.victorldavila.funnyguide.view.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -15,13 +13,10 @@ import android.view.ViewGroup;
 
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
-import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.adapter.TvGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.Tv;
 import com.victorldavila.funnyguide.view.OnViewListener;
-import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
 import com.victorldavila.funnyguide.view.presenters.TvPresenter;
 
 import java.util.List;
@@ -81,11 +76,15 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
         unbinder = ButterKnife.bind(this, view);
 
         configRecycler();
+
+        presenter.onViewCreated();
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+
+        presenter.onDestroyView();
     }
 
     private void configRecycler() {
@@ -117,19 +116,5 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
     @Override
     public void onComplete() {
         tvGridAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(presenter != null)
-            presenter.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(presenter != null)
-            presenter.onStop();
     }
 }

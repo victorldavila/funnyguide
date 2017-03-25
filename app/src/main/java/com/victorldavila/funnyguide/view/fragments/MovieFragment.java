@@ -1,10 +1,11 @@
 package com.victorldavila.funnyguide.view.fragments;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.view.OnViewListener;
-import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
+import com.victorldavila.funnyguide.view.activities.DetailItemActivity;
+import com.victorldavila.funnyguide.view.presenters.MoviePresenterImp;
 
 import java.util.List;
 
@@ -32,7 +34,7 @@ import butterknife.Unbinder;
  * Use the {@link MovieFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment implements OnViewListener<Movie>{
+public class MovieFragment extends Fragment implements MovieFragmentView{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_GENRE_ID = "GENRE_ID";
 
@@ -40,7 +42,7 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     @BindView(R.id.coordinator_layout_movie) CoordinatorLayout coordinatorLayoutMovie;
 
     private MovieGridAdapter movieGridAdapter;
-    private MoviePresenter presenter;
+    private MoviePresenterImp presenter;
     private Unbinder unbinder;
 
     public MovieFragment() {
@@ -78,7 +80,7 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
         super.onCreate(savedInstanceState);
 
         FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
-        presenter = new MoviePresenter(this, api);
+        presenter = new MoviePresenterImp(this, api);
 
         presenter.verifyArgs(getArguments());
     }
@@ -96,25 +98,48 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
         unbinder = ButterKnife.bind(this, view);
 
         configRecycler();
+        presenter.onViewCreated();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+
+        presenter.onDestroyView();
     }
 
     private void configRecycler() {
-        movieGridAdapter =  new MovieGridAdapter(getActivity(), presenter);
+        movieGridAdapter =  new MovieGridAdapter(this, presenter);
         movieRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         movieRecyclerView.setAdapter(movieGridAdapter);
 
         movieRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                presenter.verifyScrolled(recyclerView, dx, dy);
+                presenter.verifyScrolled(movieRecyclerView.getLayoutManager().getChildCount()
+                        , movieRecyclerView.getLayoutManager().getItemCount()
+                        , ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()
+                        , dx
+                        , dy);
             }
         });
+    }
+
+    @Override
+    public void changeActivity(Movie movie, SimpleDraweeView image){
+        Intent intent = new Intent(getContext(), DetailItemActivity.class);
+        intent.putExtra(DetailItemActivity.MOVIE_ITEM, movie);
+
+        if (false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/) {
+            ActivityOptionsCompat options = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(getActivity()
+                            , (View)image
+                            , getString(R.string.poster_transition));
+
+            startActivity(intent, options.toBundle());
+        } else
+            startActivity(intent);
     }
 
     @Override
@@ -133,19 +158,5 @@ public class MovieFragment extends Fragment implements OnViewListener<Movie>{
     @Override
     public void onComplete() {
         movieGridAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(presenter != null)
-            presenter.onStop();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(presenter != null)
-            presenter.onStart();
     }
 }

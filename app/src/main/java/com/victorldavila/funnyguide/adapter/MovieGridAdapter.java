@@ -1,13 +1,16 @@
 package com.victorldavila.funnyguide.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.view.presenters.MoviePresenter;
+import com.victorldavila.funnyguide.view.fragments.MovieFragmentView;
+import com.victorldavila.funnyguide.view.presenters.MoviePresenterImp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +19,7 @@ import java.util.List;
  * Created by victor on 13/12/2016.
  */
 
-public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements MoviePresenter.OnBindMovieGridAdapter {
+public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements MoviePresenterImp.OnBindMovieGridAdapter {
 
     public static final int FOOTER_SIZE = 1;
 
@@ -24,16 +27,16 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public static final int ITEM_TYPE = 20;
 
     private ArrayList<Movie> items;
-    private Context context;
     private boolean isLoad;
 
-    private MoviePresenter presenter;
+    private MoviePresenterImp presenter;
+    private MovieFragmentView view;
 
-    public MovieGridAdapter(Context context, MoviePresenter presenter) {
-        this.context = context;
+    public MovieGridAdapter(MovieFragmentView view, MoviePresenterImp presenter) {
+        this.view = view;
         this.presenter = presenter;
 
-        items = new ArrayList<Movie>();
+        items = new ArrayList<>();
         isLoad = true;
     }
 
@@ -47,7 +50,13 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return presenter.getViewHolder(parent, viewType);
+        if(viewType == MovieGridAdapter.ITEM_TYPE){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie_layout, parent, false);
+            return new PosterViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_poster_load, parent, false);
+            return new LoadPosterViewHolder(view);
+        }
     }
 
     @Override
@@ -60,8 +69,8 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         posterViewHolder.originalTitlePoster.setText(presenter.getText(movie.getTitle()));
         posterViewHolder.countVotePoster.setText(presenter.getText(String.valueOf(movie.getVote_average())));
         posterViewHolder.yearReleasePoster.setText(presenter.getText(movie.getRelease_date()));
-        presenter.loadImage(posterViewHolder.imagePosterPoster, movie, posterViewHolder.loadImagePoster);
-        posterViewHolder.imagePosterPoster.setOnClickListener(v -> presenter.clickPoster(context,posterViewHolder.imagePosterPoster, movie));
+        posterViewHolder.imagePosterPoster.setController(presenter.loadImage(movie.getPoster_path(), posterViewHolder.loadImagePoster));
+        posterViewHolder.imagePosterPoster.setOnClickListener(v -> view.changeActivity(movie, posterViewHolder.imagePosterPoster));
     }
 
     @Override
@@ -81,6 +90,9 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        return presenter.getItemViewType(position, getItemCount());
+        if(position == (getItemCount() - 1))
+            return MovieGridAdapter.FOOTER_TYPE;
+        else
+            return MovieGridAdapter.ITEM_TYPE;
     }
 }
