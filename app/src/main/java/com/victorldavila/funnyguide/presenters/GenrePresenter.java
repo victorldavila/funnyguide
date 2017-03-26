@@ -4,7 +4,7 @@ import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.models.NetWorkError;
 import com.victorldavila.funnyguide.models.ResponseGenre;
 import com.victorldavila.funnyguide.repository.GenreRepository;
-import com.victorldavila.funnyguide.view.OnViewListener;
+import com.victorldavila.funnyguide.view.ResponseView;
 
 import rx.Subscription;
 
@@ -12,9 +12,9 @@ import rx.Subscription;
  * Created by victor on 10/12/2016.
  */
 
-public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<OnViewListener<Genre>>, RxResponse<ResponseGenre> {
+public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<ResponseView<Genre>>, RxResponse<ResponseGenre> {
 
-    private OnViewListener<Genre> view;
+    private ResponseView<Genre> view;
     private GenreRepository genreRepository;
 
     private Subscription genreSubscription;
@@ -60,7 +60,7 @@ public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter
     }
 
     @Override
-    public void addView(OnViewListener<Genre> view) {
+    public void addView(ResponseView<Genre> view) {
         this.view = view;
     }
 }

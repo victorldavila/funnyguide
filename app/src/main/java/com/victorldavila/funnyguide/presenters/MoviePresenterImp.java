@@ -48,9 +48,6 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
 
     @Override
     public void onViewCreated() {
-        if(view == null)
-            throw new NullViewException();
-
         initPage();
         getMoviesGenre();
     }
@@ -65,46 +62,14 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
     }
 
     public void getMoviesGenre(){
-        rxUnSubscribe(movieSubscription);
+        verifyNullView();
+
+        rxUnSubscribe(getMovieSubscription());
         if(movieRepository != null) {
             view.setLoadRecycler(true);
-            movieSubscription = movieRepository.getMovieGenre(genreId, page, this);
-            addSubscription(movieSubscription);
+           setMovieSubscription(movieRepository.getMovieListGenre(genreId, page, this));
+            addSubscription(getMovieSubscription());
         }
-    }
-
-    public DraweeController loadImage(String pathPoster, final ProgressBar load){
-
-        Uri bmpUri = Uri.parse(FunnyApi.BASE_URL_IMAGE_TMDB + pathPoster);
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(bmpUri).build();
-
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setImageRequest(imageRequest)
-                .setControllerListener(getBaseControllerListener(load))
-                .setAutoPlayAnimations(true)
-                // other setters
-                .build();
-
-        return controller;
-    }
-
-    @NonNull
-    private BaseControllerListener<ImageInfo> getBaseControllerListener(final ProgressBar load) {
-        return new BaseControllerListener<ImageInfo>() {
-            @Override
-            public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable anim) {
-                load.setVisibility(View.GONE);
-
-                if (imageInfo == null)
-                    return;
-            }
-
-            @Override
-            public void onFailure(String id, Throwable throwable) {
-                load.setVisibility(View.GONE);
-                Log.e(getClass().getSimpleName(), throwable.getMessage());
-            }
-        };
     }
 
     public void setGenreId(int genreId) {
@@ -123,19 +88,38 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
 
     @Override
     public void onNext(ResponseListItem<Movie> result) {
+        verifyNullView();
+
         view.onItemList(result.getResults());
     }
 
     @Override
     public void onError(NetWorkError error) {
+        verifyNullView();
+
         view.onError(error.getStatus_message());
         view.setLoadRecycler(false);
     }
 
     @Override
     public void onComplete() {
+        verifyNullView();
+
         countPage();
 
         view.setLoadRecycler(false);
+    }
+
+    private void verifyNullView() {
+        if(view == null)
+            throw new NullViewException();
+    }
+
+    public Subscription getMovieSubscription() {
+        return movieSubscription;
+    }
+
+    public void setMovieSubscription(Subscription movieSubscription) {
+        this.movieSubscription = movieSubscription;
     }
 }

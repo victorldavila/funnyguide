@@ -17,7 +17,7 @@ import com.victorldavila.funnyguide.adapter.GenreViewPagerAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.repository.GenreRepositoryImp;
-import com.victorldavila.funnyguide.view.OnViewListener;
+import com.victorldavila.funnyguide.view.ResponseView;
 import com.victorldavila.funnyguide.presenters.GenrePresenter;
 
 import java.util.List;
@@ -32,7 +32,7 @@ import butterknife.Unbinder;
  * Use the {@link GenreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GenreFragment extends Fragment implements OnViewListener<Genre>{
+public class GenreFragment extends Fragment implements ResponseView<Genre> {
 
     @BindView(R.id.tab_layout_genres) TabLayout tabBarGenre;
     @BindView(R.id.view_pager_movies) ViewPager moviesViewPager;

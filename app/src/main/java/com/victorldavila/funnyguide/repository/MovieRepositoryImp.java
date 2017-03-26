@@ -24,14 +24,14 @@ public class MovieRepositoryImp implements MovieRepository{
     }
 
     @Override
-    public Subscription getMovieGenre(int genreId, int page, RxResponse<ResponseListItem<Movie>> presenterView) {
-        return getMovieListGenre(genreId, page).subscribe(movieResponseListItem -> presenterView.onNext(movieResponseListItem)
+    public Subscription getMovieListGenre(int genreId, int page, RxResponse<ResponseListItem<Movie>> presenterView) {
+        return getMovieListGenreObservable(genreId, page).subscribe(movieResponseListItem -> presenterView.onNext(movieResponseListItem)
                 , throwable -> presenterView.onError(ErrorHandler.parseError(throwable))
                 , () -> presenterView.onComplete());
     }
 
     @Override
-    public Observable<ResponseListItem<Movie>> getMovieListGenre(int genreId, int page){
+    public Observable<ResponseListItem<Movie>> getMovieListGenreObservable(int genreId, int page){
         return funnyApi.getAPI().getMoviesGenreObservable(genreId, funnyApi.getQueryStringList(page))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

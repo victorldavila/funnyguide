@@ -17,6 +17,7 @@ buildscript {
 // Required because retrolambda is on maven central
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 android {
@@ -70,4 +71,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:2.+"
 }

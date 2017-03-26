@@ -12,6 +12,6 @@ import rx.Subscription;
  */
 
 public interface MovieRepository {
-    Subscription getMovieGenre(int genreId, final int page, RxResponse<ResponseListItem<Movie>> presenterView);
-    Observable<ResponseListItem<Movie>> getMovieListGenre(int genreId, int page);
+    Subscription getMovieListGenre(int genreId, int page, RxResponse<ResponseListItem<Movie>> presenterView);
+    Observable<ResponseListItem<Movie>> getMovieListGenreObservable(int genreId, int page);
 }

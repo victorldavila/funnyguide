@@ -16,7 +16,7 @@ public class BaseRxPresenter {
     }
 
     protected void rxUnSubscribe(Subscription subscription){
-        if(subscription!=null && !subscription.isUnsubscribed()) {
+        if(subscription != null && !subscription.isUnsubscribed()) {
             compositeSubscription.remove(subscription);
             subscription.unsubscribe();
         }

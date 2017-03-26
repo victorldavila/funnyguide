@@ -33,7 +33,7 @@ public class FunnyApi {
         protected static final String API_KEY = "api_key";
         public static final String LANGUAGE = "language";
 
-        protected static final String TMDB_KEY = "";
+        protected static final String TMDB_KEY = "fcfc8516fa3b8989e68936634bc5ea84";
         public static final String LANGUAGE_BR = "pt-br";
         public static final String PAGE = "page";
     }
