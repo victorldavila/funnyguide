@@ -11,6 +11,8 @@ import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.view.fragments.MovieFragmentView;
+import com.victorldavila.funnyguide.view.fragments.TvFragmentView;
 import com.victorldavila.funnyguide.view.presenters.TvPresenter;
 
 import java.util.ArrayList;
@@ -20,24 +22,22 @@ import java.util.List;
  * Created by victo on 19/12/2016.
  */
 
-public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements TvPresenter.OnBindTvGridAdapter {
+public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int FOOTER_SIZE = 1;
 
     public static final int FOOTER_TYPE = 10;
     public static final int ITEM_TYPE = 20;
 
     private ArrayList<Tv> items;
-    private Context context;
-    private boolean isLoad;
+    private boolean load;
 
-    private TvPresenter presenter;
+    private TvFragmentView view;
 
-    public TvGridAdapter(Context context, TvPresenter presenter) {
-        this.context = context;
-        this.presenter = presenter;
+    public TvGridAdapter(TvFragmentView view) {
+        this.view = view;
 
         items = new ArrayList<Tv>();
-        isLoad = true;
+        load = true;
     }
 
     public void addList(List<Tv> items){
@@ -50,12 +50,35 @@ public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return presenter.getViewHolder(parent, viewType);
+        if(viewType == TvGridAdapter.ITEM_TYPE){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie_layout, parent, false);
+            return new PosterViewHolder(view);
+        } else{
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_poster_load, parent, false);
+            return new LoadPosterViewHolder(view);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        presenter.bindTvAdapter(holder, items, position, this);
+        if(holder instanceof PosterViewHolder){
+            PosterViewHolder posterViewHolder = (PosterViewHolder) holder;
+            setInfoTv(posterViewHolder, items.get(position));
+        } else if(holder instanceof LoadPosterViewHolder){
+            LoadPosterViewHolder loadPosterViewHolder = (LoadPosterViewHolder) holder;
+            if(isLoad())
+                onEnableLoad(loadPosterViewHolder);
+            else
+                onDisableLoad(loadPosterViewHolder);
+        }
+    }
+
+    private boolean isLoad() {
+        return load;
+    }
+
+    public void setLoad(boolean load) {
+        this.load = load;
     }
 
     @Override
@@ -65,23 +88,25 @@ public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        return presenter.getItemViewType(position, getItemCount());
+        if(position == (getItemCount() - 1))
+            return TvGridAdapter.FOOTER_TYPE;
+        else
+            return TvGridAdapter.ITEM_TYPE;
     }
 
-    @Override
     public void setInfoTv(PosterViewHolder posterViewHolder, Tv tv) {
-        posterViewHolder.originalTitlePoster.setText(presenter.getText(tv.getOriginal_name()));
-        posterViewHolder.countVotePoster.setText(presenter.getText(String.valueOf(tv.getVote_average())));
-        posterViewHolder.yearReleasePoster.setText(presenter.getText(tv.getFirst_air_date()));
-        presenter.loadImage(posterViewHolder.imagePosterPoster, tv, posterViewHolder.loadImagePoster);
+        posterViewHolder.originalTitlePoster.setText(tv.getOriginal_name());
+        posterViewHolder.countVotePoster.setText(String.valueOf(tv.getVote_average()));
+        posterViewHolder.yearReleasePoster.setText(tv.getFirst_air_date());
+        posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(tv.getPoster_path(), posterViewHolder.loadImagePoster));
+        posterViewHolder.imagePosterPoster.setOnClickListener(v -> view.changeActivity(tv, posterViewHolder.imagePosterPoster));
     }
 
-    @Override
+
     public void onEnableLoad(LoadPosterViewHolder loadPosterViewHolder) {
         loadPosterViewHolder.relativeLayoutLoad.setVisibility(View.VISIBLE);
     }
 
-    @Override
     public void onDisableLoad(LoadPosterViewHolder loadPosterViewHolder) {
         loadPosterViewHolder.relativeLayoutLoad.setVisibility(View.GONE);
     }

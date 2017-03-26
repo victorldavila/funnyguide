@@ -10,4 +10,5 @@ import com.victorldavila.funnyguide.view.OnViewListener;
 
 public interface MovieFragmentView extends OnViewListener<Movie> {
     void changeActivity(Movie movie, SimpleDraweeView image);
+    void setLoadRecycler(boolean isLoad);
 }

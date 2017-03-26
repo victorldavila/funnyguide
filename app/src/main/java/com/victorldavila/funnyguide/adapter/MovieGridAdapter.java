@@ -19,7 +19,7 @@ import java.util.List;
  * Created by victor on 13/12/2016.
  */
 
-public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements MoviePresenterImp.OnBindMovieGridAdapter {
+public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int FOOTER_SIZE = 1;
 
@@ -27,17 +27,15 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public static final int ITEM_TYPE = 20;
 
     private ArrayList<Movie> items;
-    private boolean isLoad;
 
-    private MoviePresenterImp presenter;
     private MovieFragmentView view;
+    private boolean load;
 
-    public MovieGridAdapter(MovieFragmentView view, MoviePresenterImp presenter) {
+    public MovieGridAdapter(MovieFragmentView view) {
         this.view = view;
-        this.presenter = presenter;
 
         items = new ArrayList<>();
-        isLoad = true;
+        load = true;
     }
 
     public void addList(List<Movie> items){
@@ -61,25 +59,31 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        presenter.bindMovieAdapter(holder, items, position, this);
+        if (holder instanceof PosterViewHolder) {
+            PosterViewHolder posterViewHolder = (PosterViewHolder) holder;
+            setInfoMovie(posterViewHolder, items.get(position));
+        } else if (holder instanceof LoadPosterViewHolder) {
+            LoadPosterViewHolder loadPosterViewHolder = (LoadPosterViewHolder) holder;
+            if (isLoad())
+                onEnableLoad(loadPosterViewHolder);
+            else
+                onDisableLoad(loadPosterViewHolder);
+        }
     }
 
-    @Override
-    public void setInfoMovie(PosterViewHolder posterViewHolder, Movie movie) {
-        posterViewHolder.originalTitlePoster.setText(presenter.getText(movie.getTitle()));
-        posterViewHolder.countVotePoster.setText(presenter.getText(String.valueOf(movie.getVote_average())));
-        posterViewHolder.yearReleasePoster.setText(presenter.getText(movie.getRelease_date()));
-        posterViewHolder.imagePosterPoster.setController(presenter.loadImage(movie.getPoster_path(), posterViewHolder.loadImagePoster));
+    private void setInfoMovie(PosterViewHolder posterViewHolder, Movie movie) {
+        posterViewHolder.originalTitlePoster.setText(movie.getTitle());
+        posterViewHolder.countVotePoster.setText(String.valueOf(movie.getVote_average()));
+        posterViewHolder.yearReleasePoster.setText(movie.getRelease_date());
+        posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(movie.getPoster_path(), posterViewHolder.loadImagePoster));
         posterViewHolder.imagePosterPoster.setOnClickListener(v -> view.changeActivity(movie, posterViewHolder.imagePosterPoster));
     }
 
-    @Override
-    public void onEnableLoad(LoadPosterViewHolder loadPosterViewHolder) {
+    private void onEnableLoad(LoadPosterViewHolder loadPosterViewHolder) {
         loadPosterViewHolder.relativeLayoutLoad.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onDisableLoad(LoadPosterViewHolder loadPosterViewHolder) {
+    private void onDisableLoad(LoadPosterViewHolder loadPosterViewHolder) {
         loadPosterViewHolder.relativeLayoutLoad.setVisibility(View.GONE);
     }
 
@@ -94,5 +98,13 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return MovieGridAdapter.FOOTER_TYPE;
         else
             return MovieGridAdapter.ITEM_TYPE;
+    }
+
+    public boolean isLoad() {
+        return load;
+    }
+
+    public void setLoad(boolean load) {
+        this.load = load;
     }
 }

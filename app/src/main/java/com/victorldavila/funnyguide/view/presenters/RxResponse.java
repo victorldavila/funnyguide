@@ -1,9 +1,9 @@
-package com.victorldavila.funnyguide.view.presenters.interactors;
+package com.victorldavila.funnyguide.view.presenters;
 
 import com.victorldavila.funnyguide.models.NetWorkError;
 
 /**
- * Created by victo on 25/03/2017.
+ * Created by victor on 25/03/2017.
  */
 
 public interface RxResponse<T> {

@@ -1,9 +1,11 @@
 package com.victorldavila.funnyguide.view.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.TvGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
+import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.repository.TvRepositoryImp;
 import com.victorldavila.funnyguide.view.OnViewListener;
+import com.victorldavila.funnyguide.view.activities.DetailItemActivity;
 import com.victorldavila.funnyguide.view.presenters.TvPresenter;
 
 import java.util.List;
@@ -31,7 +37,7 @@ import butterknife.Unbinder;
  * Use the {@link TvFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TvFragment extends Fragment implements OnViewListener<Tv> {
+public class TvFragment extends Fragment implements TvFragmentView {
 
     @BindView(R.id.recycler_tv_item) RecyclerView tvRecyclerView;
     @BindView(R.id.coordinator_layout_tv) CoordinatorLayout coordinatorLayoutMovie;
@@ -60,7 +66,9 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
         super.onCreate(savedInstanceState);
 
         FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
-        presenter = new TvPresenter(this, api);
+
+        presenter = new TvPresenter(new TvRepositoryImp(api));
+        presenter.addView(this);
     }
 
     @Override
@@ -88,14 +96,17 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
     }
 
     private void configRecycler() {
-        tvGridAdapter =  new TvGridAdapter(getActivity(), presenter);
+        tvGridAdapter =  new TvGridAdapter(this);
         tvRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         tvRecyclerView.setAdapter(tvGridAdapter);
 
         tvRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                presenter.verifyScroll(dy, dx, recyclerView);
+                presenter.verifyScroll(tvRecyclerView.getLayoutManager().getChildCount()
+                        , tvRecyclerView.getLayoutManager().getItemCount()
+                        , ((GridLayoutManager)tvRecyclerView.getLayoutManager()).findFirstVisibleItemPosition()
+                        , dy);
             }
         });
     }
@@ -114,7 +125,25 @@ public class TvFragment extends Fragment implements OnViewListener<Tv> {
     }
 
     @Override
-    public void onComplete() {
+    public void changeActivity(Tv tv, SimpleDraweeView image) {
+        Intent intent = new Intent(getContext(), DetailItemActivity.class);
+        intent.putExtra(DetailItemActivity.TV_ITEM, tv);
+
+        if (false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/) {
+            ActivityOptionsCompat options = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(getActivity()
+                            , (View)image
+                            , getString(R.string.poster_transition));
+
+            startActivity(intent, options.toBundle());
+        } else
+            startActivity(intent);
+    }
+
+    @Override
+    public void setLoadRecycler(boolean isLoad) {
+        tvGridAdapter.setLoad(isLoad);
+
         tvGridAdapter.notifyDataSetChanged();
     }
 }

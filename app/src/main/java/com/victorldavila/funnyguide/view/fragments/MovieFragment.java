@@ -19,6 +19,7 @@ import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
+import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailItemActivity;
 import com.victorldavila.funnyguide.view.presenters.MoviePresenterImp;
 
@@ -34,7 +35,7 @@ import butterknife.Unbinder;
  * Use the {@link MovieFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment implements MovieFragmentView{
+public class MovieFragment extends Fragment implements MovieFragmentView {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_GENRE_ID = "GENRE_ID";
 
@@ -80,9 +81,14 @@ public class MovieFragment extends Fragment implements MovieFragmentView{
         super.onCreate(savedInstanceState);
 
         FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
-        presenter = new MoviePresenterImp(this, api);
 
-        presenter.verifyArgs(getArguments());
+        presenter = new MoviePresenterImp(new MovieRepositoryImp(api));
+        presenter.addView(this);
+
+        if (getArguments() != null) {
+            int genreId = getArguments().getInt(MovieFragment.ARG_GENRE_ID);
+            presenter.setGenreId(genreId);
+        }
     }
 
     @Override
@@ -110,7 +116,7 @@ public class MovieFragment extends Fragment implements MovieFragmentView{
     }
 
     private void configRecycler() {
-        movieGridAdapter =  new MovieGridAdapter(this, presenter);
+        movieGridAdapter =  new MovieGridAdapter(this);
         movieRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         movieRecyclerView.setAdapter(movieGridAdapter);
 
@@ -120,7 +126,6 @@ public class MovieFragment extends Fragment implements MovieFragmentView{
                 presenter.verifyScrolled(movieRecyclerView.getLayoutManager().getChildCount()
                         , movieRecyclerView.getLayoutManager().getItemCount()
                         , ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()
-                        , dx
                         , dy);
             }
         });
@@ -143,6 +148,13 @@ public class MovieFragment extends Fragment implements MovieFragmentView{
     }
 
     @Override
+    public void setLoadRecycler(boolean isLoad) {
+        movieGridAdapter.setLoad(isLoad);
+
+        movieGridAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onItemList(List<Movie> results) {
         movieGridAdapter.addList(results);
     }
@@ -151,12 +163,5 @@ public class MovieFragment extends Fragment implements MovieFragmentView{
     public void onError(String error) {
         Snackbar snackbar = Snackbar.make(coordinatorLayoutMovie, error, Snackbar.LENGTH_LONG);
         snackbar.show();
-
-        movieGridAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onComplete() {
-        movieGridAdapter.notifyDataSetChanged();
     }
 }

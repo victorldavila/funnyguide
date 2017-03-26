@@ -12,6 +12,7 @@ import com.victorldavila.funnyguide.R;
 public class DetailItemActivity extends AppCompatActivity {
 
     public static final String MOVIE_ITEM = "MOVIE_ITEM";
+    public static final String TV_ITEM = "TV_ITEM";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

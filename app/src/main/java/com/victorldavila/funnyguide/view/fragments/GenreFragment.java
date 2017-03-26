@@ -17,6 +17,7 @@ import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.GenreViewPagerAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Genre;
+import com.victorldavila.funnyguide.repository.GenreRepositoryImp;
 import com.victorldavila.funnyguide.view.OnViewListener;
 import com.victorldavila.funnyguide.view.presenters.GenrePresenter;
 
@@ -39,6 +40,7 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     @BindView(R.id.coordinator_layout_genre) CoordinatorLayout coordinatorLayoutGenre;
 
     private GenrePresenter presenter;
+
     private Unbinder unbinder;
 
     public GenreFragment() {
@@ -61,7 +63,8 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
         super.onCreate(savedInstanceState);
 
         FunnyApi api = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
-        presenter = new GenrePresenter(this, api);
+        presenter = new GenrePresenter(new GenreRepositoryImp(api));
+        presenter.addView(this);
     }
 
     @Override
@@ -95,7 +98,7 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
 
     @Override
     public void onItemList(List<Genre> results) {
-        GenreViewPagerAdapter adapter = new GenreViewPagerAdapter(getFragmentManager(), results, presenter);
+        GenreViewPagerAdapter adapter = new GenreViewPagerAdapter(getFragmentManager(), results);
         moviesViewPager.setAdapter(adapter);
     }
 
@@ -103,10 +106,5 @@ public class GenreFragment extends Fragment implements OnViewListener<Genre>{
     public void onError(String error) {
         Snackbar snackbar = Snackbar.make(coordinatorLayoutGenre, error, Snackbar.LENGTH_LONG);
         snackbar.show();
-    }
-
-    @Override
-    public void onComplete() {
-
     }
 }

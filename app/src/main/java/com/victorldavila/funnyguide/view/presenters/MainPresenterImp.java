@@ -10,7 +10,7 @@ import com.victorldavila.funnyguide.view.fragments.TvFragment;
  * Created by victor on 10/12/2016.
  */
 
-public class MainPresenterImp implements ActivityPresenter {
+public class MainPresenterImp implements ActivityPresenter<MainActivityView> {
 
     private MainActivityView view;
 
@@ -47,7 +47,8 @@ public class MainPresenterImp implements ActivityPresenter {
         }
     }
 
-    public void setView(MainActivityView view) {
+    @Override
+    public void addView(MainActivityView view) {
         this.view = view;
     }
 }

@@ -1,51 +1,33 @@
 package com.victorldavila.funnyguide.view.presenters;
 
-import android.support.v4.app.Fragment;
-
-import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Genre;
+import com.victorldavila.funnyguide.models.NetWorkError;
+import com.victorldavila.funnyguide.models.ResponseGenre;
+import com.victorldavila.funnyguide.repository.GenreRepository;
 import com.victorldavila.funnyguide.view.OnViewListener;
-import com.victorldavila.funnyguide.view.fragments.MovieFragment;
-import com.victorldavila.funnyguide.view.presenters.interactors.GenreInteractor;
-
-import java.util.List;
 
 import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by victor on 10/12/2016.
  */
 
-public class GenrePresenter implements FragmentPresenter {
+public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<OnViewListener<Genre>>, RxResponse<ResponseGenre> {
 
     private OnViewListener<Genre> view;
-    private GenreInteractor interactor;
+    private GenreRepository genreRepository;
 
-    private CompositeSubscription compositeSubscription;
     private Subscription genreSubscription;
 
-    public GenrePresenter(OnViewListener<Genre> view, FunnyApi api){
-        this.view = view;
-
-        compositeSubscription = new CompositeSubscription();
-        interactor = new GenreInteractor(view, api);
-    }
-
-    @Override
-    public void onAttach() {
-        if(interactor != null)
-            interactor.bind();
-    }
-
-    @Override
-    public void onDettach() {
-        if(interactor != null)
-            interactor.unbind();
+    public GenrePresenter(GenreRepository genreRepository){
+        this.genreRepository = genreRepository;
     }
 
     @Override
     public void onViewCreated() {
+        if(view == null)
+            throw new NullViewException();
+
         getGenre();
     }
 
@@ -56,25 +38,29 @@ public class GenrePresenter implements FragmentPresenter {
 
     public void getGenre(){
         rxUnSubscribe(genreSubscription);
-        if(interactor != null) {
-            genreSubscription = interactor.getGenreMovie();
-            compositeSubscription.add(genreSubscription);
+        if(genreRepository != null) {
+            genreSubscription = genreRepository.getMovieGenre(this);
+            addSubscription(genreSubscription);
         }
     }
 
-    private void rxUnSubscribe(Subscription subscription){
-        if(subscription!=null && !subscription.isUnsubscribed())
-            subscription.unsubscribe();
+    @Override
+    public void onNext(ResponseGenre result) {
+        view.onItemList(result.getGenres());
     }
 
-    public void rxUnSubscribe(){
-        compositeSubscription.unsubscribe();
+    @Override
+    public void onError(NetWorkError error) {
+        view.onError(error.getStatus_message());
     }
 
-    public Fragment getItemGenre(List<Genre> genres, int position){
-        if(genres != null)
-            return MovieFragment.newInstance(genres.get(position).getId());
-        else
-            return MovieFragment.newInstance();
+    @Override
+    public void onComplete() {
+
+    }
+
+    @Override
+    public void addView(OnViewListener<Genre> view) {
+        this.view = view;
     }
 }

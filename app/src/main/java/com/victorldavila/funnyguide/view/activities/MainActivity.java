@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         initViews();
 
         presenter = new MainPresenterImp();
-        presenter.setView(this);
+        presenter.addView(this);
         presenter.onCreate();
     }
 
