@@ -1,7 +1,7 @@
 package com.victorldavila.funnyguide.repository;
 
 import com.victorldavila.funnyguide.models.ResponseGenre;
-import com.victorldavila.funnyguide.view.presenters.RxResponse;
+import com.victorldavila.funnyguide.presenters.RxResponse;
 
 import rx.Subscription;
 

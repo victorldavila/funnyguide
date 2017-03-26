@@ -21,7 +21,7 @@ import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailItemActivity;
-import com.victorldavila.funnyguide.view.presenters.MoviePresenterImp;
+import com.victorldavila.funnyguide.presenters.MoviePresenterImp;
 
 import java.util.List;
 

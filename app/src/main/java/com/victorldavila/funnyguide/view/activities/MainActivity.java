@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.victorldavila.funnyguide.R;
-import com.victorldavila.funnyguide.view.presenters.MainPresenterImp;
+import com.victorldavila.funnyguide.presenters.MainPresenterImp;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

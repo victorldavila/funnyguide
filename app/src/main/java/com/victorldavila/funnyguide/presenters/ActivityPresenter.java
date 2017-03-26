@@ -1,4 +1,4 @@
-package com.victorldavila.funnyguide.view.presenters;
+package com.victorldavila.funnyguide.presenters;
 
 /**
  * Created by victo on 05/03/2017.

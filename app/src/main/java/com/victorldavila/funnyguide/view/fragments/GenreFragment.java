@@ -1,6 +1,5 @@
 package com.victorldavila.funnyguide.view.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -19,7 +18,7 @@ import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.repository.GenreRepositoryImp;
 import com.victorldavila.funnyguide.view.OnViewListener;
-import com.victorldavila.funnyguide.view.presenters.GenrePresenter;
+import com.victorldavila.funnyguide.presenters.GenrePresenter;
 
 import java.util.List;
 

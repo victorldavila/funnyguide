@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.view.fragments.MovieFragment;
-import com.victorldavila.funnyguide.view.presenters.GenrePresenter;
 
 import java.util.List;
 

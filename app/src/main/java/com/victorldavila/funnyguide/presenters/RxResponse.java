@@ -1,4 +1,4 @@
-package com.victorldavila.funnyguide.view.presenters;
+package com.victorldavila.funnyguide.presenters;
 
 import com.victorldavila.funnyguide.models.NetWorkError;
 

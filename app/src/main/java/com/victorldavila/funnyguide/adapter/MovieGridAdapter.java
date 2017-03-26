@@ -10,7 +10,6 @@ import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.view.fragments.MovieFragmentView;
-import com.victorldavila.funnyguide.view.presenters.MoviePresenterImp;
 
 import java.util.ArrayList;
 import java.util.List;

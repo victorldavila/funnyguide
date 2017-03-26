@@ -4,7 +4,7 @@ import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.ResponseListItem;
-import com.victorldavila.funnyguide.view.presenters.RxResponse;
+import com.victorldavila.funnyguide.presenters.RxResponse;
 
 import rx.Observable;
 import rx.Subscription;

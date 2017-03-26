@@ -18,12 +18,10 @@ import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.TvGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.models.Tv;
 import com.victorldavila.funnyguide.repository.TvRepositoryImp;
-import com.victorldavila.funnyguide.view.OnViewListener;
 import com.victorldavila.funnyguide.view.activities.DetailItemActivity;
-import com.victorldavila.funnyguide.view.presenters.TvPresenter;
+import com.victorldavila.funnyguide.presenters.TvPresenter;
 
 import java.util.List;
 

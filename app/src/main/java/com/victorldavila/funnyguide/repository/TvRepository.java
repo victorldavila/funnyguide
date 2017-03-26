@@ -2,7 +2,7 @@ package com.victorldavila.funnyguide.repository;
 
 import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.models.Tv;
-import com.victorldavila.funnyguide.view.presenters.RxResponse;
+import com.victorldavila.funnyguide.presenters.RxResponse;
 
 import rx.Observable;
 import rx.Subscription;
