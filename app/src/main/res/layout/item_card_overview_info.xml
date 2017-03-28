@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="16dp"
+    style="@style/cardview_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
@@ -14,17 +14,11 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/lbl_overview"
-            android:text="@string/lbl_overview"
-            style="@style/text_lbl_poster_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
             android:id="@+id/overview_info_poster"
             style="@style/text_poster_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

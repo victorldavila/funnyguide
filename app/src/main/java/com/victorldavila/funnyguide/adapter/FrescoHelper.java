@@ -27,7 +27,8 @@ public class FrescoHelper {
         return new BaseControllerListener<ImageInfo>() {
             @Override
             public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable anim) {
-                load.setVisibility(View.GONE);
+                if(load != null)
+                    load.setVisibility(View.GONE);
 
                 if (imageInfo == null)
                     return;
@@ -35,7 +36,9 @@ public class FrescoHelper {
 
             @Override
             public void onFailure(String id, Throwable throwable) {
-                load.setVisibility(View.GONE);
+                if(load != null)
+                    load.setVisibility(View.GONE);
+
                 Log.e(getClass().getSimpleName(), throwable.getMessage());
             }
         };

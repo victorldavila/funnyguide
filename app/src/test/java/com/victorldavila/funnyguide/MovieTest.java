@@ -16,6 +16,7 @@ import org.mockito.ArgumentCaptor;
 
 import rx.Subscription;
 
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -190,6 +191,17 @@ public class MovieTest {
         moviePresenter.onDestroyView();
 
         verify(moviePresenter, times(1)).rxUnSubscribe();
+    }
+
+    @Test
+    public void verifysetGenreId(){
+        moviePresenter.setGenreId(35);
+        assertEquals(moviePresenter.getGenreId(), 35);
+    }
+
+    @Test
+    public void verifyGenreIdNull(){
+        assertEquals(moviePresenter.getGenreId(), 0);
     }
 
     private void getSpyPresenter() {

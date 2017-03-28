@@ -14,5 +14,7 @@ import rx.Subscription;
 public interface TvRepository {
 
     Subscription getTvTopRated(int page, RxResponse<ResponseListItem<Tv>> rxResponse);
+    Subscription getTv(int tvId, RxResponse<Tv> rxResponse);
+    Observable<Tv> getTvObservable(int tvId);
     Observable<ResponseListItem<Tv>> getTvTopRatedObservable(int page);
 }

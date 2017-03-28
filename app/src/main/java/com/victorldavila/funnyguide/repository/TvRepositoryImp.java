@@ -31,6 +31,20 @@ public class TvRepositoryImp implements TvRepository{
     }
 
     @Override
+    public Subscription getTv(int tvId, RxResponse<Tv> rxResponse) {
+        return getTvObservable(tvId).subscribe(tv -> rxResponse.onNext(tv)
+                ,throwable -> rxResponse.onError(ErrorHandler.parseError(throwable))
+                , () -> rxResponse.onComplete());
+    }
+
+    @Override
+    public Observable<Tv> getTvObservable(int tvId) {
+        return funnyApi.getAPI().getSerieObservable(tvId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public Observable<ResponseListItem<Tv>> getTvTopRatedObservable(int page) {
         return funnyApi.getAPI().getSeriesTopRateObservable(funnyApi.getQueryStringList(page))
                 .subscribeOn(Schedulers.io())

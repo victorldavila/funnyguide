@@ -31,6 +31,20 @@ public class MovieRepositoryImp implements MovieRepository{
     }
 
     @Override
+    public Subscription getMovie(int movieId, RxResponse<Movie> presenterView) {
+        return getMovieObservable(movieId).subscribe(movie -> presenterView.onNext(movie)
+                , throwable -> presenterView.onError(ErrorHandler.parseError(throwable))
+                , () -> presenterView.onComplete());
+    }
+
+    @Override
+    public Observable<Movie> getMovieObservable(int movieId) {
+        return funnyApi.getAPI().getMovieObservable(movieId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public Observable<ResponseListItem<Movie>> getMovieListGenreObservable(int genreId, int page){
         return funnyApi.getAPI().getMoviesGenreObservable(genreId, funnyApi.getQueryStringList(page))
                 .subscribeOn(Schedulers.io())

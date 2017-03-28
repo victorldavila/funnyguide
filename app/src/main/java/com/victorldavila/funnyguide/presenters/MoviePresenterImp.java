@@ -76,6 +76,10 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
         this.genreId = genreId;
     }
 
+    public int getGenreId() {
+        return genreId;
+    }
+
     public void countPage() {
         page++;
     }

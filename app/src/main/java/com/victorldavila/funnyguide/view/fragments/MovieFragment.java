@@ -1,6 +1,7 @@
 package com.victorldavila.funnyguide.view.fragments;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.view.DraweeTransition;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
@@ -20,7 +23,7 @@ import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
-import com.victorldavila.funnyguide.view.activities.DetailItemActivity;
+import com.victorldavila.funnyguide.view.activities.DetailMovieActivity;
 import com.victorldavila.funnyguide.presenters.MoviePresenterImp;
 
 import java.util.List;
@@ -133,10 +136,11 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
 
     @Override
     public void changeActivity(Movie movie, SimpleDraweeView image){
-        Intent intent = new Intent(getContext(), DetailItemActivity.class);
-        intent.putExtra(DetailItemActivity.MOVIE_ITEM, movie);
+        Intent intent = new Intent(getContext(), DetailMovieActivity.class);
+        intent.putExtra(DetailMovieActivity.MOVIE_ITEM, movie);
 
-        if (false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
             ActivityOptionsCompat options = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(getActivity()
                             , (View)image

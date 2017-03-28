@@ -20,6 +20,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/lbl_original_title"
             android:id="@+id/original_title_info_poster"
             style="@style/text_poster_info"
@@ -36,6 +37,8 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="5dp"
             android:layout_below="@+id/original_title_info_poster"
             android:layout_toRightOf="@+id/lbl_language"
             android:id="@+id/language_info_poster"
@@ -53,6 +56,8 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="5dp"
             android:layout_below="@+id/lbl_language"
             android:layout_toRightOf="@+id/language_info_poster"
             android:id="@+id/genre_info_poster"

@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activities.DetailItemActivity"
+            android:name=".view.activities.DetailMovieActivity"
             android:label="@string/title_activity_detail_item"
             android:theme="@style/AppTheme"></activity>
     </application>

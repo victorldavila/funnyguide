@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/cardview_info"
+    android:layout_margin="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
@@ -20,6 +20,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/lbl_title"
             android:id="@+id/title_info_poster"
             style="@style/text_poster_info"
@@ -36,6 +37,8 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="6dp"
             android:layout_below="@+id/lbl_title"
             android:layout_toRightOf="@+id/lbl_rating"
             android:id="@+id/rating_info_poster"
@@ -53,6 +56,8 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="6dp"
             android:layout_below="@+id/lbl_rating"
             android:layout_toRightOf="@+id/lbl_release_date"
             android:id="@+id/release_date_info_poster"
