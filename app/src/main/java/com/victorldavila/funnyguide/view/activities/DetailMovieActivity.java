@@ -61,19 +61,27 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            createTransition();
-        }
+        setWindowConfig();
+        createTransition();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_item);
 
-        unbinder = ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(DetailMovieActivity.this);
 
         configFrescoTransition();
 
+        setEnterSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+
+                initActivity();
+            }
+        });
+    }
+
+    private void initActivity() {
         FunnyApi funnyApi = ((FunnyGuideApp)getApplication()).getFunnyApi();
         MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
         presenter = new MovieDetailPresenter(movieRepository);
@@ -82,6 +90,11 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
         getBundleInfo();
 
         presenter.onCreate();
+    }
+
+    private void setWindowConfig() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
     }
 
     private void configFrescoTransition() {
@@ -101,6 +114,7 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        createBackTransition();
     }
 
     @Override
@@ -150,13 +164,27 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
         genreMovie.setText(genre);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void createTransition() {
-        getWindow().setEnterTransition(new Slide()
-                .setDuration(500)
-                .excludeTarget(R.id.toolbar, true)
-                .excludeTarget(R.id.collapsingToolbarLayout, true)
-                .excludeTarget(android.R.id.statusBarBackground, true)
-                .excludeTarget(android.R.id.navigationBarBackground, true));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setEnterTransition(new Slide()
+                    .setDuration(500)
+                    .excludeTarget(R.id.toolbar, true)
+                    .excludeTarget(R.id.collapsingToolbarLayout, true)
+                    .excludeTarget(android.R.id.statusBarBackground, true)
+                    .excludeTarget(android.R.id.navigationBarBackground, true));
+
+            getWindow().setExitTransition(null);
+        }
+    }
+
+    private void createBackTransition() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(new android.transition.Fade()
+                    .setDuration(300)
+                    .excludeTarget(R.id.toolbar, true)
+                    .excludeTarget(R.id.collapsingToolbarLayout, true)
+                    .excludeTarget(android.R.id.statusBarBackground, true)
+                    .excludeTarget(android.R.id.navigationBarBackground, true));
+        }
     }
 }
