@@ -143,7 +143,7 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
 
             ActivityOptionsCompat options = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(getActivity()
-                            , (View)image
+                            , image
                             , getString(R.string.poster_transition));
 
             startActivity(intent, options.toBundle());

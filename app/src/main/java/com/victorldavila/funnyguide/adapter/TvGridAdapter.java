@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.victorldavila.funnyguide.FrescoHelper;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;

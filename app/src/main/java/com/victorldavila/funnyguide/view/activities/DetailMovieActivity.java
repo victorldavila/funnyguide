@@ -1,13 +1,21 @@
 package com.victorldavila.funnyguide.view.activities;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.transition.Fade;
+import android.support.transition.Transition;
+import android.support.v4.app.SharedElementCallback;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.facebook.drawee.drawable.ScalingUtils;
@@ -15,11 +23,15 @@ import com.facebook.drawee.view.DraweeTransition;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
-import com.victorldavila.funnyguide.adapter.FrescoHelper;
+import com.victorldavila.funnyguide.FrescoHelper;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.presenters.MovieDetailPresenter;
+import com.victorldavila.funnyguide.repository.MovieRepository;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
+
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +42,7 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
     public static final String MOVIE_ITEM = "MOVIE_ITEM";
     public static final String TV_ITEM = "TV_ITEM";
 
-    @BindView(R.id.collapsingToolbar) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.collapsingToolbarLayout) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.item_poster_img) SimpleDraweeView imagePosterMovie;
 
     @BindView(R.id.overview_info_poster) TextView overviewMovie;
@@ -49,15 +61,23 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            createTransition();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_item);
+
         unbinder = ButterKnife.bind(this);
 
         configFrescoTransition();
 
-        FunnyApi api = ((FunnyGuideApp)getApplication()).getFunnyApi();
-        presenter = new MovieDetailPresenter(new MovieRepositoryImp(api));
-        presenter.addView(this);
+        FunnyApi funnyApi = ((FunnyGuideApp)getApplication()).getFunnyApi();
+        MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
+        presenter = new MovieDetailPresenter(movieRepository);
+        presenter.addView(DetailMovieActivity.this);
 
         getBundleInfo();
 
@@ -67,9 +87,6 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
     private void configFrescoTransition() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             getWindow().setSharedElementEnterTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
-                    ScalingUtils.ScaleType.CENTER_CROP));
-
-            getWindow().setSharedElementReturnTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
                     ScalingUtils.ScaleType.CENTER_CROP));
         }
     }
@@ -82,6 +99,11 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
@@ -89,7 +111,7 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
 
     @Override
     public void setImageUrlPoster(String urlPoster) {
-        imagePosterMovie.setController(FrescoHelper.loadImage(urlPoster, null));
+        imagePosterMovie.setController(FrescoHelper.loadImageTransition(urlPoster, null, () -> supportStartPostponedEnterTransition()));
     }
 
     @Override
@@ -126,5 +148,15 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
     @Override
     public void setGenreInfo(String genre) {
         genreMovie.setText(genre);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void createTransition() {
+        getWindow().setEnterTransition(new Slide()
+                .setDuration(500)
+                .excludeTarget(R.id.toolbar, true)
+                .excludeTarget(R.id.collapsingToolbarLayout, true)
+                .excludeTarget(android.R.id.statusBarBackground, true)
+                .excludeTarget(android.R.id.navigationBarBackground, true));
     }
 }
