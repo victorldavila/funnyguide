@@ -1,17 +1,10 @@
 package com.victorldavila.funnyguide.view.activities;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.transition.Fade;
-import android.support.transition.Transition;
 import android.support.v4.app.SharedElementCallback;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Explode;
 import android.transition.Slide;
 import android.view.View;
 import android.view.Window;
@@ -21,23 +14,25 @@ import android.widget.TextView;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.DraweeTransition;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.victorldavila.funnyguide.FrescoHelper;
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
-import com.victorldavila.funnyguide.FrescoHelper;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.presenters.MovieDetailPresenter;
+import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.presenters.DetailPresenter;
 import com.victorldavila.funnyguide.repository.MovieRepository;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
+import com.victorldavila.funnyguide.repository.TvRepository;
+import com.victorldavila.funnyguide.repository.TvRepositoryImp;
 
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class DetailMovieActivity extends AppCompatActivity implements DetailActivityView{
+public class DetailActivity extends AppCompatActivity implements DetailActivityView{
 
     public static final String MOVIE_ITEM = "MOVIE_ITEM";
     public static final String TV_ITEM = "TV_ITEM";
@@ -57,17 +52,18 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
 
     private Unbinder unbinder;
 
-    private MovieDetailPresenter presenter;
+    private DetailPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setWindowConfig();
+
         createTransition();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_item);
 
-        unbinder = ButterKnife.bind(DetailMovieActivity.this);
+        unbinder = ButterKnife.bind(DetailActivity.this);
 
         configFrescoTransition();
 
@@ -75,19 +71,40 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
             @Override
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                 super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-
                 initActivity();
             }
         });
+
+        setExitSharedElementCallback(
+                new SharedElementCallback() {
+                    @Override
+                    public void onSharedElementEnd(List<String> names, List<View> elements, List<View> snapshots) {
+                        super.onSharedElementEnd(names, elements, snapshots);
+                        initActivity();
+                    }
+                }
+        );
     }
 
     private void initActivity() {
+        createTransition();
+
         FunnyApi funnyApi = ((FunnyGuideApp)getApplication()).getFunnyApi();
         MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
-        presenter = new MovieDetailPresenter(movieRepository);
-        presenter.addView(DetailMovieActivity.this);
+        TvRepository tvRepository = new TvRepositoryImp(funnyApi);
+        if(getIntent().getExtras() != null){
+            Movie movie = getIntent().getExtras().getParcelable(MOVIE_ITEM);
+            if (movie != null) {
+                presenter = new DetailPresenter(movieRepository);
+                presenter.setMovie(movie);
+            } else {
+                Tv tv = getIntent().getExtras().getParcelable(TV_ITEM);
+                presenter = new DetailPresenter(tvRepository);
+                presenter.setTv(tv);
+            }
+        }
 
-        getBundleInfo();
+        presenter.addView(DetailActivity.this);
 
         presenter.onCreate();
     }
@@ -101,20 +118,15 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             getWindow().setSharedElementEnterTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
                     ScalingUtils.ScaleType.CENTER_CROP));
-        }
-    }
 
-    private void getBundleInfo() {
-        if(getIntent().getExtras() != null){
-            Movie movie = getIntent().getExtras().getParcelable(MOVIE_ITEM);
-            presenter.setMovie(movie);
+            getWindow().setSharedElementReturnTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
+                    ScalingUtils.ScaleType.CENTER_CROP));
         }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        createBackTransition();
     }
 
     @Override
@@ -173,13 +185,7 @@ public class DetailMovieActivity extends AppCompatActivity implements DetailActi
                     .excludeTarget(android.R.id.statusBarBackground, true)
                     .excludeTarget(android.R.id.navigationBarBackground, true));
 
-            getWindow().setExitTransition(null);
-        }
-    }
-
-    private void createBackTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setExitTransition(new android.transition.Fade()
+            getWindow().setReturnTransition(new android.transition.Fade()
                     .setDuration(300)
                     .excludeTarget(R.id.toolbar, true)
                     .excludeTarget(R.id.collapsingToolbarLayout, true)

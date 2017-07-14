@@ -1,6 +1,7 @@
 package com.victorldavila.funnyguide.view.fragments;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -20,7 +21,7 @@ import com.victorldavila.funnyguide.adapter.TvGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Tv;
 import com.victorldavila.funnyguide.repository.TvRepositoryImp;
-import com.victorldavila.funnyguide.view.activities.DetailMovieActivity;
+import com.victorldavila.funnyguide.view.activities.DetailActivity;
 import com.victorldavila.funnyguide.presenters.TvPresenter;
 
 import java.util.List;
@@ -124,13 +125,13 @@ public class TvFragment extends Fragment implements TvFragmentView {
 
     @Override
     public void changeActivity(Tv tv, SimpleDraweeView image) {
-        Intent intent = new Intent(getContext(), DetailMovieActivity.class);
-        intent.putExtra(DetailMovieActivity.TV_ITEM, tv);
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        intent.putExtra(DetailActivity.TV_ITEM, tv);
 
-        if (false/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP*/) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptionsCompat options = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(getActivity()
-                            , (View)image
+                            , image
                             , getString(R.string.poster_transition));
 
             startActivity(intent, options.toBundle());

@@ -8,8 +8,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SharedElementCallback;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
-import com.victorldavila.funnyguide.view.activities.DetailMovieActivity;
+import com.victorldavila.funnyguide.view.activities.DetailActivity;
 import com.victorldavila.funnyguide.presenters.MoviePresenterImp;
 
 import java.util.List;
@@ -81,6 +83,8 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        createReenterTransition();
+
         super.onCreate(savedInstanceState);
 
         FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
@@ -104,6 +108,7 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         unbinder = ButterKnife.bind(this, view);
 
         configRecycler();
@@ -136,8 +141,8 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
 
     @Override
     public void changeActivity(Movie movie, SimpleDraweeView image){
-        Intent intent = new Intent(getContext(), DetailMovieActivity.class);
-        intent.putExtra(DetailMovieActivity.MOVIE_ITEM, movie);
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        intent.putExtra(DetailActivity.MOVIE_ITEM, movie);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -167,5 +172,51 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
     public void onError(String error) {
         Snackbar snackbar = Snackbar.make(coordinatorLayoutMovie, error, Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    private void createReenterTransition() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().getWindow().setReenterTransition(new Fade()
+                    .setDuration(300)
+                    .excludeTarget(R.id.toolbar, true)
+                    .excludeTarget(R.id.collapsingToolbarLayout, true)
+                    .excludeTarget(android.R.id.statusBarBackground, true)
+                    .excludeTarget(android.R.id.navigationBarBackground, true));
+
+            getActivity().getWindow().setExitTransition(new Fade()
+                    .setDuration(300)
+                    .excludeTarget(R.id.toolbar, true)
+                    .excludeTarget(R.id.collapsingToolbarLayout, true)
+                    .excludeTarget(android.R.id.statusBarBackground, true)
+                    .excludeTarget(android.R.id.navigationBarBackground, true));
+
+            getActivity().getWindow().setSharedElementExitTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
+                    ScalingUtils.ScaleType.CENTER_CROP));
+
+            getActivity().getWindow().setSharedElementReenterTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
+                    ScalingUtils.ScaleType.CENTER_CROP));
+        }
+    }
+
+
+
+    @Override
+    public void startActivity(Intent intent) {
+        setExitSharedElementCallback(
+                new SharedElementCallback() {
+                    @Override
+                    public void onSharedElementEnd(List<String> names, List<View> elements, List<View> snapshots) {
+                        super.onSharedElementEnd(names, elements, snapshots);
+                        movieGridAdapter.notifyDataSetChanged();
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser && movieGridAdapter != null) {
+            movieGridAdapter.notifyDataSetChanged();
+        }
     }
 }

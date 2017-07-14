@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context="com.victorldavila.funnyguide.view.activities.DetailMovieActivity">
+    tools:context="com.victorldavila.funnyguide.view.activities.DetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:fitsSystemWindows="true"

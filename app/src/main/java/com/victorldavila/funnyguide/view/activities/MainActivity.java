@@ -1,5 +1,6 @@
 package com.victorldavila.funnyguide.view.activities;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -7,7 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.presenters.MainPresenterImp;
@@ -25,8 +30,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         unbinder = ButterKnife.bind(this);
 
         initViews();
