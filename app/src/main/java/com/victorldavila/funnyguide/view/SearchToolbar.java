@@ -118,7 +118,7 @@ public class SearchToolbar extends Toolbar {
   private void enableSearchView() {
     Fade fade = new Fade(Fade.IN);
     fade.setDuration(150);
-    TransitionManager.beginDelayedTransition(revealView, fade);
+    //TransitionManager.beginDelayedTransition(revealView, fade);
 
     if (hasBackButton) {
       backButton.setVisibility(VISIBLE);
@@ -134,7 +134,7 @@ public class SearchToolbar extends Toolbar {
     Fade fade = new Fade(Fade.OUT);
     fade.setDuration(150);
 
-    TransitionManager.beginDelayedTransition(revealView);
+    //TransitionManager.beginDelayedTransition(revealView);
 
     if (hasBackButton) {
       backButton.setVisibility(GONE);
