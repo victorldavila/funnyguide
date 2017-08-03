@@ -24,7 +24,7 @@ public class FunnyGuideApp extends Application {
 
         Fresco.initialize(this);
 
-        /*Realm.init(this);
+        /*Realm.initView(this);
         RealmConfiguration config = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(config);*/
     }

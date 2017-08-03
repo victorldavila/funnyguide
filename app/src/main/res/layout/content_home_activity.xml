@@ -5,7 +5,8 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.victorldavila.funnyguide.view.activities.MainActivity">
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:context="com.victorldavila.funnyguide.view.activities.MainActivity">
 
     <FrameLayout
         android:layout_above="@+id/bottom_navigation"

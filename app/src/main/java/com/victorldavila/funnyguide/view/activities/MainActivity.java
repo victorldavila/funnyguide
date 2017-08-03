@@ -1,27 +1,29 @@
 package com.victorldavila.funnyguide.view.activities;
 
-import android.os.Build;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Fade;
-import android.transition.Slide;
+import android.support.v7.content.res.AppCompatResources;
 import android.view.MenuItem;
 import android.view.Window;
-import android.view.WindowManager;
 
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.presenters.MainPresenterImp;
+import com.victorldavila.funnyguide.view.SearchToolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MainActivityView{
+
+    @BindView(R.id.search_toolbar) SearchToolbar searchToolbar;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
 
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.home_activity);
 
         unbinder = ButterKnife.bind(this);
 
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void initViews() {
+        searchToolbar.setToolbarBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        searchToolbar.setToolbarRevealBackgroundColor(Color.WHITE);
+        searchToolbar.enableBackToolbar();
         bottomNavigation.setOnNavigationItemSelectedListener(this);
     }
 
@@ -66,5 +71,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         ft.replace(R.id.content, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (searchToolbar.isExpanded()) {
+            searchToolbar.backRevealAnimation();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
