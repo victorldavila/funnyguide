@@ -94,6 +94,13 @@ public class SearchToolbar extends Toolbar {
     animation.setDuration(300);
     animation.addListener(new AnimatorListenerAdapter() {
       @Override
+      public void onAnimationStart(Animator animation) {
+        if (hasBackButton) {
+          backButton.setVisibility(VISIBLE);
+        }
+      }
+
+      @Override
       public void onAnimationEnd(Animator animator) {
         toolbar.setBackgroundColor(revealColor);
         revealView.setBackground(null);
@@ -119,10 +126,6 @@ public class SearchToolbar extends Toolbar {
     Fade fade = new Fade(Fade.IN);
     fade.setDuration(150);
     //TransitionManager.beginDelayedTransition(revealView, fade);
-
-    if (hasBackButton) {
-      backButton.setVisibility(VISIBLE);
-    }
 
     searchView.setVisibility(VISIBLE);
     searchButton.setVisibility(GONE);
