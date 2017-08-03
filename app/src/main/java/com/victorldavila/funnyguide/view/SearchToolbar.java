@@ -10,9 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.transition.Transition;
-import android.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -123,10 +120,6 @@ public class SearchToolbar extends Toolbar {
   }
 
   private void enableSearchView() {
-    Fade fade = new Fade(Fade.IN);
-    fade.setDuration(150);
-    //TransitionManager.beginDelayedTransition(revealView, fade);
-
     searchView.setVisibility(VISIBLE);
     searchButton.setVisibility(GONE);
 
@@ -134,11 +127,6 @@ public class SearchToolbar extends Toolbar {
   }
 
   private void disableSearchView() {
-    Fade fade = new Fade(Fade.OUT);
-    fade.setDuration(150);
-
-    //TransitionManager.beginDelayedTransition(revealView);
-
     if (hasBackButton) {
       backButton.setVisibility(GONE);
     }
