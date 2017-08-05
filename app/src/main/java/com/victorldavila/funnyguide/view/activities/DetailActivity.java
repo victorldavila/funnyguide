@@ -54,6 +54,9 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
     private DetailPresenter presenter;
 
+    private Movie movie;
+    private Tv tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setWindowConfig();
@@ -90,23 +93,48 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         createTransition();
 
         FunnyApi funnyApi = ((FunnyGuideApp)getApplication()).getFunnyApi();
+
         MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
         TvRepository tvRepository = new TvRepositoryImp(funnyApi);
-        if(getIntent().getExtras() != null){
+
+        getExtras(movieRepository, tvRepository);
+
+        presenter.addView(DetailActivity.this);
+        presenter.onCreate();
+
+        setInfoItem();
+    }
+
+    private void getExtras(MovieRepository movieRepository, TvRepository tvRepository) {
+        if(getIntent().getExtras() != null) {
             Movie movie = getIntent().getExtras().getParcelable(MOVIE_ITEM);
             if (movie != null) {
                 presenter = new DetailPresenter(movieRepository);
-                presenter.setMovie(movie);
+                this.movie = movie;
             } else {
                 Tv tv = getIntent().getExtras().getParcelable(TV_ITEM);
                 presenter = new DetailPresenter(tvRepository);
-                presenter.setTv(tv);
+                this.tv = tv;
             }
         }
+    }
 
-        presenter.addView(DetailActivity.this);
-
-        presenter.onCreate();
+    private void setInfoItem() {
+        if(movie != null) {
+            setImageUrlPoster(movie.getPoster_path());
+            setOverViewInfo(movie.getOverview());
+            setTitleInfo(movie.getTitle());
+            setRateInfo(String.valueOf(movie.getVote_average()));
+            setDateInfo(movie.getRelease_date());
+            setOriginalTitleInfo(movie.getOriginal_title());
+        } else {
+            setImageUrlPoster(tv.getPoster_path());
+            setOverViewInfo(tv.getOverview());
+            setTitleInfo(tv.getName());
+            setRateInfo(String.valueOf(tv.getVote_average()));
+            setDateInfo(tv.getFirst_air_date());
+            setOriginalTitleInfo(tv.getOriginal_name());
+        }
     }
 
     private void setWindowConfig() {
@@ -115,7 +143,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     }
 
     private void configFrescoTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setSharedElementEnterTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
                     ScalingUtils.ScaleType.CENTER_CROP));
 
@@ -174,6 +202,16 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     @Override
     public void setGenreInfo(String genre) {
         genreMovie.setText(genre);
+    }
+
+    @Override
+    public Movie getMovie() {
+        return movie;
+    }
+
+    @Override
+    public Tv getTv() {
+        return tv;
     }
 
     private void createTransition() {

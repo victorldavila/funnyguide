@@ -51,6 +51,8 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
     private MoviePresenterImp presenter;
     private Unbinder unbinder;
 
+    private int genreId;
+
     public MovieFragment() {
         // Required empty public constructor
     }
@@ -87,14 +89,21 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
 
         super.onCreate(savedInstanceState);
 
+        getExtras();
+
+        configPresenter();
+    }
+
+    private void configPresenter() {
         FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
 
         presenter = new MoviePresenterImp(new MovieRepositoryImp(api));
         presenter.addView(this);
+    }
 
+    private void getExtras() {
         if (getArguments() != null) {
-            int genreId = getArguments().getInt(MovieFragment.ARG_GENRE_ID);
-            presenter.setGenreId(genreId);
+            genreId = getArguments().getInt(MovieFragment.ARG_GENRE_ID);
         }
     }
 
@@ -112,6 +121,7 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
         unbinder = ButterKnife.bind(this, view);
 
         configRecycler();
+
         presenter.onViewCreated();
     }
 
@@ -161,6 +171,11 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
         movieGridAdapter.setLoad(isLoad);
 
         movieGridAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getGenreId() {
+        return genreId;
     }
 
     @Override

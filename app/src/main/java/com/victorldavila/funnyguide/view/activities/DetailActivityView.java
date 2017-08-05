@@ -1,5 +1,8 @@
 package com.victorldavila.funnyguide.view.activities;
 
+import com.victorldavila.funnyguide.models.Movie;
+import com.victorldavila.funnyguide.models.Tv;
+
 /**
  * Created by victo on 26/03/2017.
  */
@@ -14,4 +17,7 @@ public interface DetailActivityView {
     void setDateInfo(String date);
     void setLanguageInfo(String language);
     void setGenreInfo(String genre);
+
+  Movie getMovie();
+    Tv getTv();
 }

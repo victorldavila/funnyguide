@@ -142,7 +142,6 @@ public class TvFragment extends Fragment implements TvFragmentView {
     @Override
     public void setLoadRecycler(boolean isLoad) {
         tvGridAdapter.setLoad(isLoad);
-
         tvGridAdapter.notifyDataSetChanged();
     }
 }

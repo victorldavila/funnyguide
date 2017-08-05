@@ -11,4 +11,6 @@ import com.victorldavila.funnyguide.view.ResponseView;
 public interface MovieFragmentView extends ResponseView<Movie> {
     void changeActivity(Movie movie, SimpleDraweeView image);
     void setLoadRecycler(boolean isLoad);
+
+  int getGenreId();
 }

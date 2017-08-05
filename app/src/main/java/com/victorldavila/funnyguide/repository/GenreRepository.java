@@ -1,8 +1,8 @@
 package com.victorldavila.funnyguide.repository;
 
 import com.victorldavila.funnyguide.models.ResponseGenre;
-import com.victorldavila.funnyguide.presenters.RxResponse;
 
+import rx.Observable;
 import rx.Subscription;
 
 /**
@@ -10,5 +10,5 @@ import rx.Subscription;
  */
 
 public interface GenreRepository {
-    Subscription getMovieGenre(RxResponse<ResponseGenre> rxResponse);
+    Observable<ResponseGenre> getMovieGenre();
 }

@@ -3,7 +3,6 @@ package com.victorldavila.funnyguide.repository;
 import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseGenre;
-import com.victorldavila.funnyguide.presenters.RxResponse;
 
 import rx.Observable;
 import rx.Subscription;
@@ -23,13 +22,7 @@ public class GenreRepositoryImp implements GenreRepository {
     }
 
     @Override
-    public Subscription getMovieGenre(RxResponse<ResponseGenre> rxResponse) {
-        return getMovieGenreObservable().subscribe(responseGenre -> rxResponse.onNext(responseGenre)
-            , throwable -> rxResponse.onError(ErrorHandler.parseError(throwable))
-            , () -> rxResponse.onComplete());
-    }
-
-    private Observable<ResponseGenre> getMovieGenreObservable(){
+    public Observable<ResponseGenre> getMovieGenre(){
         return funnyApi.getAPI().getGenreObservable(funnyApi.getQueryString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

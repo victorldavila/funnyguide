@@ -1,5 +1,6 @@
 package com.victorldavila.funnyguide.presenters;
 
+import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.models.Genre;
 import com.victorldavila.funnyguide.models.NetWorkError;
 import com.victorldavila.funnyguide.models.ResponseGenre;
@@ -12,7 +13,7 @@ import rx.Subscription;
  * Created by victor on 10/12/2016.
  */
 
-public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<ResponseView<Genre>>, RxResponse<ResponseGenre> {
+public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<ResponseView<Genre>> {
 
     private ResponseView<Genre> view;
     private GenreRepository genreRepository;
@@ -25,10 +26,14 @@ public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter
 
     @Override
     public void onViewCreated() {
-        if(view == null)
-            throw new NullViewException();
+        verifyNullView();
 
         getGenre();
+    }
+
+    private void verifyNullView() {
+        if(view == null)
+            throw new NullViewException();
     }
 
     @Override
@@ -39,24 +44,18 @@ public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter
     public void getGenre(){
         rxUnSubscribe(genreSubscription);
         if(genreRepository != null) {
-            genreSubscription = genreRepository.getMovieGenre(this);
+            genreSubscription = genreRepository.getMovieGenre()
+            .subscribe(responseGenre -> {
+                  verifyNullView();
+                  view.onItemList(responseGenre.getGenres());
+              },
+              throwable -> {
+                  verifyNullView();
+                  NetWorkError error = ErrorHandler.parseError(throwable);
+                  view.onError(error.getStatus_message());
+            });
             addSubscription(genreSubscription);
         }
-    }
-
-    @Override
-    public void onNext(ResponseGenre result) {
-        view.onItemList(result.getGenres());
-    }
-
-    @Override
-    public void onError(NetWorkError error) {
-        view.onError(error.getStatus_message());
-    }
-
-    @Override
-    public void onComplete() {
-
     }
 
     @Override

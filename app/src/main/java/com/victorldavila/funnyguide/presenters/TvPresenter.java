@@ -1,5 +1,6 @@
 package com.victorldavila.funnyguide.presenters;
 
+import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.models.NetWorkError;
 import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.models.Tv;
@@ -11,7 +12,7 @@ import rx.Subscription;
 /**
  * Created by victor on 18/12/2016.
  */
-public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<TvFragmentView>, RxResponse<ResponseListItem<Tv>> {
+public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<TvFragmentView> {
 
     private TvRepository tvRepository;
     private TvFragmentView view;
@@ -45,7 +46,17 @@ public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<Tv
     public void getTvTopRated(){
         rxUnSubscribe(tvSubscription);
         if(tvRepository != null) {
-            tvSubscription = tvRepository.getTvTopRated(page, this);
+            tvSubscription = tvRepository.getTvTopRated(page)
+                .subscribe(tvResponseListItem -> {
+                      view.onItemList(tvResponseListItem.getResults());
+                      countPage();
+                  },
+                  throwable -> {
+                      NetWorkError error = ErrorHandler.parseError(throwable);
+                      view.onError(error.getStatus_message());
+                      view.setLoadRecycler(false);
+                  },
+                  () -> view.setLoadRecycler(false));
             addSubscription(tvSubscription);
         }
     }
@@ -58,24 +69,6 @@ public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<Tv
         if(dy > 0) //check for scroll down
             if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
                 getTvTopRated();
-    }
-
-    @Override
-    public void onNext(ResponseListItem<Tv> result) {
-        view.onItemList(result.getResults());
-
-        countPage();
-    }
-
-    @Override
-    public void onError(NetWorkError error) {
-        view.onError(error.getStatus_message());
-        view.setLoadRecycler(false);
-    }
-
-    @Override
-    public void onComplete() {
-        view.setLoadRecycler(false);
     }
 
     @Override

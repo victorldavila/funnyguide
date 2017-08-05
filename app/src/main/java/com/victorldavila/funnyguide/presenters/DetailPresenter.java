@@ -23,9 +23,6 @@ public class DetailPresenter extends BaseRxPresenter implements ActivityPresente
 
     private Subscription movieSubscription;
 
-    private Movie movie;
-    private Tv tv;
-
     public DetailPresenter(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
@@ -44,26 +41,7 @@ public class DetailPresenter extends BaseRxPresenter implements ActivityPresente
         if(view == null)
             throw new NullViewException();
 
-        setInfoItem();
         getDetailInfo();
-    }
-
-    private void setInfoItem() {
-        if(movie != null) {
-            view.setImageUrlPoster(movie.getPoster_path());
-            view.setOverViewInfo(movie.getOverview());
-            view.setTitleInfo(movie.getTitle());
-            view.setRateInfo(String.valueOf(movie.getVote_average()));
-            view.setDateInfo(movie.getRelease_date());
-            view.setOriginalTitleInfo(movie.getOriginal_title());
-        } else {
-            view.setImageUrlPoster(tv.getPoster_path());
-            view.setOverViewInfo(tv.getOverview());
-            view.setTitleInfo(tv.getName());
-            view.setRateInfo(String.valueOf(tv.getVote_average()));
-            view.setDateInfo(tv.getFirst_air_date());
-            view.setOriginalTitleInfo(tv.getOriginal_name());
-        }
     }
 
     @Override
@@ -75,59 +53,19 @@ public class DetailPresenter extends BaseRxPresenter implements ActivityPresente
         if(movieRepository != null){
             rxUnSubscribe(movieSubscription);
             if (movieRepository != null) {
-                movieSubscription = movieRepository.getMovie(movie.getId(), getMovieRxResponse());
+                Movie movie = view.getMovie();
+                movieSubscription = movieRepository.getMovie(movie.getId())
+                .subscribe(movieItem -> {},
+                  throwable -> {});
             } else {
-                movieSubscription = tvRepository.getTv(tv.getId(), getTvRxResponse());
+                Tv tv = view.getTv();
+                movieSubscription = tvRepository.getTv(tv.getId())
+                    .subscribe(
+                      tvItem -> {},
+                      throwable -> {}
+                    );
             }
             addSubscription(movieSubscription);
         }
-    }
-
-    @NonNull
-    private RxResponse<Tv> getTvRxResponse() {
-        return new RxResponse<Tv>() {
-            @Override
-            public void onNext(Tv result) {
-
-            }
-
-            @Override
-            public void onError(NetWorkError error) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-    }
-
-    @NonNull
-    private RxResponse<Movie> getMovieRxResponse() {
-        return new RxResponse<Movie>() {
-            @Override
-            public void onNext(Movie result) {
-
-            }
-
-            @Override
-            public void onError(NetWorkError error) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
-    }
-
-    public void setTv(Tv tv) {
-        this.tv = tv;
     }
 }

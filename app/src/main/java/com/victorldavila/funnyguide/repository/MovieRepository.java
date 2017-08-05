@@ -2,7 +2,6 @@ package com.victorldavila.funnyguide.repository;
 
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.ResponseListItem;
-import com.victorldavila.funnyguide.presenters.RxResponse;
 
 import rx.Observable;
 import rx.Subscription;
@@ -12,8 +11,6 @@ import rx.Subscription;
  */
 
 public interface MovieRepository {
-    Subscription getMovieListGenre(int genreId, int page, RxResponse<ResponseListItem<Movie>> presenterView);
-    Subscription getMovie(int movieId, RxResponse<Movie> presenterView);
-    Observable<Movie> getMovieObservable(int movieId);
-    Observable<ResponseListItem<Movie>> getMovieListGenreObservable(int genreId, int page);
+    Observable<Movie> getMovie(int movieId);
+    Observable<ResponseListItem<Movie>> getMovieListGenre(int genreId, int page);
 }

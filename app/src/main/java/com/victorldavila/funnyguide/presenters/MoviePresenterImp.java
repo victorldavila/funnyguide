@@ -14,6 +14,7 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.NetWorkError;
@@ -27,14 +28,13 @@ import rx.Subscription;
  * Created by victor on 12/12/2016.
  */
 
-public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresenter<MovieFragmentView>, RxResponse<ResponseListItem<Movie>> {
+public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresenter<MovieFragmentView> {
 
     private MovieFragmentView view;
     private MovieRepository movieRepository;
 
     private Subscription movieSubscription;
 
-    private int genreId;
     private int page;
 
     public MoviePresenterImp(MovieRepository movieRepository){
@@ -67,17 +67,25 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
         rxUnSubscribe(getMovieSubscription());
         if(movieRepository != null) {
             view.setLoadRecycler(true);
-           setMovieSubscription(movieRepository.getMovieListGenre(genreId, page, this));
+           setMovieSubscription(movieRepository.getMovieListGenre(view.getGenreId(), page)
+            .subscribe(movieResponseListItem -> {
+                  verifyNullView();
+                  view.onItemList(movieResponseListItem.getResults());
+            },
+              throwable -> {
+                  verifyNullView();
+                  NetWorkError error = ErrorHandler.parseError(throwable);
+                  view.onError(error.getStatus_message());
+                  view.setLoadRecycler(false);
+              },
+              () -> {
+                  verifyNullView();
+                  countPage();
+                  view.setLoadRecycler(false);
+              }));
+
             addSubscription(getMovieSubscription());
         }
-    }
-
-    public void setGenreId(int genreId) {
-        this.genreId = genreId;
-    }
-
-    public int getGenreId() {
-        return genreId;
     }
 
     public void countPage() {
@@ -88,30 +96,6 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
         if(dy > 0) //check for scroll down
             if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
                 getMoviesGenre();
-    }
-
-    @Override
-    public void onNext(ResponseListItem<Movie> result) {
-        verifyNullView();
-
-        view.onItemList(result.getResults());
-    }
-
-    @Override
-    public void onError(NetWorkError error) {
-        verifyNullView();
-
-        view.onError(error.getStatus_message());
-        view.setLoadRecycler(false);
-    }
-
-    @Override
-    public void onComplete() {
-        verifyNullView();
-
-        countPage();
-
-        view.setLoadRecycler(false);
     }
 
     private void verifyNullView() {

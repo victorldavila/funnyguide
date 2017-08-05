@@ -14,10 +14,6 @@ public class MainPresenterImp implements ActivityPresenter<MainActivityView> {
 
     private MainActivityView view;
 
-    public MainPresenterImp() {
-
-    }
-
     @Override
     public void onCreate() {
         fragmentChange(R.id.action_movies);
