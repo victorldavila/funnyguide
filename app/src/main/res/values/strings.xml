@@ -20,4 +20,6 @@
     <string name="lbl_release_date">Data:</string>
     <string name="lbl_language">Lingua:</string>
     <string name="lbl_overview">Resumo:</string>
+
+    <string name="search_hint">Procurar...</string>
 </resources>

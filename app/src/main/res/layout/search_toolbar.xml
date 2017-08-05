@@ -15,8 +15,8 @@
 
     <ImageButton
       android:id="@+id/toolbar_back_button"
-      android:layout_marginLeft="16dp"
-      android:src="@drawable/ic_search_white"
+      android:layout_marginLeft="6dp"
+      android:src="@drawable/ic_arrow_back_white"
       android:layout_alignParentLeft="true"
       android:layout_centerVertical="true"
       android:background="@android:color/transparent"
@@ -33,13 +33,17 @@
       android:layout_width="30dp"
       android:layout_height="30dp"/>
 
-    <android.support.v7.widget.SearchView
+    <EditText
       android:visibility="gone"
+      android:theme="@style/SearchToolbarEditText"
       android:id="@+id/toolbar_search_view"
-      android:layout_toLeftOf="@+id/toolbar_search_button"
       android:layout_toRightOf="@+id/toolbar_back_button"
+      android:hint="@string/search_hint"
+      android:textColor="@color/colorPrimaryDark"
+      android:textColorHint="@color/darkGreyAlpha80"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
+      android:layout_marginLeft="6dp"
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />
 

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -30,9 +31,7 @@ public class SearchToolbar extends Toolbar {
 
   @BindView(R.id.toolbar_back_button) ImageButton backButton;
   @BindView(R.id.toolbar_search_button) ImageButton searchButton;
-  @BindView(R.id.toolbar_search_view) SearchView searchView;
-
-  private AppCompatActivity activity;
+  @BindView(R.id.toolbar_search_view) EditText searchView;
 
   private int defaultBackgroundColor = 0;
   private int revealBackgroundColor = 0;
@@ -82,18 +81,24 @@ public class SearchToolbar extends Toolbar {
   }
 
   private void reveal(float x, float y, int revealColor) {
-    int cx = getRootView().getWidth();
-    int cy = getRootView().getHeight();
+    int finalRadius = (int) Math.hypot(toolbar.getWidth(), toolbar.getHeight());
 
-    float finalRadius = (float) Math.max(cx, cy) * 1.2f;
-
-    Animator animation = ViewAnimationUtils.createCircularReveal(revealView, (int) x, (int) y, 0f, finalRadius);
-    animation.setDuration(300);
+    Animator animation;
+    if (revealColor == revealBackgroundColor) {
+      animation = ViewAnimationUtils.createCircularReveal(revealView, (int) x, (int) y, 0f, finalRadius);
+    } else {
+      animation = ViewAnimationUtils.createCircularReveal(revealView, (int) x, (int) y, 0f, finalRadius);
+    }
+    animation.setDuration(500);
     animation.addListener(new AnimatorListenerAdapter() {
       @Override
       public void onAnimationStart(Animator animation) {
         if (hasBackButton) {
           backButton.setVisibility(VISIBLE);
+        }
+
+        if (revealColor == revealBackgroundColor) {
+          searchView.setVisibility(VISIBLE);
         }
       }
 
@@ -120,7 +125,6 @@ public class SearchToolbar extends Toolbar {
   }
 
   private void enableSearchView() {
-    searchView.setVisibility(VISIBLE);
     searchButton.setVisibility(GONE);
 
     isExpanded = true;
@@ -134,8 +138,8 @@ public class SearchToolbar extends Toolbar {
     searchView.setVisibility(GONE);
     searchButton.setVisibility(VISIBLE);
 
-    float x = toolbar.getX();
-    float y = toolbar.getY() / 2;
+    int x = (backButton.getLeft() + backButton.getRight()) / 2;
+    int y = (backButton.getTop() + backButton.getBottom()) / 2;
 
     reveal(x, y, defaultBackgroundColor);
   }
