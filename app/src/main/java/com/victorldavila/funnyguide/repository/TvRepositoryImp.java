@@ -1,12 +1,10 @@
 package com.victorldavila.funnyguide.repository;
 
-import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseListItem;
 import com.victorldavila.funnyguide.models.Tv;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 

@@ -2,8 +2,12 @@ package com.victorldavila.funnyguide.view.activities;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.SharedElementCallback;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Slide;
 import android.view.View;
@@ -37,8 +41,13 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     public static final String MOVIE_ITEM = "MOVIE_ITEM";
     public static final String TV_ITEM = "TV_ITEM";
 
+    @BindView(R.id.coordinator_layout_detail) CoordinatorLayout coordinatorLayout;
+
     @BindView(R.id.collapsingToolbarLayout) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
     @BindView(R.id.item_poster_img) SimpleDraweeView imagePosterMovie;
+
+    @BindView(R.id.neste_scroll) NestedScrollView nestedScrollView;
 
     @BindView(R.id.overview_info_poster) TextView overviewMovie;
 
