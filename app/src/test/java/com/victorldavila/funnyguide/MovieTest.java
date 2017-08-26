@@ -30,7 +30,7 @@ public class MovieTest {
 
  // Subscription subscriptionMock;
 
-  @Before
+  /*@Before
   public void setup() {
   //  movieRepositoryMock = mock(MovieRepository.class);
    // viewMock = mock(MovieFragmentView.class);
@@ -197,5 +197,5 @@ public class MovieTest {
   private void getSpyPresenter() {
  //   moviePresenter = spy(new MoviePresenterImp(movieRepositoryMock));
   //  moviePresenter.addView(viewMock);
-  }
+  }*/
 }
