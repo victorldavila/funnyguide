@@ -30,118 +30,103 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * A simple {@link Fragment} subclass.
- *
- * Use the {@link TvFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TvFragment extends Fragment implements TvFragmentView {
+  @BindView(R.id.recycler_tv_item) RecyclerView tvRecyclerView;
+  @BindView(R.id.coordinator_layout_tv) CoordinatorLayout coordinatorLayoutMovie;
 
-    @BindView(R.id.recycler_tv_item) RecyclerView tvRecyclerView;
-    @BindView(R.id.coordinator_layout_tv) CoordinatorLayout coordinatorLayoutMovie;
+  private TvPresenter presenter;
+  private TvGridAdapter tvGridAdapter;
+  private Unbinder unbinder;
 
-    private TvPresenter presenter;
-    private TvGridAdapter tvGridAdapter;
-    private Unbinder unbinder;
+  public TvFragment() { }
 
-    public TvFragment() {
-        // Required empty public constructor
-    }
+  public static TvFragment newInstance() {
+    TvFragment fragment = new TvFragment();
+    return fragment;
+  }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment.
-     *
-     * @return A new instance of fragment TvFragment.
-     */
-    public static TvFragment newInstance() {
-        TvFragment fragment = new TvFragment();
-        return fragment;
-    }
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
+    presenter = new TvPresenter(new TvRepositoryImp(api));
+    presenter.addView(this);
+  }
 
-        FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_tv, container, false);
+  }
 
-        presenter = new TvPresenter(new TvRepositoryImp(api));
-        presenter.addView(this);
-    }
+  @Override
+  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tv, container, false);
-    }
+    unbinder = ButterKnife.bind(this, view);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
+    configRecycler();
 
-        configRecycler();
+    presenter.onViewCreated();
+  }
 
-        presenter.onViewCreated();
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
 
-        presenter.onDestroyView();
-    }
+    unbinder.unbind();
 
-    private void configRecycler() {
-        tvGridAdapter =  new TvGridAdapter(this);
-        tvRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        tvRecyclerView.setAdapter(tvGridAdapter);
+    presenter.onDestroyView();
+  }
 
-        tvRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                presenter.verifyScroll(tvRecyclerView.getLayoutManager().getChildCount()
-                        , tvRecyclerView.getLayoutManager().getItemCount()
-                        , ((GridLayoutManager)tvRecyclerView.getLayoutManager()).findFirstVisibleItemPosition()
-                        , dy);
-            }
-        });
-    }
+  private void configRecycler() {
+    tvGridAdapter =  new TvGridAdapter(this);
+    tvRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+    tvRecyclerView.setAdapter(tvGridAdapter);
 
-    @Override
-    public void onItemList(List<Tv> results) {
+    tvRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        presenter.verifyScroll(tvRecyclerView.getLayoutManager().getChildCount()
+          , tvRecyclerView.getLayoutManager().getItemCount()
+          , ((GridLayoutManager)tvRecyclerView.getLayoutManager()).findFirstVisibleItemPosition()
+          , dy);
+      }
+    });
+  }
+
+  @Override
+  public void onItemList(List<Tv> results) {
         tvGridAdapter.addList(results);
     }
 
-    @Override
-    public void onError(String error) {
-        Snackbar snackbar = Snackbar.make(coordinatorLayoutMovie, error, Snackbar.LENGTH_LONG);
-        snackbar.show();
+  @Override
+  public void onError(String error) {
+    Snackbar snackbar = Snackbar.make(coordinatorLayoutMovie, error, Snackbar.LENGTH_LONG);
+    snackbar.show();
 
-        tvGridAdapter.notifyDataSetChanged();
-    }
+    tvGridAdapter.notifyDataSetChanged();
+  }
 
-    @Override
-    public void changeActivity(Tv tv, SimpleDraweeView image) {
-        Intent intent = new Intent(getContext(), DetailActivity.class);
-        intent.putExtra(DetailActivity.TV_ITEM, tv);
+  @Override
+  public void changeActivity(Tv tv, SimpleDraweeView image) {
+    Intent intent = new Intent(getContext(), DetailActivity.class);
+    intent.putExtra(DetailActivity.TV_ITEM, tv);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptionsCompat options = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(getActivity()
-                            , image
-                            , getString(R.string.poster_transition));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      ActivityOptionsCompat options = ActivityOptionsCompat
+        .makeSceneTransitionAnimation(getActivity()
+          , image
+          , getString(R.string.poster_transition));
 
-            startActivity(intent, options.toBundle());
-        } else
-            startActivity(intent);
-    }
+      startActivity(intent, options.toBundle());
+    } else
+      startActivity(intent);
+  }
 
-    @Override
-    public void setLoadRecycler(boolean isLoad) {
-        tvGridAdapter.setLoad(isLoad);
-        tvGridAdapter.notifyDataSetChanged();
-    }
+  @Override
+  public void setLoadRecycler(boolean isLoad) {
+    tvGridAdapter.setLoad(isLoad);
+    tvGridAdapter.notifyDataSetChanged();
+  }
 }

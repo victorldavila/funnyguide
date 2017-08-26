@@ -1,38 +1,31 @@
 package com.victorldavila.funnyguide.repository;
 
-import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.Movie;
 import com.victorldavila.funnyguide.models.ResponseListItem;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by victor on 26/03/2017.
- */
-
 public class MovieRepositoryImp implements MovieRepository{
+  private FunnyApi funnyApi;
 
-    private FunnyApi funnyApi;
-
-    public MovieRepositoryImp(FunnyApi funnyApi) {
+  public MovieRepositoryImp(FunnyApi funnyApi) {
         this.funnyApi = funnyApi;
     }
 
-    @Override
-    public Observable<Movie> getMovie(int movieId) {
-        return funnyApi.getAPI().getMovieObservable(movieId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+  @Override
+  public Observable<Movie> getMovie(int movieId) {
+    return funnyApi.getAPI().getMovieObservable(movieId)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread());
+  }
 
-    @Override
-    public Observable<ResponseListItem<Movie>> getMovieListGenre(int genreId, int page){
-        return funnyApi.getAPI().getMoviesGenreObservable(genreId, funnyApi.getQueryStringList(page))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+  @Override
+  public Observable<ResponseListItem<Movie>> getMovieListGenre(int genreId, int page) {
+    return funnyApi.getAPI().getMoviesGenreObservable(genreId, funnyApi.getQueryStringList(page))
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread());
+  }
 }

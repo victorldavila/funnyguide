@@ -9,35 +9,31 @@ import com.victorldavila.funnyguide.view.fragments.MovieFragment;
 
 import java.util.List;
 
-/**
- * Created by victo on 11/12/2016.
- */
-
 public class GenreViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private List<Genre> genres;
+  private List<Genre> genres;
 
-    public GenreViewPagerAdapter(FragmentManager fm, List<Genre> genres) {
-        super(fm);
+  public GenreViewPagerAdapter(FragmentManager fm, List<Genre> genres) {
+    super(fm);
 
-        this.genres = genres;
-    }
+    this.genres = genres;
+  }
 
-    @Override
-    public int getCount() {
-        return genres.size();
-    }
+  @Override
+  public int getCount() {
+    return genres.size();
+  }
 
-    @Override
-    public Fragment getItem(int position) {
-        if(genres != null)
-            return MovieFragment.newInstance(genres.get(position).getId());
-        else
-            return MovieFragment.newInstance();
-    }
+  @Override
+  public Fragment getItem(int position) {
+    if (genres != null)
+      return MovieFragment.newInstance(genres.get(position).getId());
+    else
+      return MovieFragment.newInstance();
+  }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return genres.get(position).getName();
-    }
+  @Override
+  public CharSequence getPageTitle(int position) {
+    return genres.get(position).getName();
+  }
 }

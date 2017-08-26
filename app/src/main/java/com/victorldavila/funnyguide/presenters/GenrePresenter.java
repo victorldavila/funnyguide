@@ -9,39 +9,33 @@ import com.victorldavila.funnyguide.view.ResponseView;
 
 import rx.Subscription;
 
-/**
- * Created by victor on 10/12/2016.
- */
-
 public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<ResponseView<Genre>> {
+  private ResponseView<Genre> view;
+  private GenreRepository genreRepository;
 
-    private ResponseView<Genre> view;
-    private GenreRepository genreRepository;
+  private Subscription genreSubscription;
 
-    private Subscription genreSubscription;
+  public GenrePresenter(GenreRepository genreRepository){
+    this.genreRepository = genreRepository;
+  }
 
-    public GenrePresenter(GenreRepository genreRepository){
-        this.genreRepository = genreRepository;
-    }
+  @Override
+  public void onViewCreated() {
+    verifyNullView();
+    getGenre();
+  }
 
-    @Override
-    public void onViewCreated() {
-        verifyNullView();
+  private void verifyNullView() {
+    if(view == null)
+      throw new NullViewException();
+  }
 
-        getGenre();
-    }
-
-    private void verifyNullView() {
-        if(view == null)
-            throw new NullViewException();
-    }
-
-    @Override
-    public void onDestroyView() {
+  @Override
+  public void onDestroyView() {
         rxUnSubscribe();
     }
 
-    public void getGenre(){
+  public void getGenre(){
         rxUnSubscribe(genreSubscription);
         if(genreRepository != null) {
             genreSubscription = genreRepository.getMovieGenre()

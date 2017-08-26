@@ -22,63 +22,66 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MainActivityView{
+  @BindView(R.id.search_toolbar) SearchToolbar searchToolbar;
+  @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
 
-    @BindView(R.id.search_toolbar) SearchToolbar searchToolbar;
+  private MainPresenterImp presenter;
+  private Unbinder unbinder;
 
-    @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
-    private MainPresenterImp presenter;
-    private Unbinder unbinder;
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.home_activity);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_activity);
+    unbinder = ButterKnife.bind(this);
 
-        unbinder = ButterKnife.bind(this);
+    initViews();
 
-        initViews();
+    configPresenter();
+  }
 
-        presenter = new MainPresenterImp();
-        presenter.addView(this);
-        presenter.onCreate();
+  private void configPresenter() {
+    presenter = new MainPresenterImp();
+    presenter.addView(this);
+    presenter.onCreate();
+  }
+
+  private void initViews() {
+    searchToolbar.setToolbarBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    searchToolbar.setToolbarRevealBackgroundColor(Color.WHITE);
+    searchToolbar.enableBackToolbar();
+    bottomNavigation.setOnNavigationItemSelectedListener(this);
+  }
+
+  @Override
+  public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    return presenter.fragmentChange(item.getItemId());
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    unbinder.unbind();
+  }
+
+  @Override
+  public void changeFragment(Fragment fragment) {
+    FragmentManager fm = getSupportFragmentManager();
+    FragmentTransaction ft = fm.beginTransaction();
+    ft.replace(R.id.content, fragment);
+    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+    ft.commit();
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (searchToolbar.isExpanded()) {
+      searchToolbar.backRevealAnimation();
+    } else {
+      super.onBackPressed();
     }
-
-    private void initViews() {
-        searchToolbar.setToolbarBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        searchToolbar.setToolbarRevealBackgroundColor(Color.WHITE);
-        searchToolbar.enableBackToolbar();
-        bottomNavigation.setOnNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return presenter.fragmentChange(item.getItemId());
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        unbinder.unbind();
-    }
-
-    @Override
-    public void changeFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.content, fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (searchToolbar.isExpanded()) {
-            searchToolbar.backRevealAnimation();
-        } else {
-            super.onBackPressed();
-        }
-    }
+  }
 }

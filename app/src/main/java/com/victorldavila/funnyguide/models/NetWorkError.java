@@ -1,35 +1,31 @@
 package com.victorldavila.funnyguide.models;
 
-/**
- * Created by victo on 25/03/2017.
- */
-
 public class NetWorkError {
-    private String status_message;
-    private int status_code;
-    private boolean success;
+  private String status_message;
+  private int status_code;
+  private boolean success;
 
-    public String getStatus_message() {
+  public String getStatus_message() {
         return status_message;
     }
 
-    public void setStatus_message(String status_message) {
+  public void setStatus_message(String status_message) {
         this.status_message = status_message;
     }
 
-    public int getStatus_code() {
+  public int getStatus_code() {
         return status_code;
     }
 
-    public void setStatus_code(int status_code) {
+  public void setStatus_code(int status_code) {
         this.status_code = status_code;
     }
 
-    public boolean isSuccess() {
+  public boolean isSuccess() {
         return success;
     }
 
-    public void setSuccess(boolean success) {
+  public void setSuccess(boolean success) {
         this.success = success;
     }
 }

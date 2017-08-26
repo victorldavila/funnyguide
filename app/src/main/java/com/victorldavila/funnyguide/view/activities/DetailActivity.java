@@ -37,207 +37,223 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class DetailActivity extends AppCompatActivity implements DetailActivityView{
+  public static final String MOVIE_ITEM = "MOVIE_ITEM";
+  public static final String TV_ITEM = "TV_ITEM";
 
-    public static final String MOVIE_ITEM = "MOVIE_ITEM";
-    public static final String TV_ITEM = "TV_ITEM";
+  @BindView(R.id.coordinator_layout_detail) CoordinatorLayout coordinatorLayout;
+  @BindView(R.id.collapsingToolbarLayout) CollapsingToolbarLayout collapsingToolbarLayout;
+  @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
+  @BindView(R.id.item_poster_img) SimpleDraweeView imagePosterMovie;
+  @BindView(R.id.neste_scroll) NestedScrollView nestedScrollView;
+  @BindView(R.id.overview_info_poster) TextView overviewMovie;
+  @BindView(R.id.title_info_poster) TextView titleMovie;
+  @BindView(R.id.rating_info_poster) TextView rateMovie;
+  @BindView(R.id.release_date_info_poster) TextView dateMovie;
+  @BindView(R.id.original_title_info_poster) TextView originalTitleMovie;
+  @BindView(R.id.language_info_poster) TextView languageMovie;
+  @BindView(R.id.genre_info_poster) TextView genreMovie;
 
-    @BindView(R.id.coordinator_layout_detail) CoordinatorLayout coordinatorLayout;
+  private Unbinder unbinder;
 
-    @BindView(R.id.collapsingToolbarLayout) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
-    @BindView(R.id.item_poster_img) SimpleDraweeView imagePosterMovie;
+  private DetailPresenter presenter;
 
-    @BindView(R.id.neste_scroll) NestedScrollView nestedScrollView;
+  private Movie movie;
+  private Tv tv;
 
-    @BindView(R.id.overview_info_poster) TextView overviewMovie;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    setWindowConfig();
+    createTransition();
 
-    @BindView(R.id.title_info_poster) TextView titleMovie;
-    @BindView(R.id.rating_info_poster) TextView rateMovie;
-    @BindView(R.id.release_date_info_poster) TextView dateMovie;
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_detail_item);
 
-    @BindView(R.id.original_title_info_poster) TextView originalTitleMovie;
-    @BindView(R.id.language_info_poster) TextView languageMovie;
-    @BindView(R.id.genre_info_poster) TextView genreMovie;
+    unbinder = ButterKnife.bind(DetailActivity.this);
 
-    private Unbinder unbinder;
+    configFrescoTransition();
+    configSharedElementCallback();
+  }
 
-    private DetailPresenter presenter;
+  private void configSharedElementCallback() {
+    setEnterSharedElementCallback(new SharedElementCallback() {
+      @Override
+      public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+        super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+        initActivity();
+      }
+    });
 
-    private Movie movie;
-    private Tv tv;
+    setExitSharedElementCallback(new SharedElementCallback() {
+      @Override
+      public void onSharedElementEnd(List<String> names, List<View> elements, List<View> snapshots) {
+        super.onSharedElementEnd(names, elements, snapshots);
+        initActivity();
+      }
+    });
+  }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setWindowConfig();
+  private void initActivity() {
+    createTransition();
 
-        createTransition();
+    FunnyApi funnyApi = ((FunnyGuideApp)getApplication()).getFunnyApi();
+    MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
+    TvRepository tvRepository = new TvRepositoryImp(funnyApi);
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_item);
+    getExtras(movieRepository, tvRepository);
 
-        unbinder = ButterKnife.bind(DetailActivity.this);
+    presenter.addView(DetailActivity.this);
+    presenter.onCreate();
 
-        configFrescoTransition();
+    setInfoItem();
+  }
 
-        setEnterSharedElementCallback(new SharedElementCallback() {
-            @Override
-            public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-                super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-                initActivity();
-            }
-        });
-
-        setExitSharedElementCallback(
-                new SharedElementCallback() {
-                    @Override
-                    public void onSharedElementEnd(List<String> names, List<View> elements, List<View> snapshots) {
-                        super.onSharedElementEnd(names, elements, snapshots);
-                        initActivity();
-                    }
-                }
-        );
+  private void getExtras(MovieRepository movieRepository, TvRepository tvRepository) {
+    if(getIntent().getExtras() != null) {
+      Movie movie = getIntent().getExtras().getParcelable(MOVIE_ITEM);
+      if (movie != null) {
+        presenter = new DetailPresenter(movieRepository);
+        this.movie = movie;
+      } else {
+        Tv tv = getIntent().getExtras().getParcelable(TV_ITEM);
+        presenter = new DetailPresenter(tvRepository);
+        this.tv = tv;
+      }
     }
+  }
 
-    private void initActivity() {
-        createTransition();
-
-        FunnyApi funnyApi = ((FunnyGuideApp)getApplication()).getFunnyApi();
-
-        MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
-        TvRepository tvRepository = new TvRepositoryImp(funnyApi);
-
-        getExtras(movieRepository, tvRepository);
-
-        presenter.addView(DetailActivity.this);
-        presenter.onCreate();
-
-        setInfoItem();
+  private void setInfoItem() {
+    if(movie != null) {
+      setImageUrlPoster(movie.getPoster_path());
+      setOverViewInfo(movie.getOverview());
+      setTitleInfo(movie.getTitle());
+      setRateInfo(String.valueOf(movie.getVote_average()));
+      setDateInfo(movie.getRelease_date());
+      setOriginalTitleInfo(movie.getOriginal_title());
+    } else {
+      setImageUrlPoster(tv.getPoster_path());
+      setOverViewInfo(tv.getOverview());
+      setTitleInfo(tv.getName());
+      setRateInfo(String.valueOf(tv.getVote_average()));
+      setDateInfo(tv.getFirst_air_date());
+      setOriginalTitleInfo(tv.getOriginal_name());
     }
+  }
 
-    private void getExtras(MovieRepository movieRepository, TvRepository tvRepository) {
-        if(getIntent().getExtras() != null) {
-            Movie movie = getIntent().getExtras().getParcelable(MOVIE_ITEM);
-            if (movie != null) {
-                presenter = new DetailPresenter(movieRepository);
-                this.movie = movie;
-            } else {
-                Tv tv = getIntent().getExtras().getParcelable(TV_ITEM);
-                presenter = new DetailPresenter(tvRepository);
-                this.tv = tv;
-            }
-        }
+  private void setWindowConfig() {
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+  }
+
+  private void configFrescoTransition() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      configSharedElementEnter();
+      configSharedElementReturn();
     }
+  }
 
-    private void setInfoItem() {
-        if(movie != null) {
-            setImageUrlPoster(movie.getPoster_path());
-            setOverViewInfo(movie.getOverview());
-            setTitleInfo(movie.getTitle());
-            setRateInfo(String.valueOf(movie.getVote_average()));
-            setDateInfo(movie.getRelease_date());
-            setOriginalTitleInfo(movie.getOriginal_title());
-        } else {
-            setImageUrlPoster(tv.getPoster_path());
-            setOverViewInfo(tv.getOverview());
-            setTitleInfo(tv.getName());
-            setRateInfo(String.valueOf(tv.getVote_average()));
-            setDateInfo(tv.getFirst_air_date());
-            setOriginalTitleInfo(tv.getOriginal_name());
-        }
-    }
+  private void configSharedElementReturn() {
+    getWindow()
+      .setSharedElementReturnTransition(DraweeTransition
+        .createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
+          ScalingUtils.ScaleType.CENTER_CROP));
+  }
 
-    private void setWindowConfig() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-    }
+  private void configSharedElementEnter() {
+    getWindow()
+      .setSharedElementEnterTransition(DraweeTransition
+        .createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
+          ScalingUtils.ScaleType.CENTER_CROP));
+  }
 
-    private void configFrescoTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setSharedElementEnterTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
-                    ScalingUtils.ScaleType.CENTER_CROP));
-
-            getWindow().setSharedElementReturnTransition(DraweeTransition.createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
-                    ScalingUtils.ScaleType.CENTER_CROP));
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
+  @Override
+  public void onBackPressed() {
         super.onBackPressed();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
 
-    @Override
-    public void setImageUrlPoster(String urlPoster) {
-        imagePosterMovie.setController(FrescoHelper.loadImageTransition(urlPoster, null, () -> supportStartPostponedEnterTransition()));
-    }
+    unbinder.unbind();
 
-    @Override
-    public void setOverViewInfo(String overview) {
+    presenter.onDestroy();
+  }
+
+  @Override
+  public void setImageUrlPoster(String urlPoster) {
+    imagePosterMovie.setController(FrescoHelper.loadImageTransition(urlPoster, null, () -> supportStartPostponedEnterTransition()));
+  }
+
+  @Override
+  public void setOverViewInfo(String overview) {
         overviewMovie.setText(overview);
     }
 
-    @Override
-    public void setTitleInfo(String title) {
-        collapsingToolbarLayout.setTitle(title);
-        titleMovie.setText(title);
-    }
+  @Override
+  public void setTitleInfo(String title) {
+    collapsingToolbarLayout.setTitle(title);
+    titleMovie.setText(title);
+  }
 
-    @Override
-    public void setOriginalTitleInfo(String originalTitle) {
-        originalTitleMovie.setText(originalTitle);
-    }
+  @Override
+  public void setOriginalTitleInfo(String originalTitle) {
+    originalTitleMovie.setText(originalTitle);
+  }
 
-    @Override
-    public void setRateInfo(String rate) {
+  @Override
+  public void setRateInfo(String rate) {
         rateMovie.setText(rate);
     }
 
-    @Override
-    public void setDateInfo(String date) {
+  @Override
+  public void setDateInfo(String date) {
         dateMovie.setText(date);
     }
 
-    @Override
-    public void setLanguageInfo(String language) {
+  @Override
+  public void setLanguageInfo(String language) {
         languageMovie.setText(language);
     }
 
-    @Override
-    public void setGenreInfo(String genre) {
+  @Override
+  public void setGenreInfo(String genre) {
         genreMovie.setText(genre);
     }
 
-    @Override
-    public Movie getMovie() {
+  @Override
+  public Movie getMovie() {
         return movie;
     }
 
-    @Override
-    public Tv getTv() {
+  @Override
+  public Tv getTv() {
         return tv;
     }
 
-    private void createTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setEnterTransition(new Slide()
-                    .setDuration(500)
-                    .excludeTarget(R.id.toolbar, true)
-                    .excludeTarget(R.id.collapsingToolbarLayout, true)
-                    .excludeTarget(android.R.id.statusBarBackground, true)
-                    .excludeTarget(android.R.id.navigationBarBackground, true));
-
-            getWindow().setReturnTransition(new android.transition.Fade()
-                    .setDuration(300)
-                    .excludeTarget(R.id.toolbar, true)
-                    .excludeTarget(R.id.collapsingToolbarLayout, true)
-                    .excludeTarget(android.R.id.statusBarBackground, true)
-                    .excludeTarget(android.R.id.navigationBarBackground, true));
-        }
+  private void createTransition() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      configEnterTransition();
+      configReturnTransition();
     }
+  }
+
+  private void configReturnTransition() {
+    getWindow()
+      .setReturnTransition(new android.transition.Fade()
+        .setDuration(300)
+        .excludeTarget(R.id.toolbar, true)
+        .excludeTarget(R.id.collapsingToolbarLayout, true)
+        .excludeTarget(android.R.id.statusBarBackground, true)
+        .excludeTarget(android.R.id.navigationBarBackground, true));
+  }
+
+  private void configEnterTransition() {
+    getWindow()
+      .setEnterTransition(new Slide()
+        .setDuration(500)
+        .excludeTarget(R.id.toolbar, true)
+        .excludeTarget(R.id.collapsingToolbarLayout, true)
+        .excludeTarget(android.R.id.statusBarBackground, true)
+        .excludeTarget(android.R.id.navigationBarBackground, true));
+  }
 }

@@ -26,11 +26,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SearchToolbar extends Toolbar {
-
   @BindView(R.id.toolbar) Toolbar toolbar;
-
   @BindView(R.id.reveal_layout) RelativeLayout revealView;
-
   @BindView(R.id.toolbar_back_button) ImageButton backButton;
   @BindView(R.id.toolbar_search_button) ImageButton searchButton;
   @BindView(R.id.toolbar_search_view) EditText searchView;

@@ -19,87 +19,79 @@ import com.victorldavila.funnyguide.api.FunnyApi;
 
 import rx.functions.Action0;
 
-/**
- * Created by victo on 26/03/2017.
- */
-
 public class FrescoHelper {
 
-    @NonNull
-    private static BaseControllerListener<ImageInfo> getBaseControllerListener(final ProgressBar load) {
-        return new BaseControllerListener<ImageInfo>() {
-            @Override
-            public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable anim) {
-                if(load != null)
-                    load.setVisibility(View.GONE);
+  @NonNull
+  private static BaseControllerListener<ImageInfo> getBaseControllerListener(final ProgressBar load) {
+    return new BaseControllerListener<ImageInfo>() {
+      @Override
+      public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable anim) {
+        if(load != null)
+          load.setVisibility(View.GONE);
 
-                if (imageInfo == null)
-                    return;
-            }
+        if (imageInfo == null)
+          return;
+      }
 
-            @Override
-            public void onFailure(String id, Throwable throwable) {
-                if(load != null)
-                    load.setVisibility(View.GONE);
+      @Override
+      public void onFailure(String id, Throwable throwable) {
+        if(load != null)
+          load.setVisibility(View.GONE);
 
-                Log.e(getClass().getSimpleName(), throwable.getMessage());
-            }
-        };
-    }
+        Log.e(getClass().getSimpleName(), throwable.getMessage());
+      }
+    };
+  }
 
-    @NonNull
-    private static BaseControllerListener<ImageInfo> getTransitionControllerListener(final ProgressBar load, Action0 startPostponedEnterTransition) {
-        return new BaseControllerListener<ImageInfo>() {
-            @Override
-            public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable anim) {
-                startPostponedEnterTransition.call();
+  @NonNull
+  private static BaseControllerListener<ImageInfo> getTransitionControllerListener(final ProgressBar load, Action0 startPostponedEnterTransition) {
+    return new BaseControllerListener<ImageInfo>() {
+      @Override
+      public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable anim) {
+        startPostponedEnterTransition.call();
 
-                if(load != null)
-                    load.setVisibility(View.GONE);
+        if(load != null)
+          load.setVisibility(View.GONE);
 
-                if (imageInfo == null)
-                    return;
-            }
+        if (imageInfo == null)
+          return;
+      }
 
-            @Override
-            public void onFailure(String id, Throwable throwable) {
-                startPostponedEnterTransition.call();
+      @Override
+      public void onFailure(String id, Throwable throwable) {
+        startPostponedEnterTransition.call();
 
-                if(load != null)
-                    load.setVisibility(View.GONE);
+        if(load != null)
+          load.setVisibility(View.GONE);
 
-                Log.e(getClass().getSimpleName(), throwable.getMessage());
-            }
-        };
-    }
+        Log.e(getClass().getSimpleName(), throwable.getMessage());
+      }
+    };
+  }
 
-    public static DraweeController loadImage(String posterUrl, final ProgressBar progressBar){
+  public static DraweeController loadImage(String posterUrl, final ProgressBar progressBar){
+    Uri bmpUri = Uri.parse(FunnyApi.BASE_URL_IMAGE_TMDB + posterUrl);
+    ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(bmpUri).build();
 
-        Uri bmpUri = Uri.parse(FunnyApi.BASE_URL_IMAGE_TMDB + posterUrl);
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(bmpUri).build();
+    DraweeController controller = Fresco.newDraweeControllerBuilder()
+      .setImageRequest(imageRequest)
+      .setControllerListener(FrescoHelper.getBaseControllerListener(progressBar))
+      .setAutoPlayAnimations(true)
+      .build();
 
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setImageRequest(imageRequest)
-                .setControllerListener(FrescoHelper.getBaseControllerListener(progressBar))
-                .setAutoPlayAnimations(true)
-                // other setters
-                .build();
+    return controller;
+  }
 
-        return controller;
-    }
+  public static DraweeController loadImageTransition(String posterUrl, final ProgressBar progressBar, Action0 startPostponedEnterTransition){
+    Uri bmpUri = Uri.parse(FunnyApi.BASE_URL_IMAGE_TMDB + posterUrl);
+    ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(bmpUri).build();
 
-    public static DraweeController loadImageTransition(String posterUrl, final ProgressBar progressBar, Action0 startPostponedEnterTransition){
+    DraweeController controller = Fresco.newDraweeControllerBuilder()
+      .setImageRequest(imageRequest)
+      .setControllerListener(FrescoHelper.getTransitionControllerListener(progressBar, startPostponedEnterTransition))
+      .setAutoPlayAnimations(true)
+      .build();
 
-        Uri bmpUri = Uri.parse(FunnyApi.BASE_URL_IMAGE_TMDB + posterUrl);
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(bmpUri).build();
-
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setImageRequest(imageRequest)
-                .setControllerListener(FrescoHelper.getTransitionControllerListener(progressBar, startPostponedEnterTransition))
-                .setAutoPlayAnimations(true)
-                // other setters
-                .build();
-
-        return controller;
-    }
+    return controller;
+  }
 }

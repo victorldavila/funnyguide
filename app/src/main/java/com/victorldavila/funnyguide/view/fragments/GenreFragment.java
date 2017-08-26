@@ -26,84 +26,69 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * A simple {@link Fragment} subclass.
- *
- * Use the {@link GenreFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GenreFragment extends Fragment implements ResponseView<Genre> {
+  @BindView(R.id.tab_layout_genres) TabLayout tabBarGenre;
+  @BindView(R.id.view_pager_movies) ViewPager moviesViewPager;
+  @BindView(R.id.coordinator_layout_genre) CoordinatorLayout coordinatorLayoutGenre;
 
-    @BindView(R.id.tab_layout_genres) TabLayout tabBarGenre;
-    @BindView(R.id.view_pager_movies) ViewPager moviesViewPager;
-    @BindView(R.id.coordinator_layout_genre) CoordinatorLayout coordinatorLayoutGenre;
+  private GenrePresenter presenter;
 
-    private GenrePresenter presenter;
+  private Unbinder unbinder;
 
-    private Unbinder unbinder;
+  public GenreFragment() { }
 
-    public GenreFragment() {
-        // Required empty public constructor
-    }
+  public static GenreFragment newInstance() {
+    GenreFragment fragment = new GenreFragment();
+    return fragment;
+  }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment.
-     *
-     * @return A new instance of fragment GenreFragment.
-     */
-    public static GenreFragment newInstance() {
-        GenreFragment fragment = new GenreFragment();
-        return fragment;
-    }
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    FunnyApi api = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
+    presenter = new GenrePresenter(new GenreRepositoryImp(api));
+    presenter.addView(this);
+  }
 
-        FunnyApi api = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
-        presenter = new GenrePresenter(new GenreRepositoryImp(api));
-        presenter.addView(this);
-    }
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_genre, container, false);
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_genre, container, false);
-    }
+  @Override
+  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
+    unbinder = ButterKnife.bind(this, view);
 
-        initView();
+    initView();
 
-        presenter.onViewCreated();
-    }
+    presenter.onViewCreated();
+  }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
 
-        presenter.onDestroyView();
-    }
+    unbinder.unbind();
 
-    private void initView() {
+    presenter.onDestroyView();
+  }
+
+  private void initView() {
         tabBarGenre.setupWithViewPager(moviesViewPager);
     }
 
-    @Override
-    public void onItemList(List<Genre> results) {
-        GenreViewPagerAdapter adapter = new GenreViewPagerAdapter(getFragmentManager(), results);
-        moviesViewPager.setAdapter(adapter);
-    }
+  @Override
+  public void onItemList(List<Genre> results) {
+    GenreViewPagerAdapter adapter = new GenreViewPagerAdapter(getFragmentManager(), results);
+    moviesViewPager.setAdapter(adapter);
+  }
 
-    @Override
-    public void onError(String error) {
-        Snackbar snackbar = Snackbar.make(coordinatorLayoutGenre, error, Snackbar.LENGTH_LONG);
-        snackbar.show();
-    }
+  @Override
+  public void onError(String error) {
+    Snackbar snackbar = Snackbar.make(coordinatorLayoutGenre, error, Snackbar.LENGTH_LONG);
+    snackbar.show();
+  }
 }

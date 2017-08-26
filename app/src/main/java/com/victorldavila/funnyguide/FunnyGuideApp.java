@@ -8,28 +8,19 @@ import com.victorldavila.funnyguide.api.FunnyApi;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-/**
- * Created by victor on 09/12/2016.
- */
-
 public class FunnyGuideApp extends Application {
+  private FunnyApi funnyApi;
 
-    private FunnyApi funnyApi;
+  @Override
+  public void onCreate() {
+    super.onCreate();
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    funnyApi = new FunnyApi();
 
-        funnyApi = new FunnyApi();
+    Fresco.initialize(this);
+  }
 
-        Fresco.initialize(this);
-
-        /*Realm.initView(this);
-        RealmConfiguration config = new RealmConfiguration.Builder().build();
-        Realm.setDefaultConfiguration(config);*/
-    }
-
-    public FunnyApi getFunnyApi() {
+  public FunnyApi getFunnyApi() {
         return funnyApi;
     }
 }
