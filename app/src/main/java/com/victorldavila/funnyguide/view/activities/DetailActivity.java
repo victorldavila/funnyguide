@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.transition.TransitionManager;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +21,8 @@ import com.victorldavila.funnyguide.FrescoHelper;
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.models.ResponseMovie;
+import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.presenters.DetailPresenter;
 import com.victorldavila.funnyguide.repository.MovieRepository;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
@@ -57,8 +56,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
   private DetailPresenter presenter;
 
-  private Movie movie;
-  private Tv tv;
+  private ResponseMovie responseMovie;
+  private ResponseTv responseTv;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -109,33 +108,33 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
   private void getExtras(MovieRepository movieRepository, TvRepository tvRepository) {
     if(getIntent().getExtras() != null) {
-      Movie movie = getIntent().getExtras().getParcelable(MOVIE_ITEM);
-      if (movie != null) {
+      ResponseMovie responseMovie = getIntent().getExtras().getParcelable(MOVIE_ITEM);
+      if (responseMovie != null) {
         presenter = new DetailPresenter(movieRepository);
-        this.movie = movie;
+        this.responseMovie = responseMovie;
       } else {
-        Tv tv = getIntent().getExtras().getParcelable(TV_ITEM);
+        ResponseTv responseTv = getIntent().getExtras().getParcelable(TV_ITEM);
         presenter = new DetailPresenter(tvRepository);
-        this.tv = tv;
+        this.responseTv = responseTv;
       }
     }
   }
 
   private void setInfoItem() {
-    if(movie != null) {
-      setImageUrlPoster(movie.getPoster_path());
-      setOverViewInfo(movie.getOverview());
-      setTitleInfo(movie.getTitle());
-      setRateInfo(String.valueOf(movie.getVote_average()));
-      setDateInfo(movie.getRelease_date());
-      setOriginalTitleInfo(movie.getOriginal_title());
+    if(responseMovie != null) {
+      setImageUrlPoster(responseMovie.getPoster_path());
+      setOverViewInfo(responseMovie.getOverview());
+      setTitleInfo(responseMovie.getTitle());
+      setRateInfo(String.valueOf(responseMovie.getVote_average()));
+      setDateInfo(responseMovie.getRelease_date());
+      setOriginalTitleInfo(responseMovie.getOriginal_title());
     } else {
-      setImageUrlPoster(tv.getPoster_path());
-      setOverViewInfo(tv.getOverview());
-      setTitleInfo(tv.getName());
-      setRateInfo(String.valueOf(tv.getVote_average()));
-      setDateInfo(tv.getFirst_air_date());
-      setOriginalTitleInfo(tv.getOriginal_name());
+      setImageUrlPoster(responseTv.getPoster_path());
+      setOverViewInfo(responseTv.getOverview());
+      setTitleInfo(responseTv.getName());
+      setRateInfo(String.valueOf(responseTv.getVote_average()));
+      setDateInfo(responseTv.getFirst_air_date());
+      setOriginalTitleInfo(responseTv.getOriginal_name());
     }
   }
 
@@ -220,14 +219,12 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         genreMovie.setText(genre);
     }
 
-  @Override
-  public Movie getMovie() {
-        return movie;
+  public ResponseMovie getResponseMovie() {
+        return responseMovie;
     }
 
-  @Override
-  public Tv getTv() {
-        return tv;
+  public ResponseTv getResponseTv() {
+        return responseTv;
     }
 
   private void createTransition() {

@@ -1,2 +1,2 @@
 # funnyguide
-It's a guide for fun, with movie and series information.
+It's a guide for fun, with responseMovie and series information.

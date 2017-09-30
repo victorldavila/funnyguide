@@ -19,7 +19,7 @@ import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.TvGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.repository.TvRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailActivity;
 import com.victorldavila.funnyguide.presenters.TvPresenter;
@@ -96,7 +96,7 @@ public class TvFragment extends Fragment implements TvFragmentView {
   }
 
   @Override
-  public void onItemList(List<Tv> results) {
+  public void onItemList(List<ResponseTv> results) {
         tvGridAdapter.addList(results);
     }
 
@@ -109,9 +109,9 @@ public class TvFragment extends Fragment implements TvFragmentView {
   }
 
   @Override
-  public void changeActivity(Tv tv, SimpleDraweeView image) {
+  public void changeActivity(ResponseTv responseTv, SimpleDraweeView image) {
     Intent intent = new Intent(getContext(), DetailActivity.class);
-    intent.putExtra(DetailActivity.TV_ITEM, tv);
+    intent.putExtra(DetailActivity.TV_ITEM, responseTv);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       ActivityOptionsCompat options = ActivityOptionsCompat

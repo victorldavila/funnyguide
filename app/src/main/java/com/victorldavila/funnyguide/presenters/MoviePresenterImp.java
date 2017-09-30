@@ -27,7 +27,10 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
   @Override
   public void onViewCreated() {
     initPage();
-    getMoviesGenre();
+
+    if (view != null) {
+      getMoviesGenre();
+    }
   }
 
   @Override
@@ -40,8 +43,6 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
     }
 
   public void getMoviesGenre(){
-    verifyNullView();
-
     rxUnSubscribe(getMovieSubscription());
 
     if(movieRepository != null) {
@@ -74,11 +75,6 @@ public class MoviePresenterImp extends BaseRxPresenter implements FragmentPresen
         getMoviesGenre();
       }
     }
-  }
-
-  private void verifyNullView() {
-    if(view == null)
-      throw new NullViewException();
   }
 
   public Subscription getMovieSubscription() {

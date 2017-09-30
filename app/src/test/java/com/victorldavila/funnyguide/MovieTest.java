@@ -1,23 +1,8 @@
 package com.victorldavila.funnyguide;
 
-import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.models.NetWorkError;
-import com.victorldavila.funnyguide.models.ResponseListItem;
-import com.victorldavila.funnyguide.presenters.MoviePresenterImp;
-import com.victorldavila.funnyguide.presenters.NullViewException;
-import com.victorldavila.funnyguide.repository.MovieRepository;
-import com.victorldavila.funnyguide.view.fragments.MovieFragmentView;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import rx.Subscription;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class MovieTest {
 
@@ -105,7 +90,7 @@ public class MovieTest {
 
   //  verify(movieRepositoryMock, times(1)).getMovieListGenre(anyInt(), anyInt(), rxResponseArgumentCaptor.capture());
 
-   // ResponseListItem<Movie> responseListItemMock = mock(ResponseListItem.class);
+   // ResponseListItem<ResponseMovie> responseListItemMock = mock(ResponseListItem.class);
   //  rxResponseArgumentCaptor.getValue().onNext(responseListItemMock);
 
   //  verify(moviePresenter, times(1)).onNext(any());
@@ -120,7 +105,7 @@ public class MovieTest {
 
     //moviePresenter.addView(null);
 
-    //ResponseListItem<Movie> responseListItemMock = mock(ResponseListItem.class);
+    //ResponseListItem<ResponseMovie> responseListItemMock = mock(ResponseListItem.class);
   //  rxResponseArgumentCaptor.getValue().onNext(responseListItemMock);
   }
 

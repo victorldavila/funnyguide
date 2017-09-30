@@ -9,7 +9,7 @@ import com.victorldavila.funnyguide.FrescoHelper;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
-import com.victorldavila.funnyguide.models.Movie;
+import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.view.fragments.MovieFragmentView;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
   public static final int FOOTER_TYPE = 10;
   public static final int ITEM_TYPE = 20;
 
-  private ArrayList<Movie> items;
+  private ArrayList<ResponseMovie> items;
 
   private MovieFragmentView view;
   private boolean load;
@@ -34,11 +34,11 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     load = true;
   }
 
-  public void addList(List<Movie> items){
+  public void addList(List<ResponseMovie> items){
     this.items.addAll(items);
   }
 
-  public void addItem(Movie item){
+  public void addItem(ResponseMovie item){
     this.items.add(item);
   }
 
@@ -67,12 +67,12 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
   }
 
-  private void setInfoMovie(PosterViewHolder posterViewHolder, Movie movie) {
-    posterViewHolder.originalTitlePoster.setText(movie.getTitle());
-    posterViewHolder.countVotePoster.setText(String.valueOf(movie.getVote_average()));
-    posterViewHolder.yearReleasePoster.setText(movie.getRelease_date());
-    posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(movie.getPoster_path(), posterViewHolder.loadImagePoster));
-    posterViewHolder.imagePosterPoster.setOnClickListener(v -> view.changeActivity(movie, posterViewHolder.imagePosterPoster));
+  private void setInfoMovie(PosterViewHolder posterViewHolder, ResponseMovie responseMovie) {
+    posterViewHolder.originalTitlePoster.setText(responseMovie.getTitle());
+    posterViewHolder.countVotePoster.setText(String.valueOf(responseMovie.getVote_average()));
+    posterViewHolder.yearReleasePoster.setText(responseMovie.getRelease_date());
+    posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(responseMovie.getPoster_path(), posterViewHolder.loadImagePoster));
+    posterViewHolder.imagePosterPoster.setOnClickListener(v -> view.changeActivity(responseMovie, posterViewHolder.imagePosterPoster));
   }
 
   private void onEnableLoad(LoadPosterViewHolder loadPosterViewHolder) {

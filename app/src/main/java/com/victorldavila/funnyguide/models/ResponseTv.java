@@ -3,7 +3,7 @@ package com.victorldavila.funnyguide.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Tv extends Item implements Parcelable{
+public class ResponseTv extends Item implements Parcelable{
   private String name;
   private String original_name;
   private String first_air_date;
@@ -55,9 +55,9 @@ public class Tv extends Item implements Parcelable{
     dest.writeStringArray(this.origin_country);
   }
 
-  public Tv() { }
+  public ResponseTv() { }
 
-  protected Tv(Parcel in) {
+  protected ResponseTv(Parcel in) {
     super(in);
     this.name = in.readString();
     this.original_name = in.readString();
@@ -65,15 +65,15 @@ public class Tv extends Item implements Parcelable{
     this.origin_country = in.createStringArray();
   }
 
-  public static final Creator<Tv> CREATOR = new Creator<Tv>() {
+  public static final Creator<ResponseTv> CREATOR = new Creator<ResponseTv>() {
     @Override
-    public Tv createFromParcel(Parcel source) {
-            return new Tv(source);
+    public ResponseTv createFromParcel(Parcel source) {
+            return new ResponseTv(source);
         }
 
     @Override
-    public Tv[] newArray(int size) {
-            return new Tv[size];
+    public ResponseTv[] newArray(int size) {
+            return new ResponseTv[size];
         }
   };
 }

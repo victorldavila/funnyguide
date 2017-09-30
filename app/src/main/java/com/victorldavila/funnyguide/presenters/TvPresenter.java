@@ -3,7 +3,7 @@ package com.victorldavila.funnyguide.presenters;
 import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.models.NetWorkError;
 import com.victorldavila.funnyguide.models.ResponseListItem;
-import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.repository.TvRepository;
 import com.victorldavila.funnyguide.view.fragments.TvFragmentView;
 
@@ -22,10 +22,17 @@ public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<Tv
     }
 
   @Override
+  public void addView(TvFragmentView view) {
+    this.view = view;
+  }
+
+  @Override
   public void onViewCreated() {
-    verifyNullView();
     initPage();
-    getTvTopRated();
+
+    if (view != null) {
+      getTvTopRated();
+    }
   }
 
   @Override
@@ -42,27 +49,23 @@ public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<Tv
 
     if(tvRepository != null) {
       tvSubscription = tvRepository.getTvTopRated(page)
+        .doOnError(throwable -> view.setLoadRecycler(false))
+        .doOnCompleted(() -> view.setLoadRecycler(false))
         .subscribe(
           this::resultGetTvRated,
-          this::errorGetTvRated,
-          this::completeGetTvRated
+          this::errorGetTvRated
         );
 
       addSubscription(tvSubscription);
     }
   }
 
-  private void completeGetTvRated() {
-    view.setLoadRecycler(false);
-  }
-
   private void errorGetTvRated(Throwable throwable) {
     NetWorkError error = ErrorHandler.parseError(throwable);
     view.onError(error.getStatus_message());
-    view.setLoadRecycler(false);
   }
 
-  private void resultGetTvRated(ResponseListItem<Tv> tvResponseListItem) {
+  private void resultGetTvRated(ResponseListItem<ResponseTv> tvResponseListItem) {
     view.onItemList(tvResponseListItem.getResults());
     countPage();
   }
@@ -75,15 +78,5 @@ public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<Tv
     if(dy > 0)
       if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
         getTvTopRated();
-  }
-
-  @Override
-  public void addView(TvFragmentView view) {
-        this.view = view;
-    }
-
-  private void verifyNullView() {
-    if(view == null)
-      throw new NullViewException();
   }
 }

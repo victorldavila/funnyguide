@@ -1,7 +1,7 @@
 package com.victorldavila.funnyguide.view.activities;
 
-import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.models.ResponseMovie;
+import com.victorldavila.funnyguide.models.ResponseTv;
 
 public interface DetailActivityView {
   void setImageUrlPoster(String urlPoster);
@@ -13,6 +13,6 @@ public interface DetailActivityView {
   void setLanguageInfo(String language);
   void setGenreInfo(String genre);
 
-  Movie getMovie();
-  Tv getTv();
+  ResponseMovie getResponseMovie();
+  ResponseTv getResponseTv();
 }

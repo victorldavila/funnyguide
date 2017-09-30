@@ -2,7 +2,7 @@ package com.victorldavila.funnyguide.repository;
 
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseListItem;
-import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.models.ResponseTv;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -16,14 +16,14 @@ public class TvRepositoryImp implements TvRepository{
     }
 
   @Override
-  public Observable<ResponseListItem<Tv>> getTvTopRated(int page) {
+  public Observable<ResponseListItem<ResponseTv>> getTvTopRated(int page) {
     return funnyApi.getAPI().getSeriesTopRateObservable(funnyApi.getQueryStringList(page))
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread());
   }
 
   @Override
-  public Observable<Tv> getTv(int tvId) {
+  public Observable<ResponseTv> getTv(int tvId) {
     return funnyApi.getAPI().getSerieObservable(tvId)
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread());

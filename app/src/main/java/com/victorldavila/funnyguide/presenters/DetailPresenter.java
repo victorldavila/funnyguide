@@ -1,7 +1,7 @@
 package com.victorldavila.funnyguide.presenters;
 
-import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.models.ResponseMovie;
+import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.repository.MovieRepository;
 import com.victorldavila.funnyguide.repository.TvRepository;
 import com.victorldavila.funnyguide.view.activities.DetailActivityView;
@@ -30,8 +30,9 @@ public class DetailPresenter extends BaseRxPresenter implements ActivityPresente
 
   @Override
   public void onCreate() {
-    verifyNullView();
-    getDetailInfo();
+    if (view != null) {
+      getDetailInfo();
+    }
   }
 
   @Override
@@ -54,9 +55,9 @@ public class DetailPresenter extends BaseRxPresenter implements ActivityPresente
   }
 
   private void getTvInfo() {
-    Tv tv = view.getTv();
+    ResponseTv responseTv = view.getResponseTv();
 
-    movieSubscription = tvRepository.getTv(tv.getId())
+    movieSubscription = tvRepository.getTv(responseTv.getId())
       .subscribe(
         tvItem -> {},
         throwable -> {}
@@ -64,17 +65,12 @@ public class DetailPresenter extends BaseRxPresenter implements ActivityPresente
   }
 
   private void getMovieInfo() {
-    Movie movie = view.getMovie();
+    ResponseMovie responseMovie = view.getResponseMovie();
 
-    movieSubscription = movieRepository.getMovie(movie.getId())
+    movieSubscription = movieRepository.getMovie(responseMovie.getId())
       .subscribe(
         movieItem -> {},
         throwable -> {}
       );
-  }
-
-  private void verifyNullView() {
-    if(view == null)
-      throw new NullViewException();
   }
 }

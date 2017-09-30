@@ -17,26 +17,21 @@ public class MainPresenterImp implements ActivityPresenter<MainActivityView> {
   public void onDestroy() { }
 
   public boolean fragmentChange(int id) {
-    verifyNullView();
-
-    switch (id) {
-      case R.id.action_movies:
-        view.changeFragment(GenreFragment.newInstance());
-        return true;
-      case R.id.action_series:
-        view.changeFragment(TvFragment.newInstance());
-        return true;
-      case R.id.action_profile:
-        view.changeFragment(TvFragment.newInstance());
-        return true;
-      default:
-        return false;
+    if (view != null) {
+      switch (id) {
+        case R.id.action_movies:
+          view.changeFragment(GenreFragment.newInstance());
+          return true;
+        case R.id.action_series:
+          view.changeFragment(TvFragment.newInstance());
+          return true;
+        case R.id.action_profile:
+          view.changeFragment(TvFragment.newInstance());
+          return true;
+      }
     }
-  }
 
-  private void verifyNullView() {
-    if(view == null)
-      throw new NullViewException();
+    return false;
   }
 
   @Override

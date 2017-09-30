@@ -9,7 +9,7 @@ import com.victorldavila.funnyguide.FrescoHelper;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
-import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.view.fragments.TvFragmentView;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   public static final int FOOTER_TYPE = 10;
   public static final int ITEM_TYPE = 20;
 
-  private ArrayList<Tv> items;
+  private ArrayList<ResponseTv> items;
   private boolean load;
 
   private TvFragmentView view;
@@ -29,16 +29,16 @@ public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   public TvGridAdapter(TvFragmentView view) {
     this.view = view;
 
-    items = new ArrayList<Tv>();
+    items = new ArrayList<ResponseTv>();
 
     load = true;
   }
 
-  public void addList(List<Tv> items){
+  public void addList(List<ResponseTv> items){
     this.items.addAll(items);
   }
 
-  public void addItem(Tv item){
+  public void addItem(ResponseTv item){
     this.items.add(item);
   }
 
@@ -88,12 +88,12 @@ public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
       return TvGridAdapter.ITEM_TYPE;
   }
 
-  public void setInfoTv(PosterViewHolder posterViewHolder, Tv tv) {
-    posterViewHolder.originalTitlePoster.setText(tv.getOriginal_name());
-    posterViewHolder.countVotePoster.setText(String.valueOf(tv.getVote_average()));
-    posterViewHolder.yearReleasePoster.setText(tv.getFirst_air_date());
-    posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(tv.getPoster_path(), posterViewHolder.loadImagePoster));
-    posterViewHolder.imagePosterPoster.setOnClickListener(v -> view.changeActivity(tv, posterViewHolder.imagePosterPoster));
+  public void setInfoTv(PosterViewHolder posterViewHolder, ResponseTv responseTv) {
+    posterViewHolder.originalTitlePoster.setText(responseTv.getOriginal_name());
+    posterViewHolder.countVotePoster.setText(String.valueOf(responseTv.getVote_average()));
+    posterViewHolder.yearReleasePoster.setText(responseTv.getFirst_air_date());
+    posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(responseTv.getPoster_path(), posterViewHolder.loadImagePoster));
+    posterViewHolder.imagePosterPoster.setOnClickListener(v -> view.changeActivity(responseTv, posterViewHolder.imagePosterPoster));
   }
 
 

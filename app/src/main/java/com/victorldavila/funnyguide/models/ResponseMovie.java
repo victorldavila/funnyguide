@@ -2,14 +2,8 @@ package com.victorldavila.funnyguide.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
-
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
-public class Movie extends Item implements Parcelable{
+public class ResponseMovie extends Item implements Parcelable{
   private boolean adult;
   private String release_date;
   private String original_title;
@@ -71,9 +65,9 @@ public class Movie extends Item implements Parcelable{
     dest.writeByte(this.video ? (byte) 1 : (byte) 0);
   }
 
-    public Movie() { }
+    public ResponseMovie() { }
 
-  protected Movie(Parcel in) {
+  protected ResponseMovie(Parcel in) {
     super(in);
     this.adult = in.readByte() != 0;
     this.release_date = in.readString();
@@ -82,15 +76,15 @@ public class Movie extends Item implements Parcelable{
     this.video = in.readByte() != 0;
   }
 
-  public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+  public static final Creator<ResponseMovie> CREATOR = new Creator<ResponseMovie>() {
     @Override
-    public Movie createFromParcel(Parcel source) {
-            return new Movie(source);
+    public ResponseMovie createFromParcel(Parcel source) {
+            return new ResponseMovie(source);
         }
 
     @Override
-    public Movie[] newArray(int size) {
-            return new Movie[size];
+    public ResponseMovie[] newArray(int size) {
+            return new ResponseMovie[size];
         }
   };
 }

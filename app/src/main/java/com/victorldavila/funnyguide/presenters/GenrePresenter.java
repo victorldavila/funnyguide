@@ -1,16 +1,15 @@
 package com.victorldavila.funnyguide.presenters;
 
 import com.victorldavila.funnyguide.api.ErrorHandler;
-import com.victorldavila.funnyguide.models.Genre;
-import com.victorldavila.funnyguide.models.NetWorkError;
 import com.victorldavila.funnyguide.models.ResponseGenre;
+import com.victorldavila.funnyguide.models.NetWorkError;
 import com.victorldavila.funnyguide.repository.GenreRepository;
 import com.victorldavila.funnyguide.view.ResponseView;
 
 import rx.Subscription;
 
-public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<ResponseView<Genre>> {
-  private ResponseView<Genre> view;
+public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<ResponseView<ResponseGenre>> {
+  private ResponseView<ResponseGenre> view;
   private GenreRepository genreRepository;
 
   private Subscription genreSubscription;
@@ -20,14 +19,15 @@ public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter
   }
 
   @Override
-  public void onViewCreated() {
-    verifyNullView();
-    getGenre();
+  public void addView(ResponseView<ResponseGenre> view) {
+    this.view = view;
   }
 
-  private void verifyNullView() {
-    if(view == null)
-      throw new NullViewException();
+  @Override
+  public void onViewCreated() {
+    if (view != null) {
+      getGenre();
+    }
   }
 
   @Override
@@ -37,23 +37,20 @@ public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter
 
   public void getGenre(){
         rxUnSubscribe(genreSubscription);
+
         if(genreRepository != null) {
             genreSubscription = genreRepository.getMovieGenre()
-            .subscribe(responseGenre -> {
-                  verifyNullView();
-                  view.onItemList(responseGenre.getGenres());
-              },
-              throwable -> {
-                  verifyNullView();
-                  NetWorkError error = ErrorHandler.parseError(throwable);
-                  view.onError(error.getStatus_message());
-            });
-            addSubscription(genreSubscription);
+            .subscribe(
+              responseGenre -> view.onItemList(responseGenre.getGenres()),
+              this::handleError
+            );
+
+          addSubscription(genreSubscription);
         }
     }
 
-    @Override
-    public void addView(ResponseView<Genre> view) {
-        this.view = view;
-    }
+  private void handleError(Throwable throwable) {
+    NetWorkError error = ErrorHandler.parseError(throwable);
+    view.onError(error.getStatus_message());
+  }
 }

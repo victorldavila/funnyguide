@@ -23,7 +23,7 @@ import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Movie;
+import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailActivity;
 import com.victorldavila.funnyguide.presenters.MoviePresenterImp;
@@ -126,9 +126,9 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
   }
 
   @Override
-  public void changeActivity(Movie movie, SimpleDraweeView image) {
+  public void changeActivity(ResponseMovie responseMovie, SimpleDraweeView image) {
     Intent intent = new Intent(getContext(), DetailActivity.class);
-    intent.putExtra(DetailActivity.MOVIE_ITEM, movie);
+    intent.putExtra(DetailActivity.MOVIE_ITEM, responseMovie);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       ActivityOptionsCompat options = ActivityOptionsCompat
@@ -153,7 +153,7 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
   }
 
   @Override
-  public void onItemList(List<Movie> results) {
+  public void onItemList(List<ResponseMovie> results) {
         movieGridAdapter.addList(results);
     }
 

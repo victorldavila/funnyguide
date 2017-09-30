@@ -1,7 +1,7 @@
 package com.victorldavila.funnyguide.repository;
 
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.ResponseGenre;
+import com.victorldavila.funnyguide.models.ResponseListGenre;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -15,7 +15,7 @@ public class GenreRepositoryImp implements GenreRepository {
     }
 
   @Override
-  public Observable<ResponseGenre> getMovieGenre(){
+  public Observable<ResponseListGenre> getMovieGenre(){
     return funnyApi.getAPI().getGenreObservable(funnyApi.getQueryString())
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread());

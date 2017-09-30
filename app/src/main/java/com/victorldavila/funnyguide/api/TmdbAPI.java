@@ -1,9 +1,9 @@
 package com.victorldavila.funnyguide.api;
 
-import com.victorldavila.funnyguide.models.Movie;
-import com.victorldavila.funnyguide.models.ResponseGenre;
+import com.victorldavila.funnyguide.models.ResponseMovie;
+import com.victorldavila.funnyguide.models.ResponseListGenre;
 import com.victorldavila.funnyguide.models.ResponseListItem;
-import com.victorldavila.funnyguide.models.Tv;
+import com.victorldavila.funnyguide.models.ResponseTv;
 
 import java.util.Map;
 
@@ -14,17 +14,17 @@ import rx.Observable;
 
 public interface TmdbAPI {
   @GET(FunnyApi.EndPoint.GENRE + "/" + FunnyApi.EndPoint.MOVIE + "/" + FunnyApi.EndPoint.LIST)
-  Observable<ResponseGenre> getGenreObservable(@QueryMap Map<String, String> options);
+  Observable<ResponseListGenre> getGenreObservable(@QueryMap Map<String, String> options);
 
   @GET(FunnyApi.EndPoint.GENRE + "/{genre_id}/" + FunnyApi.EndPoint.MOVIES)
-  Observable<ResponseListItem<Movie>> getMoviesGenreObservable(@Path("genre_id") int genreId, @QueryMap Map<String, String> options);
+  Observable<ResponseListItem<ResponseMovie>> getMoviesGenreObservable(@Path("genre_id") int genreId, @QueryMap Map<String, String> options);
 
   @GET(FunnyApi.EndPoint.MOVIES + "/{movie_id}")
-  Observable<Movie> getMovieObservable(@Path("movie_id") int movieId);
+  Observable<ResponseMovie> getMovieObservable(@Path("movie_id") int movieId);
 
   @GET(FunnyApi.EndPoint.TV + "/" + FunnyApi.EndPoint.TOP_RATED)
-  Observable<ResponseListItem<Tv>> getSeriesTopRateObservable(@QueryMap Map<String, String> options);
+  Observable<ResponseListItem<ResponseTv>> getSeriesTopRateObservable(@QueryMap Map<String, String> options);
 
   @GET(FunnyApi.EndPoint.TV + "/{tv_id}")
-  Observable<Tv> getSerieObservable(@Path("tv_id") int tvId);
+  Observable<ResponseTv> getSerieObservable(@Path("tv_id") int tvId);
 }
