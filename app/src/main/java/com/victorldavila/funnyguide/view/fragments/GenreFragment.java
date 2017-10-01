@@ -78,7 +78,7 @@ public class GenreFragment extends Fragment implements ResponseView<ResponseGenr
 
   private void initView() {
         tabBarGenre.setupWithViewPager(moviesViewPager);
-    }
+  }
 
   @Override
   public void onItemList(List<ResponseGenre> results) {

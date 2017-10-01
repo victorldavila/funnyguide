@@ -8,18 +8,18 @@ import com.victorldavila.funnyguide.view.activities.DetailActivityView;
 
 import rx.Subscription;
 
-public class DetailPresenter extends BaseRxPresenter implements ActivityPresenter<DetailActivityView> {
+public class InfoItemPresenter extends BaseRxPresenter implements FragmentPresenter<DetailActivityView> {
   private DetailActivityView view;
   private MovieRepository movieRepository;
   private TvRepository tvRepository;
 
   private Subscription movieSubscription;
 
-  public DetailPresenter(MovieRepository movieRepository) {
+  public InfoItemPresenter(MovieRepository movieRepository) {
     this.movieRepository = movieRepository;
   }
 
-  public DetailPresenter(TvRepository tvRepository) {
+  public InfoItemPresenter(TvRepository tvRepository) {
         this.tvRepository = tvRepository;
     }
 
@@ -29,16 +29,16 @@ public class DetailPresenter extends BaseRxPresenter implements ActivityPresente
     }
 
   @Override
-  public void onCreate() {
+  public void onViewCreated() {
     if (view != null) {
       getDetailInfo();
     }
   }
 
   @Override
-  public void onDestroy() {
-        rxUnSubscribe();
-    }
+  public void onDestroyView() {
+    rxUnSubscribe();
+  }
 
   public void getDetailInfo(){
     if(movieRepository != null){

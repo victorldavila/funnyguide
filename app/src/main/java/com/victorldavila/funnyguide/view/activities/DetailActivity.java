@@ -5,30 +5,25 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.SharedElementCallback;
-import android.support.v4.widget.NestedScrollView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Slide;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.DraweeTransition;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.victorldavila.funnyguide.FrescoHelper;
-import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
-import com.victorldavila.funnyguide.api.FunnyApi;
+import com.victorldavila.funnyguide.adapter.DetailViewPagerAdapter;
 import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.models.ResponseTv;
-import com.victorldavila.funnyguide.presenters.DetailPresenter;
-import com.victorldavila.funnyguide.repository.MovieRepository;
-import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
-import com.victorldavila.funnyguide.repository.TvRepository;
-import com.victorldavila.funnyguide.repository.TvRepositoryImp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,16 +37,9 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   @BindView(R.id.coordinator_layout_detail) CoordinatorLayout coordinatorLayout;
   @BindView(R.id.collapsingToolbarLayout) CollapsingToolbarLayout collapsingToolbarLayout;
   @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
+  @BindView(R.id.tab_layout_details) TabLayout tabBarDetails;
+  @BindView(R.id.view_pager_details) ViewPager detailsViewPager;
   @BindView(R.id.item_poster_img) SimpleDraweeView imagePosterMovie;
-
-  /*@BindView(R.id.neste_scroll) NestedScrollView nestedScrollView;
-  @BindView(R.id.overview_info_poster) TextView overviewMovie;
-  @BindView(R.id.title_info_poster) TextView titleMovie;
-  @BindView(R.id.rating_info_poster) TextView rateMovie;
-  @BindView(R.id.release_date_info_poster) TextView dateMovie;
-  @BindView(R.id.original_title_info_poster) TextView originalTitleMovie;
-  @BindView(R.id.language_info_poster) TextView languageMovie;
-  @BindView(R.id.genre_info_poster) TextView genreMovie;*/
 
   private Unbinder unbinder;
 
@@ -61,7 +49,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     setWindowConfig();
-    createTransition();
+    //createTransition();
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_detail_item);
@@ -91,8 +79,9 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   }
 
   private void initActivity() {
-    createTransition();
+    //createTransition();
     getExtras();
+    initView();
     setInfoItem();
   }
 
@@ -155,6 +144,24 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     imagePosterMovie.setController(FrescoHelper.loadImageTransition(urlPoster, null, () -> supportStartPostponedEnterTransition()));
   }
 
+  private void initView() {
+    tabBarDetails.setupWithViewPager(detailsViewPager);
+    List<String> tabTitles = new ArrayList<>();
+    tabTitles.add("Informações");
+    tabTitles.add("Informações");
+    tabTitles.add("Informações");
+    tabTitles.add("Informações");
+    DetailViewPagerAdapter adapter = new DetailViewPagerAdapter(getSupportFragmentManager(), tabTitles);
+
+    if (responseMovie != null) {
+      adapter.setMovie(responseMovie);
+    } else {
+      adapter.setTv(responseTv);
+    }
+
+    detailsViewPager.setAdapter(adapter);
+  }
+
   public ResponseMovie getResponseMovie() {
         return responseMovie;
     }
@@ -163,7 +170,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         return responseTv;
     }
 
-  private void createTransition() {
+/*  private void createTransition() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       configEnterTransition();
       configReturnTransition();
@@ -175,9 +182,11 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
       .setReturnTransition(new android.transition.Fade()
         .setDuration(300)
         .excludeTarget(R.id.toolbar, true)
+        //.excludeTarget(R.id.app_bar_layout, true)
         .excludeTarget(R.id.collapsingToolbarLayout, true)
         .excludeTarget(android.R.id.statusBarBackground, true)
         .excludeTarget(android.R.id.navigationBarBackground, true));
+        //.excludeTarget(R.id.tab_layout_details, true));
   }
 
   private void configEnterTransition() {
@@ -185,8 +194,9 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
       .setEnterTransition(new Slide()
         .setDuration(500)
         .excludeTarget(R.id.toolbar, true)
+        //.excludeTarget(R.id.app_bar_layout, true)
         .excludeTarget(R.id.collapsingToolbarLayout, true)
         .excludeTarget(android.R.id.statusBarBackground, true)
         .excludeTarget(android.R.id.navigationBarBackground, true));
-  }
+  }*/
 }

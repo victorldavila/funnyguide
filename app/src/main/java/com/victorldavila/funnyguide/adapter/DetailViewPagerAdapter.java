@@ -5,11 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.victorldavila.funnyguide.models.ResponseGenre;
 import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.models.ResponseTv;
-import com.victorldavila.funnyguide.view.fragments.InfoItemFragment;
-import com.victorldavila.funnyguide.view.fragments.MovieFragment;
+import com.victorldavila.funnyguide.view.fragments.InfoMovieFragment;
+import com.victorldavila.funnyguide.view.fragments.InfoTvFragment;
 
 import java.util.List;
 
@@ -34,9 +33,9 @@ public class DetailViewPagerAdapter extends FragmentStatePagerAdapter {
   @Override
   public Fragment getItem(int position) {
     if (movie != null)
-      return InfoItemFragment.newInstance();
+      return InfoMovieFragment.newInstance(movie);
     else
-      return InfoItemFragment.newInstance();
+      return InfoTvFragment.newInstance(tv);
   }
 
   @Override
