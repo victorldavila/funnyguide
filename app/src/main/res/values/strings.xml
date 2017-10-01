@@ -1,25 +1,28 @@
 <resources>
-    <string name="app_name">FunnyGuide</string>
+  <string name="app_name">FunnyGuide</string>
 
-    <!-- bottom navigation strings -->
-    <string name="text_movie_nav">Filmes</string>
-    <string name="text_tv_nav">Series</string>
-    <string name="text_profile">Perfil</string>
+  <!-- bottom navigation strings -->
+  <string name="text_movie_nav">Filmes</string>
+  <string name="text_tv_nav">Series</string>
+  <string name="text_profile">Perfil</string>
 
-    <!-- activity string -->
-    <string name="title_activity_detail_item">DetailItemActivity</string>
+  <!-- activity string -->
+  <string name="title_activity_detail_item">DetailItemActivity</string>
 
-    <!-- transition strings -->
-    <string name="poster_transition">poster_item_transition</string>
+  <!-- transition strings -->
+  <string name="poster_transition">poster_item_transition</string>
 
-    <!-- label strings -->
-    <string name="lbl_title">Titulo:</string>
-    <string name="lbl_original_title">Titulo original:</string>
-    <string name="lbl_rating">Nota:</string>
-    <string name="lbl_genre">Genero:</string>
-    <string name="lbl_release_date">Data:</string>
-    <string name="lbl_language">Lingua:</string>
-    <string name="lbl_overview">Resumo:</string>
+  <!-- label strings -->
+  <string name="lbl_title">Titulo:</string>
+  <string name="lbl_original_title">Titulo original:</string>
+  <string name="lbl_rating">Nota:</string>
+  <string name="lbl_genre">Genero:</string>
+  <string name="lbl_release_date">Data:</string>
+  <string name="lbl_language">Lingua:</string>
+  <string name="lbl_overview">Resumo:</string>
 
-    <string name="search_hint">Procurar...</string>
+  <string name="search_hint">Procurar...</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
