@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.content.res.AppCompatResources;
 import android.view.MenuItem;
 import android.view.Window;
 
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.home_activity);
+    setContentView(R.layout.activity_home);
 
     unbinder = ButterKnife.bind(this);
 

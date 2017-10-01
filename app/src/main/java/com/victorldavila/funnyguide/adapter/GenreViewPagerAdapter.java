@@ -4,16 +4,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.victorldavila.funnyguide.models.Genre;
+import com.victorldavila.funnyguide.models.ResponseGenre;
 import com.victorldavila.funnyguide.view.fragments.MovieFragment;
 
 import java.util.List;
 
 public class GenreViewPagerAdapter extends FragmentStatePagerAdapter {
 
-  private List<Genre> genres;
+  private List<ResponseGenre> genres;
 
-  public GenreViewPagerAdapter(FragmentManager fm, List<Genre> genres) {
+  public GenreViewPagerAdapter(FragmentManager fm, List<ResponseGenre> genres) {
     super(fm);
 
     this.genres = genres;

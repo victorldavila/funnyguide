@@ -43,18 +43,17 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   @BindView(R.id.collapsingToolbarLayout) CollapsingToolbarLayout collapsingToolbarLayout;
   @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
   @BindView(R.id.item_poster_img) SimpleDraweeView imagePosterMovie;
-  @BindView(R.id.neste_scroll) NestedScrollView nestedScrollView;
+
+  /*@BindView(R.id.neste_scroll) NestedScrollView nestedScrollView;
   @BindView(R.id.overview_info_poster) TextView overviewMovie;
   @BindView(R.id.title_info_poster) TextView titleMovie;
   @BindView(R.id.rating_info_poster) TextView rateMovie;
   @BindView(R.id.release_date_info_poster) TextView dateMovie;
   @BindView(R.id.original_title_info_poster) TextView originalTitleMovie;
   @BindView(R.id.language_info_poster) TextView languageMovie;
-  @BindView(R.id.genre_info_poster) TextView genreMovie;
+  @BindView(R.id.genre_info_poster) TextView genreMovie;*/
 
   private Unbinder unbinder;
-
-  private DetailPresenter presenter;
 
   private ResponseMovie responseMovie;
   private ResponseTv responseTv;
@@ -93,28 +92,18 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
   private void initActivity() {
     createTransition();
-
-    FunnyApi funnyApi = ((FunnyGuideApp)getApplication()).getFunnyApi();
-    MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
-    TvRepository tvRepository = new TvRepositoryImp(funnyApi);
-
-    getExtras(movieRepository, tvRepository);
-
-    presenter.addView(DetailActivity.this);
-    presenter.onCreate();
-
+    getExtras();
     setInfoItem();
   }
 
-  private void getExtras(MovieRepository movieRepository, TvRepository tvRepository) {
+  private void getExtras() {
     if(getIntent().getExtras() != null) {
       ResponseMovie responseMovie = getIntent().getExtras().getParcelable(MOVIE_ITEM);
+
       if (responseMovie != null) {
-        presenter = new DetailPresenter(movieRepository);
         this.responseMovie = responseMovie;
       } else {
         ResponseTv responseTv = getIntent().getExtras().getParcelable(TV_ITEM);
-        presenter = new DetailPresenter(tvRepository);
         this.responseTv = responseTv;
       }
     }
@@ -123,18 +112,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   private void setInfoItem() {
     if(responseMovie != null) {
       setImageUrlPoster(responseMovie.getPoster_path());
-      setOverViewInfo(responseMovie.getOverview());
-      setTitleInfo(responseMovie.getTitle());
-      setRateInfo(String.valueOf(responseMovie.getVote_average()));
-      setDateInfo(responseMovie.getRelease_date());
-      setOriginalTitleInfo(responseMovie.getOriginal_title());
     } else {
       setImageUrlPoster(responseTv.getPoster_path());
-      setOverViewInfo(responseTv.getOverview());
-      setTitleInfo(responseTv.getName());
-      setRateInfo(String.valueOf(responseTv.getVote_average()));
-      setDateInfo(responseTv.getFirst_air_date());
-      setOriginalTitleInfo(responseTv.getOriginal_name());
     }
   }
 
@@ -165,59 +144,16 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   }
 
   @Override
-  public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-  @Override
   protected void onDestroy() {
     super.onDestroy();
 
     unbinder.unbind();
-
-    presenter.onDestroy();
   }
 
   @Override
   public void setImageUrlPoster(String urlPoster) {
     imagePosterMovie.setController(FrescoHelper.loadImageTransition(urlPoster, null, () -> supportStartPostponedEnterTransition()));
   }
-
-  @Override
-  public void setOverViewInfo(String overview) {
-        overviewMovie.setText(overview);
-    }
-
-  @Override
-  public void setTitleInfo(String title) {
-    collapsingToolbarLayout.setTitle(title);
-    titleMovie.setText(title);
-  }
-
-  @Override
-  public void setOriginalTitleInfo(String originalTitle) {
-    originalTitleMovie.setText(originalTitle);
-  }
-
-  @Override
-  public void setRateInfo(String rate) {
-        rateMovie.setText(rate);
-    }
-
-  @Override
-  public void setDateInfo(String date) {
-        dateMovie.setText(date);
-    }
-
-  @Override
-  public void setLanguageInfo(String language) {
-        languageMovie.setText(language);
-    }
-
-  @Override
-  public void setGenreInfo(String genre) {
-        genreMovie.setText(genre);
-    }
 
   public ResponseMovie getResponseMovie() {
         return responseMovie;

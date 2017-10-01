@@ -15,7 +15,7 @@ import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.GenreViewPagerAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.Genre;
+import com.victorldavila.funnyguide.models.ResponseGenre;
 import com.victorldavila.funnyguide.repository.GenreRepositoryImp;
 import com.victorldavila.funnyguide.view.ResponseView;
 import com.victorldavila.funnyguide.presenters.GenrePresenter;
@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class GenreFragment extends Fragment implements ResponseView<Genre> {
+public class GenreFragment extends Fragment implements ResponseView<ResponseGenre> {
   @BindView(R.id.tab_layout_genres) TabLayout tabBarGenre;
   @BindView(R.id.view_pager_movies) ViewPager moviesViewPager;
   @BindView(R.id.coordinator_layout_genre) CoordinatorLayout coordinatorLayoutGenre;
@@ -81,7 +81,7 @@ public class GenreFragment extends Fragment implements ResponseView<Genre> {
     }
 
   @Override
-  public void onItemList(List<Genre> results) {
+  public void onItemList(List<ResponseGenre> results) {
     GenreViewPagerAdapter adapter = new GenreViewPagerAdapter(getFragmentManager(), results);
     moviesViewPager.setAdapter(adapter);
   }
