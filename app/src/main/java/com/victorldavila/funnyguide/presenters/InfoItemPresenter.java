@@ -94,5 +94,15 @@ public class InfoItemPresenter extends BaseRxPresenter implements FragmentPresen
         .map(language -> language.getName())
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
         .subscribe(view::setLanguageInfo);
+
+    Observable.from(responseMovie.getProduction_companies())
+        .map(company -> company.getName())
+        .reduce((name, accumulator) -> accumulator.concat(", " + name))
+        .subscribe(view::setProductionCompanies);
+
+    Observable.from(responseMovie.getProduction_countries())
+        .map(country -> country.getName())
+        .reduce((name, accumulator) -> accumulator.concat(", " + name))
+        .subscribe(view::setProductionCountries);
   }
 }

@@ -36,6 +36,8 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
   @BindView(R.id.language_info_poster) TextView languageMovie;
   @BindView(R.id.genre_info_poster) TextView genreMovie;
   @BindView(R.id.status_item) TextView statusMovie;
+  @BindView(R.id.production_companies) TextView productionCompanies;
+  @BindView(R.id.countries) TextView productionCountries;
 
   private InfoItemPresenter infoItemPresenter;
 
@@ -152,6 +154,16 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
   @Override
   public void setStatus(String status) {
     statusMovie.setText(status);
+  }
+
+  @Override
+  public void setProductionCountries(String countries) {
+    productionCountries.setText(countries);
+  }
+
+  @Override
+  public void setProductionCompanies(String companies) {
+    productionCompanies.setText(companies);
   }
 
   @Override

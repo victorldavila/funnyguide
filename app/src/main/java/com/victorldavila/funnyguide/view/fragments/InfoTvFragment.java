@@ -155,6 +155,16 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
   }
 
   @Override
+  public void setProductionCountries(String countries) {
+
+  }
+
+  @Override
+  public void setProductionCompanies(String companies) {
+
+  }
+
+  @Override
   public ResponseTv getResponseTv() {
     return responseTv;
   }
