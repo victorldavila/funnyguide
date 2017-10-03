@@ -14,12 +14,9 @@ import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseMovie;
-import com.victorldavila.funnyguide.models.ResponseTv;
-import com.victorldavila.funnyguide.presenters.InfoItemPresenter;
+import com.victorldavila.funnyguide.presenters.InfoMoviePresenterImp;
 import com.victorldavila.funnyguide.repository.MovieRepository;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
-import com.victorldavila.funnyguide.repository.TvRepository;
-import com.victorldavila.funnyguide.repository.TvRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailActivity;
 
 import butterknife.BindView;
@@ -39,7 +36,7 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
   @BindView(R.id.production_companies) TextView productionCompanies;
   @BindView(R.id.countries) TextView productionCountries;
 
-  private InfoItemPresenter infoItemPresenter;
+  private InfoMoviePresenterImp infoMoviePresenterImp;
 
   private Unbinder unbinder;
 
@@ -70,8 +67,8 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
 
     FunnyApi funnyApi = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
     MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
-    infoItemPresenter = new InfoItemPresenter(movieRepository);
-    infoItemPresenter.addView(this);
+    infoMoviePresenterImp = new InfoMoviePresenterImp(movieRepository);
+    infoMoviePresenterImp.addView(this);
   }
 
   @Override
@@ -88,7 +85,7 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
 
     setInfoItem();
 
-    infoItemPresenter.onViewCreated();
+    infoMoviePresenterImp.onViewCreated();
   }
 
   @Override

@@ -14,11 +14,8 @@ import android.widget.TextView;
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.api.FunnyApi;
-import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.models.ResponseTv;
-import com.victorldavila.funnyguide.presenters.InfoItemPresenter;
-import com.victorldavila.funnyguide.repository.MovieRepository;
-import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
+import com.victorldavila.funnyguide.presenters.InfoMoviePresenterImp;
 import com.victorldavila.funnyguide.repository.TvRepository;
 import com.victorldavila.funnyguide.repository.TvRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailActivity;
@@ -38,7 +35,7 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
   @BindView(R.id.language_info_poster) TextView languageMovie;
   @BindView(R.id.genre_info_poster) TextView genreMovie;
 
-  private InfoItemPresenter infoItemPresenter;
+  private InfoMoviePresenterImp infoMoviePresenterImp;
 
   private Unbinder unbinder;
 
@@ -69,7 +66,7 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
     FunnyApi funnyApi = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
     TvRepository tvRepository = new TvRepositoryImp(funnyApi);
-    //infoItemPresenter = new InfoItemPresenter(tvRepository);
+    //infoMoviePresenterImp = new InfoMoviePresenterImp(tvRepository);
   }
 
   @Override
@@ -86,7 +83,7 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
     setInfoItem();
 
-    infoItemPresenter.onViewCreated();
+    infoMoviePresenterImp.onViewCreated();
   }
 
   @Override

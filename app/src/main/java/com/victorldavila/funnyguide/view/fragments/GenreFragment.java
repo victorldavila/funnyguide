@@ -18,7 +18,7 @@ import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseGenre;
 import com.victorldavila.funnyguide.repository.GenreRepositoryImp;
 import com.victorldavila.funnyguide.view.ResponseView;
-import com.victorldavila.funnyguide.presenters.GenrePresenter;
+import com.victorldavila.funnyguide.presenters.GenrePresenterImp;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class GenreFragment extends Fragment implements ResponseView<ResponseGenr
   @BindView(R.id.view_pager_movies) ViewPager moviesViewPager;
   @BindView(R.id.coordinator_layout_genre) CoordinatorLayout coordinatorLayoutGenre;
 
-  private GenrePresenter presenter;
+  private GenrePresenterImp presenter;
 
   private Unbinder unbinder;
 
@@ -47,7 +47,7 @@ public class GenreFragment extends Fragment implements ResponseView<ResponseGenr
     super.onCreate(savedInstanceState);
 
     FunnyApi api = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
-    presenter = new GenrePresenter(new GenreRepositoryImp(api));
+    presenter = new GenrePresenterImp(new GenreRepositoryImp(api));
     presenter.addView(this);
   }
 

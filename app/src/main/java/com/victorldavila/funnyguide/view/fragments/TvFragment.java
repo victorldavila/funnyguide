@@ -22,7 +22,7 @@ import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.repository.TvRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailActivity;
-import com.victorldavila.funnyguide.presenters.TvPresenter;
+import com.victorldavila.funnyguide.presenters.TvPresenterImp;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class TvFragment extends Fragment implements TvFragmentView {
   @BindView(R.id.recycler_tv_item) RecyclerView tvRecyclerView;
   @BindView(R.id.coordinator_layout_tv) CoordinatorLayout coordinatorLayoutMovie;
 
-  private TvPresenter presenter;
+  private TvPresenterImp presenter;
   private TvGridAdapter tvGridAdapter;
   private Unbinder unbinder;
 
@@ -50,7 +50,7 @@ public class TvFragment extends Fragment implements TvFragmentView {
     super.onCreate(savedInstanceState);
 
     FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
-    presenter = new TvPresenter(new TvRepositoryImp(api));
+    presenter = new TvPresenterImp(new TvRepositoryImp(api));
     presenter.addView(this);
   }
 

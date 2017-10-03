@@ -8,13 +8,13 @@ import com.victorldavila.funnyguide.view.ResponseView;
 
 import rx.Subscription;
 
-public class GenrePresenter extends BaseRxPresenter implements FragmentPresenter<ResponseView<ResponseGenre>> {
+public class GenrePresenterImp extends BaseRxPresenter implements FragmentPresenter<ResponseView<ResponseGenre>> {
   private ResponseView<ResponseGenre> view;
   private GenreRepository genreRepository;
 
   private Subscription genreSubscription;
 
-  public GenrePresenter(GenreRepository genreRepository){
+  public GenrePresenterImp(GenreRepository genreRepository){
     this.genreRepository = genreRepository;
   }
 

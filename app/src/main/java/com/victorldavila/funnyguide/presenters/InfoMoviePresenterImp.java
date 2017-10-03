@@ -12,18 +12,18 @@ import java.text.DateFormat;
 import rx.Observable;
 import rx.Subscription;
 
-public class InfoItemPresenter extends BaseRxPresenter implements FragmentPresenter<InfoMovieFragment> {
+public class InfoMoviePresenterImp extends BaseRxPresenter implements FragmentPresenter<InfoMovieFragment> {
   private InfoMovieFragment view;
   private MovieRepository movieRepository;
   private TvRepository tvRepository;
 
   private Subscription movieSubscription;
 
-  public InfoItemPresenter(MovieRepository movieRepository) {
+  public InfoMoviePresenterImp(MovieRepository movieRepository) {
     this.movieRepository = movieRepository;
   }
 
-  /*public InfoItemPresenter(TvRepository tvRepository) {
+  /*public InfoMoviePresenterImp(TvRepository tvRepository) {
         this.tvRepository = tvRepository;
     }*/
 

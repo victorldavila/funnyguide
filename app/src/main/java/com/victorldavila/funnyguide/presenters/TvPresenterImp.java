@@ -9,7 +9,7 @@ import com.victorldavila.funnyguide.view.fragments.TvFragmentView;
 
 import rx.Subscription;
 
-public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<TvFragmentView> {
+public class TvPresenterImp extends BaseRxPresenter implements FragmentPresenter<TvFragmentView> {
   private TvRepository tvRepository;
   private TvFragmentView view;
 
@@ -17,7 +17,7 @@ public class TvPresenter extends BaseRxPresenter implements FragmentPresenter<Tv
 
   private int page;
 
-  public TvPresenter(TvRepository tvRepository){
+  public TvPresenterImp(TvRepository tvRepository){
         this.tvRepository = tvRepository;
     }
 
