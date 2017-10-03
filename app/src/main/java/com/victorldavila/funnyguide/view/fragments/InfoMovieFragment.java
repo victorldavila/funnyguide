@@ -35,6 +35,7 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
   @BindView(R.id.original_title_info_poster) TextView originalTitleMovie;
   @BindView(R.id.language_info_poster) TextView languageMovie;
   @BindView(R.id.genre_info_poster) TextView genreMovie;
+  @BindView(R.id.status_item) TextView statusMovie;
 
   private InfoItemPresenter infoItemPresenter;
 
@@ -68,6 +69,7 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
     FunnyApi funnyApi = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
     MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
     infoItemPresenter = new InfoItemPresenter(movieRepository);
+    infoItemPresenter.addView(this);
   }
 
   @Override
@@ -145,6 +147,11 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
   @Override
   public void setGenreInfo(String genre) {
     genreMovie.setText(genre);
+  }
+
+  @Override
+  public void setStatus(String status) {
+    statusMovie.setText(status);
   }
 
   @Override

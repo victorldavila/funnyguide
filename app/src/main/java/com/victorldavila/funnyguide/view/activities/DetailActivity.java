@@ -49,7 +49,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     setWindowConfig();
-    //createTransition();
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_detail_item);
@@ -79,7 +78,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   }
 
   private void initActivity() {
-    //createTransition();
     getExtras();
     initView();
     setInfoItem();
@@ -146,12 +144,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
   private void initView() {
     tabBarDetails.setupWithViewPager(detailsViewPager);
-    List<String> tabTitles = new ArrayList<>();
-    tabTitles.add("Informações");
-    tabTitles.add("Informações");
-    tabTitles.add("Informações");
-    tabTitles.add("Informações");
-    DetailViewPagerAdapter adapter = new DetailViewPagerAdapter(getSupportFragmentManager(), tabTitles);
+
+    DetailViewPagerAdapter adapter = new DetailViewPagerAdapter(getSupportFragmentManager());
 
     if (responseMovie != null) {
       adapter.setMovie(responseMovie);
@@ -169,34 +163,4 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
   public ResponseTv getResponseTv() {
         return responseTv;
     }
-
-/*  private void createTransition() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      configEnterTransition();
-      configReturnTransition();
-    }
-  }
-
-  private void configReturnTransition() {
-    getWindow()
-      .setReturnTransition(new android.transition.Fade()
-        .setDuration(300)
-        .excludeTarget(R.id.toolbar, true)
-        //.excludeTarget(R.id.app_bar_layout, true)
-        .excludeTarget(R.id.collapsingToolbarLayout, true)
-        .excludeTarget(android.R.id.statusBarBackground, true)
-        .excludeTarget(android.R.id.navigationBarBackground, true));
-        //.excludeTarget(R.id.tab_layout_details, true));
-  }
-
-  private void configEnterTransition() {
-    getWindow()
-      .setEnterTransition(new Slide()
-        .setDuration(500)
-        .excludeTarget(R.id.toolbar, true)
-        //.excludeTarget(R.id.app_bar_layout, true)
-        .excludeTarget(R.id.collapsingToolbarLayout, true)
-        .excludeTarget(android.R.id.statusBarBackground, true)
-        .excludeTarget(android.R.id.navigationBarBackground, true));
-  }*/
 }

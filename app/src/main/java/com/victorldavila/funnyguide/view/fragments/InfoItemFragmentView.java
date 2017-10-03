@@ -12,4 +12,5 @@ public interface InfoItemFragmentView {
   void setDateInfo(String date);
   void setLanguageInfo(String language);
   void setGenreInfo(String genre);
+  void setStatus(String status);
 }

@@ -5,15 +5,14 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/neste_scroll"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  tools:context="com.victorldavila.funnyguide.view.activities.DetailActivity"
-  tools:showIn="@layout/activity_detail_item" >
+  android:layout_height="match_parent" >
 
     <LinearLayout
       android:orientation="vertical"
       android:id="@+id/content_detail_item"
       android:layout_width="match_parent"
       android:layout_height="match_parent" >
+
         <include layout="@layout/item_card_basic_info" />
 
         <include layout="@layout/item_card_overview_info" />

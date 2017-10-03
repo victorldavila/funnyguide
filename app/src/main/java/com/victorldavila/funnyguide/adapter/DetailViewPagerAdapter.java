@@ -10,6 +10,7 @@ import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.view.fragments.InfoMovieFragment;
 import com.victorldavila.funnyguide.view.fragments.InfoTvFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -19,10 +20,15 @@ public class DetailViewPagerAdapter extends FragmentStatePagerAdapter {
   private ResponseMovie movie;
   private ResponseTv tv;
 
-  public DetailViewPagerAdapter(FragmentManager fm, List<String> title) {
+  public DetailViewPagerAdapter(FragmentManager fm) {
     super(fm);
 
-    this.title = title;
+    title = new ArrayList<>();
+
+    title.add("Detalhes");
+    title.add("Opiniões");
+    title.add("Titulos Semelhantes");
+    title.add("Creditos");
   }
 
   @Override

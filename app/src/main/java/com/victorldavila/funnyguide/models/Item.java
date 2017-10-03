@@ -10,6 +10,7 @@ public class Item implements Parcelable {
   private int id;
   private String original_language;
   private String backdrop_path;
+  private String status;
   private double popularity;
   private int vote_count;
   private double vote_average;
@@ -86,25 +87,35 @@ public class Item implements Parcelable {
         this.vote_average = vote_average;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-      dest.writeString(this.poster_path);
-      dest.writeString(this.overview);
-      dest.writeIntArray(this.genre_ids);
-      dest.writeInt(this.id);
-      dest.writeString(this.original_language);
-      dest.writeString(this.backdrop_path);
-      dest.writeDouble(this.popularity);
-      dest.writeInt(this.vote_count);
-      dest.writeDouble(this.vote_average);
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-  public Item() { }
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(this.poster_path);
+    dest.writeString(this.overview);
+    dest.writeIntArray(this.genre_ids);
+    dest.writeInt(this.id);
+    dest.writeString(this.original_language);
+    dest.writeString(this.backdrop_path);
+    dest.writeString(this.status);
+    dest.writeDouble(this.popularity);
+    dest.writeInt(this.vote_count);
+    dest.writeDouble(this.vote_average);
+  }
+
+  public Item() {
+  }
 
   protected Item(Parcel in) {
     this.poster_path = in.readString();
@@ -113,20 +124,21 @@ public class Item implements Parcelable {
     this.id = in.readInt();
     this.original_language = in.readString();
     this.backdrop_path = in.readString();
+    this.status = in.readString();
     this.popularity = in.readDouble();
     this.vote_count = in.readInt();
     this.vote_average = in.readDouble();
   }
 
-  public static final Creator<Item> CREATOR = new Creator<Item>() {
+  public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
     @Override
-    public Item createFromParcel(Parcel in) {
-            return new Item(in);
-        }
+    public Item createFromParcel(Parcel source) {
+      return new Item(source);
+    }
 
     @Override
     public Item[] newArray(int size) {
-            return new Item[size];
-        }
+      return new Item[size];
+    }
   };
 }

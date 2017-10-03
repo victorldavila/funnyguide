@@ -69,7 +69,7 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
     FunnyApi funnyApi = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
     TvRepository tvRepository = new TvRepositoryImp(funnyApi);
-    infoItemPresenter = new InfoItemPresenter(tvRepository);
+    //infoItemPresenter = new InfoItemPresenter(tvRepository);
   }
 
   @Override
@@ -147,6 +147,11 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
   @Override
   public void setGenreInfo(String genre) {
     genreMovie.setText(genre);
+  }
+
+  @Override
+  public void setStatus(String status) {
+
   }
 
   @Override
