@@ -71,21 +71,25 @@ public class InfoTvPresenterImp extends BaseRxPresenter implements FragmentPrese
     Observable.from(responseTv.getGenres())
         .map(genre -> genre.getName())
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setGenreInfo);
+        .subscribe(view::setGenreInfo,
+            throwable -> { });
 
     Observable.from(responseTv.getLanguages())
         .map(language -> language)
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setLanguageInfo);
+        .subscribe(view::setLanguageInfo,
+            throwable -> { });
 
     Observable.from(responseTv.getProduction_companies())
         .map(company -> company.getName())
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setProductionCompanies);
+        .subscribe(view::setProductionCompanies,
+            throwable -> { });
 
     Observable.from(responseTv.getOrigin_country())
         .map(country -> country)
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setProductionCountries);
+        .subscribe(view::setProductionCountries,
+            throwable -> { });
   }
 }

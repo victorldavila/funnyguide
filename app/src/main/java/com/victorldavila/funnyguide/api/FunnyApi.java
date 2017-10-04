@@ -37,6 +37,7 @@ public class FunnyApi {
     public static final String GENRE = "genre";
     public static final String MOVIE = "movie";
     public static final String MOVIES = "movies";
+    public static final String REVIEWS = "reviews";
     public static final String LIST = "list";
     public static final String TV = "tv";
     public static final String TOP_RATED = "top_rated";
