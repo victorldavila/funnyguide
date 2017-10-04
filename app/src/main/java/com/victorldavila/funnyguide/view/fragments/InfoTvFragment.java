@@ -15,7 +15,7 @@ import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseTv;
-import com.victorldavila.funnyguide.presenters.InfoMoviePresenterImp;
+import com.victorldavila.funnyguide.presenters.InfoTvPresenterImp;
 import com.victorldavila.funnyguide.repository.TvRepository;
 import com.victorldavila.funnyguide.repository.TvRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailActivity;
@@ -27,15 +27,21 @@ import butterknife.Unbinder;
 public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
   @BindView(R.id.neste_scroll) NestedScrollView nestedScrollView;
-  @BindView(R.id.overview_info_poster) TextView overviewMovie;
-  @BindView(R.id.title_info_poster) TextView titleMovie;
-  @BindView(R.id.rating_info_poster) TextView rateMovie;
-  @BindView(R.id.release_date_info_poster) TextView dateMovie;
-  @BindView(R.id.original_title_info_poster) TextView originalTitleMovie;
-  @BindView(R.id.language_info_poster) TextView languageMovie;
-  @BindView(R.id.genre_info_poster) TextView genreMovie;
+  @BindView(R.id.overview_info_poster) TextView overviewTv;
+  @BindView(R.id.name_info_poster) TextView titleTv;
+  @BindView(R.id.rating_info_poster) TextView rateTv;
+  @BindView(R.id.original_title_info_poster) TextView originalTitleTv;
+  @BindView(R.id.language_info_poster) TextView languageTv;
+  @BindView(R.id.genre_info_poster) TextView genreTv;
+  @BindView(R.id.status_item) TextView statusTv;
+  @BindView(R.id.production_companies) TextView productionCompanies;
+  @BindView(R.id.countries) TextView productionCountries;
+  @BindView(R.id.release_date_info_poster) TextView releaseDateTv;
+  @BindView(R.id.last_air_date_info_poster) TextView lastAirDateTv;
+  @BindView(R.id.number_of_episodes) TextView numberOfEpisodesTv;
+  @BindView(R.id.number_of_seasons) TextView numberOfSeasonsTv;
 
-  private InfoMoviePresenterImp infoMoviePresenterImp;
+  private InfoTvPresenterImp infoTvPresenterImp;
 
   private Unbinder unbinder;
 
@@ -66,13 +72,13 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
     FunnyApi funnyApi = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
     TvRepository tvRepository = new TvRepositoryImp(funnyApi);
-    //infoMoviePresenterImp = new InfoMoviePresenterImp(tvRepository);
+    infoTvPresenterImp = new InfoTvPresenterImp(tvRepository);
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.fragment_detail_item, container, false);
+    return inflater.inflate(R.layout.fragment_info_tv, container, false);
   }
 
   @Override
@@ -83,7 +89,8 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
     setInfoItem();
 
-    infoMoviePresenterImp.onViewCreated();
+    infoTvPresenterImp.addView(this);
+    infoTvPresenterImp.onViewCreated();
   }
 
   @Override
@@ -113,52 +120,67 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
   @Override
   public void setOverViewInfo(String overview) {
-    overviewMovie.setText(overview);
+    overviewTv.setText(overview);
   }
 
   @Override
   public void setTitleInfo(String title) {
-    titleMovie.setText(title);
+    titleTv.setText(title);
   }
 
   @Override
   public void setOriginalTitleInfo(String originalTitle) {
-    originalTitleMovie.setText(originalTitle);
+    originalTitleTv.setText(originalTitle);
   }
 
   @Override
   public void setRateInfo(String rate) {
-    rateMovie.setText(rate);
+    rateTv.setText(rate);
   }
 
   @Override
   public void setDateInfo(String date) {
-    dateMovie.setText(date);
+    releaseDateTv.setText(date);
   }
 
   @Override
   public void setLanguageInfo(String language) {
-    languageMovie.setText(language);
+    languageTv.setText(language);
   }
 
   @Override
   public void setGenreInfo(String genre) {
-    genreMovie.setText(genre);
+    genreTv.setText(genre);
   }
 
   @Override
   public void setStatus(String status) {
-
+    statusTv.setText(status);
   }
 
   @Override
   public void setProductionCountries(String countries) {
-
+    productionCountries.setText(countries);
   }
 
   @Override
   public void setProductionCompanies(String companies) {
+    productionCompanies.setText(companies);
+  }
 
+  @Override
+  public void setLastAirDate(String lastAirDate) {
+    lastAirDateTv.setText(lastAirDate);
+  }
+
+  @Override
+  public void setNumberOfEpisodes(int numberOfEpisodes) {
+    numberOfEpisodesTv.setText(String.valueOf(numberOfEpisodes));
+  }
+
+  @Override
+  public void setNumberOfSeason(int numberOfSeason) {
+    numberOfSeasonsTv.setText(String.valueOf(numberOfSeason));
   }
 
   @Override

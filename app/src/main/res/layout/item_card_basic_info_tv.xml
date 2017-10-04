@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_margin="16dp"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  app:cardCornerRadius="3dp"
+  app:cardElevation="3dp" >
+
+  <RelativeLayout
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+      android:id="@+id/lbl_name"
+      android:text="@string/lbl_name"
+      style="@style/text_lbl_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_marginLeft="5dp"
+      android:layout_toRightOf="@+id/lbl_name"
+      android:id="@+id/name_info_poster"
+      style="@style/text_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_marginTop="6dp"
+      android:layout_below="@+id/lbl_name"
+      android:id="@+id/lbl_rating"
+      android:text="@string/lbl_rating"
+      style="@style/text_lbl_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_marginLeft="5dp"
+      android:layout_marginTop="6dp"
+      android:layout_below="@+id/name_info_poster"
+      android:layout_toRightOf="@+id/lbl_rating"
+      android:id="@+id/rating_info_poster"
+      style="@style/text_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_marginTop="6dp"
+      android:layout_below="@+id/rating_info_poster"
+      android:id="@+id/lbl_number_of_episodes"
+      android:text="@string/lbl_number_of_episodes"
+      style="@style/text_lbl_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_below="@+id/rating_info_poster"
+      android:layout_marginTop="6dp"
+      android:layout_marginLeft="5dp"
+      android:layout_toRightOf="@+id/lbl_number_of_episodes"
+      android:id="@+id/number_of_episodes"
+      style="@style/text_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_marginTop="6dp"
+      android:layout_below="@+id/number_of_episodes"
+      android:id="@+id/lbl_season"
+      android:text="@string/lbl_season"
+      style="@style/text_lbl_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_marginLeft="5dp"
+      android:layout_marginTop="6dp"
+      android:layout_below="@+id/number_of_episodes"
+      android:layout_toRightOf="@+id/lbl_season"
+      android:id="@+id/number_of_seasons"
+      style="@style/text_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_marginTop="6dp"
+      android:layout_below="@+id/number_of_seasons"
+      android:id="@+id/lbl_status"
+      android:text="@string/lbl_status"
+      style="@style/text_lbl_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:layout_marginLeft="5dp"
+      android:layout_marginTop="6dp"
+      android:layout_below="@+id/number_of_seasons"
+      android:layout_toRightOf="@+id/lbl_status"
+      android:id="@+id/status_item"
+      style="@style/text_poster_info"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+  </RelativeLayout>
+</android.support.v7.widget.CardView>

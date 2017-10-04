@@ -4,6 +4,10 @@ import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.repository.TvRepository;
 import com.victorldavila.funnyguide.view.fragments.InfoTvFragmentView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import rx.Observable;
 import rx.Subscription;
 
@@ -55,30 +59,33 @@ public class InfoTvPresenterImp extends BaseRxPresenter implements FragmentPrese
   }
 
   private void resultTv(ResponseTv responseTv) {
-    /*view.setTitleInfo(responseMovie.getTitle());
-    view.setOriginalTitleInfo(responseMovie.getOriginal_title());
-    view.setDateInfo(responseMovie.getRelease_date());
-    view.setRateInfo(String.valueOf(responseMovie.getVote_average()));
-    view.setStatus(responseMovie.getStatus());
+    view.setTitleInfo(responseTv.getName());
+    view.setOriginalTitleInfo(responseTv.getOriginal_name());
+    view.setDateInfo(responseTv.getFirst_air_date());
+    view.setRateInfo(String.valueOf(responseTv.getVote_average()));
+    view.setStatus(responseTv.getStatus());
+    view.setLastAirDate(responseTv.getLast_air_date());
+    view.setNumberOfEpisodes(responseTv.getNumber_of_episodes());
+    view.setNumberOfSeason(responseTv.getNumber_of_seasons());
 
-    Observable.from(responseMovie.getGenres())
+    Observable.from(responseTv.getGenres())
         .map(genre -> genre.getName())
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
         .subscribe(view::setGenreInfo);
 
-    Observable.from(responseMovie.getSpoken_languages())
-        .map(language -> language.getName())
+    Observable.from(responseTv.getLanguages())
+        .map(language -> language)
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
         .subscribe(view::setLanguageInfo);
 
-    Observable.from(responseMovie.getProduction_companies())
+    Observable.from(responseTv.getProduction_companies())
         .map(company -> company.getName())
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
         .subscribe(view::setProductionCompanies);
 
-    Observable.from(responseMovie.getProduction_countries())
-        .map(country -> country.getName())
+    Observable.from(responseTv.getOrigin_country())
+        .map(country -> country)
         .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setProductionCountries);*/
+        .subscribe(view::setProductionCountries);
   }
 }

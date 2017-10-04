@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/neste_scroll"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" >
+
+  <LinearLayout
+    android:orientation="vertical"
+    android:id="@+id/content_detail_item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include layout="@layout/item_card_basic_info_tv" />
+
+    <include layout="@layout/item_card_overview_info" />
+    <include layout="@layout/item_card_comp_tv" />
+    <include layout="@layout/item_card_comp_item" />
+
+  </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
