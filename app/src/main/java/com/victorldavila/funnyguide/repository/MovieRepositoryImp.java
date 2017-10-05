@@ -36,4 +36,11 @@ public class MovieRepositoryImp implements MovieRepository{
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread());
   }
+
+  @Override
+  public Observable<ResponseListItem<ResponseMovie>> getSimilarMovies(int movieId, int page) {
+    return funnyApi.getAPI().getSimilarMovieObservable(movieId, funnyApi.getQueryStringListPt(page))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
+  }
 }

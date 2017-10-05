@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.victorldavila.funnyguide.FrescoHelper;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
@@ -15,6 +16,9 @@ import com.victorldavila.funnyguide.view.fragments.MovieFragmentView;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.functions.Action1;
+import rx.functions.Action2;
+
 public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   public static final int FOOTER_SIZE = 1;
@@ -24,13 +28,12 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
   private ArrayList<ResponseMovie> items;
 
-  private MovieFragmentView view;
+  private Action2<ResponseMovie, SimpleDraweeView> mainAction;
   private boolean load;
 
-  public MovieGridAdapter(MovieFragmentView view) {
-    this.view = view;
-
+  public MovieGridAdapter() {
     items = new ArrayList<>();
+
     load = true;
   }
 
@@ -40,6 +43,10 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
   public void addItem(ResponseMovie item){
     this.items.add(item);
+  }
+
+  public void setMainAction(Action2<ResponseMovie, SimpleDraweeView> mainAction) {
+    this.mainAction = mainAction;
   }
 
   @Override
@@ -72,7 +79,7 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     posterViewHolder.countVotePoster.setText(String.valueOf(responseMovie.getVote_average()));
     posterViewHolder.yearReleasePoster.setText(responseMovie.getRelease_date());
     posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(responseMovie.getPoster_path(), posterViewHolder.loadImagePoster));
-    posterViewHolder.imagePosterPoster.setOnClickListener(v -> view.changeActivity(responseMovie, posterViewHolder.imagePosterPoster));
+    posterViewHolder.imagePosterPoster.setOnClickListener(v -> mainAction.call(responseMovie, posterViewHolder.imagePosterPoster));
   }
 
   private void onEnableLoad(LoadPosterViewHolder loadPosterViewHolder) {

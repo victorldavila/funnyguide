@@ -41,6 +41,7 @@ public class FunnyApi {
     public static final String LIST = "list";
     public static final String TV = "tv";
     public static final String TOP_RATED = "top_rated";
+    public static final String SIMILAR = "similar";
   }
 
   private static final String BASE_URL_TMDB = "https://api.themoviedb.org/3/";

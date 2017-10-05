@@ -1,9 +1,6 @@
 package com.victorldavila.funnyguide.view.fragments;
 
 
-import com.victorldavila.funnyguide.models.ResponseMovie;
-import com.victorldavila.funnyguide.models.ResponseTv;
-
 public interface InfoItemFragmentView {
   void setOverViewInfo(String overview);
   void setTitleInfo(String title);

@@ -3,8 +3,11 @@ package com.victorldavila.funnyguide.presenters;
 
 import com.victorldavila.funnyguide.api.ErrorHandler;
 import com.victorldavila.funnyguide.models.NetWorkError;
+import com.victorldavila.funnyguide.models.ResponseReview;
 import com.victorldavila.funnyguide.repository.MovieRepository;
 import com.victorldavila.funnyguide.view.fragments.ReviewFragmentView;
+
+import java.util.List;
 
 import rx.Subscription;
 
@@ -48,16 +51,27 @@ public class ReviewPresenterImp extends BaseRxPresenter implements FragmentPrese
 
     if(movieRepository != null) {
       reviewSubscription = movieRepository.getMovieReviews(view.getMovieId(), page)
+          .map(responseReviewListItem -> responseReviewListItem.getResults())
         .doOnSubscribe(() -> view.setLoadRecycler(true))
         .doOnError(throwable -> view.setLoadRecycler(false))
         .doOnCompleted(() -> view.setLoadRecycler(false))
         .subscribe(
-          responseListReview -> view.onItemList(responseListReview.getResults()),
+          this::onNextReview,
           this::errorReviewListGenre,
           this::countPage
         );
 
       addSubscription(reviewSubscription);
+    }
+  }
+
+  private void onNextReview(List<ResponseReview> responseReviews) {
+    if (responseReviews.size() != 0) {
+      view.onItemList(responseReviews);
+    } else if (page == 1) {
+      view.enableEmptyState();
+    } else {
+      view.finishLoadReview();
     }
   }
 

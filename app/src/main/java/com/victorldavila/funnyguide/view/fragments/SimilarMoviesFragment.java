@@ -1,6 +1,8 @@
 package com.victorldavila.funnyguide.view.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,9 +26,9 @@ import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.MovieGridAdapter;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseMovie;
+import com.victorldavila.funnyguide.presenters.SimilarMoviePresenterImp;
 import com.victorldavila.funnyguide.repository.MovieRepositoryImp;
 import com.victorldavila.funnyguide.view.activities.DetailActivity;
-import com.victorldavila.funnyguide.presenters.MoviePresenterImp;
 
 import java.util.List;
 
@@ -34,30 +36,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MovieFragment extends Fragment implements MovieFragmentView {
-  public static final String ARG_GENRE_ID = "GENRE_ID";
-
-  @BindView(R.id.recycler_movie_item) RecyclerView movieRecyclerView;
-  @BindView(R.id.coordinator_layout_movie) CoordinatorLayout coordinatorLayoutMovie;
+public class SimilarMoviesFragment extends Fragment implements SimilarMoviesFragmentView{
+  @BindView(R.id.recycler_movie_item)
+  RecyclerView movieRecyclerView;
+  @BindView(R.id.coordinator_layout_movie)
+  CoordinatorLayout coordinatorLayoutMovie;
 
   private MovieGridAdapter movieGridAdapter;
-  private MoviePresenterImp presenter;
+  private SimilarMoviePresenterImp presenter;
   private Unbinder unbinder;
 
-  private int genreId;
+  private int movieId;
 
-  public MovieFragment() { }
+  public SimilarMoviesFragment() { }
 
-  public static MovieFragment newInstance(int genreId) {
-    MovieFragment fragment = new MovieFragment();
+  public static SimilarMoviesFragment newInstance(int movieId) {
+    SimilarMoviesFragment fragment = new SimilarMoviesFragment();
     Bundle args = new Bundle();
-    args.putInt(ARG_GENRE_ID, genreId);
+    args.putInt(ReviewsFragment.ARG_MOVIE_ID, movieId);
     fragment.setArguments(args);
-    return fragment;
-  }
-
-  public static MovieFragment newInstance() {
-    MovieFragment fragment = new MovieFragment();
     return fragment;
   }
 
@@ -74,13 +71,13 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
   private void configPresenter() {
     FunnyApi api = ((FunnyGuideApp)getActivity().getApplication()).getFunnyApi();
 
-    presenter = new MoviePresenterImp(new MovieRepositoryImp(api));
+    presenter = new SimilarMoviePresenterImp(new MovieRepositoryImp(api));
     presenter.addView(this);
   }
 
   private void getExtras() {
     if (getArguments() != null) {
-      genreId = getArguments().getInt(MovieFragment.ARG_GENRE_ID);
+      movieId = getArguments().getInt(ReviewsFragment.ARG_MOVIE_ID);
     }
   }
 
@@ -119,9 +116,9 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
       @Override
       public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         presenter.verifyScrolled(movieRecyclerView.getLayoutManager().getChildCount()
-          , movieRecyclerView.getLayoutManager().getItemCount()
-          , ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()
-          , dy);
+            , movieRecyclerView.getLayoutManager().getItemCount()
+            , ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()
+            , dy);
       }
     });
   }
@@ -133,9 +130,9 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       ActivityOptionsCompat options = ActivityOptionsCompat
-        .makeSceneTransitionAnimation(getActivity()
-          , image
-          , getString(R.string.poster_transition));
+          .makeSceneTransitionAnimation(getActivity()
+              , image
+              , getString(R.string.poster_transition));
 
       startActivity(intent, options.toBundle());
     } else
@@ -149,14 +146,14 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
   }
 
   @Override
-  public int getGenreId() {
-    return genreId;
+  public int getMovieId() {
+    return movieId;
   }
 
   @Override
   public void onItemList(List<ResponseMovie> results) {
-        movieGridAdapter.addList(results);
-    }
+    movieGridAdapter.addList(results);
+  }
 
   @Override
   public void onError(String error) {
@@ -166,8 +163,8 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
 
   private void createReenterTransition() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      configReenterTransition();
-      configExitTransition();
+      //configReenterTransition();
+      //configExitTransition();
 
       configSharedElementExit();
       configSharedElementReenter();
@@ -176,52 +173,52 @@ public class MovieFragment extends Fragment implements MovieFragmentView {
 
   private void configSharedElementReenter() {
     getActivity()
-      .getWindow()
-      .setSharedElementReenterTransition(DraweeTransition
-        .createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
-          ScalingUtils.ScaleType.CENTER_CROP));
+        .getWindow()
+        .setSharedElementReenterTransition(DraweeTransition
+            .createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
+                ScalingUtils.ScaleType.CENTER_CROP));
   }
 
   private void configSharedElementExit() {
     getActivity()
-      .getWindow()
-      .setSharedElementExitTransition(DraweeTransition
-        .createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
-          ScalingUtils.ScaleType.CENTER_CROP));
+        .getWindow()
+        .setSharedElementExitTransition(DraweeTransition
+            .createTransitionSet(ScalingUtils.ScaleType.CENTER_CROP,
+                ScalingUtils.ScaleType.CENTER_CROP));
   }
 
-  private void configExitTransition() {
+  /*private void configExitTransition() {
     getActivity()
-      .getWindow()
-      .setExitTransition(new Fade()
-        .setDuration(300)
-        .excludeTarget(R.id.toolbar, true)
-        .excludeTarget(R.id.collapsingToolbarLayout, true)
-        .excludeTarget(android.R.id.statusBarBackground, true)
-        .excludeTarget(android.R.id.navigationBarBackground, true));
+        .getWindow()
+        .setExitTransition(new Fade()
+            .setDuration(300)
+            .excludeTarget(R.id.toolbar, true)
+            .excludeTarget(R.id.collapsingToolbarLayout, true)
+            .excludeTarget(android.R.id.statusBarBackground, true)
+            .excludeTarget(android.R.id.navigationBarBackground, true));
   }
 
   private void configReenterTransition() {
     getActivity()
-      .getWindow()
-      .setReenterTransition(new Fade()
-        .setDuration(300)
-        .excludeTarget(R.id.toolbar, true)
-        .excludeTarget(R.id.collapsingToolbarLayout, true)
-        .excludeTarget(android.R.id.statusBarBackground, true)
-        .excludeTarget(android.R.id.navigationBarBackground, true));
-  }
+        .getWindow()
+        .setReenterTransition(new Fade()
+            .setDuration(300)
+            .excludeTarget(R.id.toolbar, true)
+            .excludeTarget(R.id.collapsingToolbarLayout, true)
+            .excludeTarget(android.R.id.statusBarBackground, true)
+            .excludeTarget(android.R.id.navigationBarBackground, true));
+  }*/
 
   @Override
   public void startActivity(Intent intent) {
     setExitSharedElementCallback(
-      new SharedElementCallback() {
-        @Override
-        public void onSharedElementEnd(List<String> names, List<View> elements, List<View> snapshots) {
-          super.onSharedElementEnd(names, elements, snapshots);
-          movieGridAdapter.notifyDataSetChanged();
+        new SharedElementCallback() {
+          @Override
+          public void onSharedElementEnd(List<String> names, List<View> elements, List<View> snapshots) {
+            super.onSharedElementEnd(names, elements, snapshots);
+            movieGridAdapter.notifyDataSetChanged();
+          }
         }
-      }
     );
   }
 

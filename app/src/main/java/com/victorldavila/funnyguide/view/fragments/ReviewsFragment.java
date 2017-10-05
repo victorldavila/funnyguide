@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.victorldavila.funnyguide.FunnyGuideApp;
 import com.victorldavila.funnyguide.R;
@@ -33,11 +34,15 @@ public class ReviewsFragment extends Fragment implements ReviewFragmentView{
   @BindView(R.id.recycler_review) RecyclerView reviewRecyclerView;
   @BindView(R.id.coordinator_layout_review) CoordinatorLayout coordinatorLayoutReview;
 
+  @BindView(R.id.layout_empty_state) LinearLayout emptyStateLayout;
+
   private ReviewMovieAdapter reviewMovieAdapter;
   private ReviewPresenterImp presenter;
   private Unbinder unbinder;
 
   private int movieId;
+
+  private boolean finishLoad = false;
 
   public ReviewsFragment() {
     // Required empty public constructor
@@ -117,8 +122,21 @@ public class ReviewsFragment extends Fragment implements ReviewFragmentView{
 
   @Override
   public void setLoadRecycler(boolean isLoad) {
-    reviewMovieAdapter.setLoad(isLoad);
-    reviewMovieAdapter.notifyDataSetChanged();
+    if (!finishLoad) {
+      reviewMovieAdapter.setLoad(isLoad);
+      reviewMovieAdapter.notifyDataSetChanged();
+    }
+  }
+
+  @Override
+  public void enableEmptyState() {
+    reviewRecyclerView.setVisibility(View.GONE);
+    emptyStateLayout.setVisibility(View.VISIBLE);
+  }
+
+  @Override
+  public void finishLoadReview() {
+    finishLoad = true;
   }
 
   @Override

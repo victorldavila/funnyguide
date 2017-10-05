@@ -27,6 +27,9 @@ public interface TmdbAPI {
   @GET(FunnyApi.EndPoint.MOVIE + "/{movie_id}/" + FunnyApi.EndPoint.REVIEWS)
   Observable<ResponseListItem<ResponseReview>> getMovieReviewsObservable(@Path("movie_id") int movieId, @QueryMap Map<String, String> options);
 
+  @GET(FunnyApi.EndPoint.MOVIE + "/{movie_id}/" + FunnyApi.EndPoint.SIMILAR)
+  Observable<ResponseListItem<ResponseMovie>> getSimilarMovieObservable(@Path("movie_id") int movieId, @QueryMap Map<String, String> options);
+
   @GET(FunnyApi.EndPoint.TV + "/" + FunnyApi.EndPoint.TOP_RATED)
   Observable<ResponseListItem<ResponseTv>> getSeriesTopRateObservable(@QueryMap Map<String, String> options);
 

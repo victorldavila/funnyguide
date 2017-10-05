@@ -31,4 +31,5 @@
   <string name="lbl_number_of_episodes">Numero de episodios:</string>
   <string name="lbl_season">Numero de temporadas:</string>
   <string name="lbl_original_name">Nome original</string>
+  <string name="lbl_empty_state_review">Este Filme não possui reviews.</string>
 </resources>

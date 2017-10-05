@@ -10,4 +10,5 @@ public interface MovieRepository {
   Observable<ResponseMovie> getMovie(int movieId);
   Observable<ResponseListItem<ResponseMovie>> getMovieListGenre(int genreId, int page);
   Observable<ResponseListItem<ResponseReview>> getMovieReviews(int movieId, int page);
+  Observable<ResponseListItem<ResponseMovie>> getSimilarMovies(int movieId, int page);
 }

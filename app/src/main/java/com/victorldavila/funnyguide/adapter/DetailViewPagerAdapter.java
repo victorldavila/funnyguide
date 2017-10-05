@@ -10,6 +10,7 @@ import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.view.fragments.InfoMovieFragment;
 import com.victorldavila.funnyguide.view.fragments.InfoTvFragment;
 import com.victorldavila.funnyguide.view.fragments.ReviewsFragment;
+import com.victorldavila.funnyguide.view.fragments.SimilarMoviesFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,7 @@ public class DetailViewPagerAdapter extends FragmentStatePagerAdapter {
     switch (position) {
       case DETALHES: return InfoMovieFragment.newInstance(movie);
       case OPINIAO: return ReviewsFragment.newInstance(movie.getId());
-      case SEMELHANTES: return ReviewsFragment.newInstance(movie.getId());
+      case SEMELHANTES: return SimilarMoviesFragment.newInstance(movie.getId());
       case CREDITOS: return ReviewsFragment.newInstance(movie.getId());
       default: return ReviewsFragment.newInstance(movie.getId());
     }
