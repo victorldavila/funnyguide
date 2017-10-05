@@ -11,12 +11,10 @@ import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.models.ResponseMovie;
-import com.victorldavila.funnyguide.view.fragments.MovieFragmentView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.functions.Action1;
 import rx.functions.Action2;
 
 public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,7 +26,8 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
   private ArrayList<ResponseMovie> items;
 
-  private Action2<ResponseMovie, SimpleDraweeView> mainAction;
+  private Action2<ResponseMovie, SimpleDraweeView> mainAction = (responseMovie, simpleDraweeView) -> { };
+
   private boolean load;
 
   public MovieGridAdapter() {

@@ -80,7 +80,8 @@ public class TvFragment extends Fragment implements TvFragmentView {
   }
 
   private void configRecycler() {
-    tvGridAdapter =  new TvGridAdapter(this);
+    tvGridAdapter =  new TvGridAdapter();
+    tvGridAdapter.setMainAction((responseTv, simpleDraweeView) -> changeActivity(responseTv, simpleDraweeView));
     tvRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
     tvRecyclerView.setAdapter(tvGridAdapter);
 

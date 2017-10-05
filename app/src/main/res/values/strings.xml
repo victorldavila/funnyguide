@@ -20,9 +20,6 @@
   <string name="lbl_release_date">Data de lançamento:</string>
   <string name="lbl_language">Lingua:</string>
   <string name="lbl_overview">Resumo:</string>
-
-  <string name="search_hint">Procurar...</string>
-
   <string name="lbl_status">Status:</string>
   <string name="lbl_production_companies">Produtora:</string>
   <string name="lbl_countries">País:</string>
@@ -30,6 +27,11 @@
   <string name="lbl_last_air_date">Data de término:</string>
   <string name="lbl_number_of_episodes">Numero de episodios:</string>
   <string name="lbl_season">Numero de temporadas:</string>
-  <string name="lbl_original_name">Nome original</string>
+  <string name="lbl_original_name">Nome original:</string>
+
+  <!-- hint search -->
+  <string name="search_hint">Procurar...</string>
+
+  <!-- Label empty state review -->
   <string name="lbl_empty_state_review">Este Filme não possui reviews.</string>
 </resources>

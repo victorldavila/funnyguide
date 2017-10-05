@@ -11,6 +11,7 @@ import com.victorldavila.funnyguide.view.fragments.InfoMovieFragment;
 import com.victorldavila.funnyguide.view.fragments.InfoTvFragment;
 import com.victorldavila.funnyguide.view.fragments.ReviewsFragment;
 import com.victorldavila.funnyguide.view.fragments.SimilarMoviesFragment;
+import com.victorldavila.funnyguide.view.fragments.TvSeasonsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class DetailViewPagerAdapter extends FragmentStatePagerAdapter {
   private static final int DETALHES = 0;
   private static final int OPINIAO = 1;
+  private static final int TEMPORADAS = 1;
   private static final int SEMELHANTES = 2;
   private static final int CREDITOS = 3;
 
@@ -47,7 +49,7 @@ public class DetailViewPagerAdapter extends FragmentStatePagerAdapter {
     titleTv = new ArrayList<>();
 
     titleTv.add("Detalhes");
-    titleTv.add("Opiniões");
+    titleTv.add("Temporadas");
     titleTv.add("Titulos Semelhantes");
     titleTv.add("Creditos");
   }
@@ -88,7 +90,7 @@ public class DetailViewPagerAdapter extends FragmentStatePagerAdapter {
   private Fragment getTvFragment(int position) {
     switch (position) {
       case DETALHES: return InfoTvFragment.newInstance(tv);
-      case OPINIAO: return InfoTvFragment.newInstance(tv);
+      case TEMPORADAS: return TvSeasonsFragment.newInstance(tv.getId());
       case SEMELHANTES: return InfoTvFragment.newInstance(tv);
       case CREDITOS: return InfoTvFragment.newInstance(tv);
       default: return InfoTvFragment.newInstance(tv);
