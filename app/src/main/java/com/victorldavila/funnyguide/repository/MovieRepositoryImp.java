@@ -3,6 +3,7 @@ package com.victorldavila.funnyguide.repository;
 import com.victorldavila.funnyguide.api.FunnyApi;
 import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.models.ResponseListItem;
+import com.victorldavila.funnyguide.models.ResponseReview;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -25,6 +26,13 @@ public class MovieRepositoryImp implements MovieRepository{
   @Override
   public Observable<ResponseListItem<ResponseMovie>> getMovieListGenre(int genreId, int page) {
     return funnyApi.getAPI().getMoviesGenreObservable(genreId, funnyApi.getQueryStringList(page))
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread());
+  }
+
+  @Override
+  public Observable<ResponseListItem<ResponseReview>> getMovieReviews(int movieId, int page) {
+    return funnyApi.getAPI().getMovieReviewsObservable(movieId, funnyApi.getQueryStringList(page))
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread());
   }

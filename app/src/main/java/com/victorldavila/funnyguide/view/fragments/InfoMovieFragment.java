@@ -61,10 +61,12 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
 
     super.onCreate(savedInstanceState);
 
-    if (getArguments() != null) {
-      getExtras();
-    }
+    getExtras();
 
+    configPresenter();
+  }
+
+  private void configPresenter() {
     FunnyApi funnyApi = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
     MovieRepository movieRepository = new MovieRepositoryImp(funnyApi);
     infoMoviePresenterImp = new InfoMoviePresenterImp(movieRepository);
@@ -96,10 +98,12 @@ public class InfoMovieFragment extends Fragment implements InfoMovieFragmentView
   }
 
   private void getExtras() {
-    ResponseMovie responseMovie = getArguments().getParcelable(DetailActivity.MOVIE_ITEM);
+    if (getArguments() != null) {
+      ResponseMovie responseMovie = getArguments().getParcelable(DetailActivity.MOVIE_ITEM);
 
-    if (responseMovie != null) {
-      this.responseMovie = responseMovie;
+      if (responseMovie != null) {
+        this.responseMovie = responseMovie;
+      }
     }
   }
 

@@ -9,23 +9,21 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.victorldavila.funnyguide.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PosterViewHolder extends RecyclerView.ViewHolder {
 
-  public SimpleDraweeView imagePosterPoster;
-  public TextView originalTitlePoster;
-  public TextView countVotePoster;
-  public TextView yearReleasePoster;
-  public ProgressBar loadImagePoster;
-  public RelativeLayout layoutInfoPoster;
+  public @BindView(R.id.item_poster_img) SimpleDraweeView imagePosterPoster;
+  public @BindView(R.id.item_poster_name) TextView originalTitlePoster;
+  public @BindView(R.id.item_vote_count) TextView countVotePoster;
+  public @BindView(R.id.item_date_release) TextView yearReleasePoster;
+  public @BindView(R.id.load_image_poster) ProgressBar loadImagePoster;
+  public @BindView(R.id.layout_info_poster) RelativeLayout layoutInfoPoster;
 
   public PosterViewHolder(View itemView) {
     super(itemView);
 
-    imagePosterPoster = (SimpleDraweeView) itemView.findViewById(R.id.item_poster_img);
-    originalTitlePoster = (TextView) itemView.findViewById(R.id.item_poster_name);
-    countVotePoster = (TextView) itemView.findViewById(R.id.item_vote_count);
-    yearReleasePoster = (TextView) itemView.findViewById(R.id.item_date_release);
-    loadImagePoster = (ProgressBar) itemView.findViewById(R.id.load_image_poster);
-    layoutInfoPoster = (RelativeLayout) itemView.findViewById(R.id.layout_info_poster);
+    ButterKnife.bind(this, itemView);
   }
 }

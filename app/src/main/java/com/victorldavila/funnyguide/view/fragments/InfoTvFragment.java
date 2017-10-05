@@ -66,13 +66,16 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
     super.onCreate(savedInstanceState);
 
-    if (getArguments() != null) {
-      getExtras();
-    }
+    getExtras();
 
+    configPresenter();
+  }
+
+  private void configPresenter() {
     FunnyApi funnyApi = ((FunnyGuideApp) getActivity().getApplication()).getFunnyApi();
     TvRepository tvRepository = new TvRepositoryImp(funnyApi);
     infoTvPresenterImp = new InfoTvPresenterImp(tvRepository);
+    infoTvPresenterImp.addView(this);
   }
 
   @Override
@@ -89,7 +92,6 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
 
     setInfoItem();
 
-    infoTvPresenterImp.addView(this);
     infoTvPresenterImp.onViewCreated();
   }
 
@@ -101,10 +103,12 @@ public class InfoTvFragment extends Fragment implements InfoTvFragmentView{
   }
 
   private void getExtras() {
-    ResponseTv responseTv = getArguments().getParcelable(DetailActivity.TV_ITEM);
+    if (getArguments() != null) {
+      ResponseTv responseTv = getArguments().getParcelable(DetailActivity.TV_ITEM);
 
-    if (responseTv != null) {
-      this.responseTv = responseTv;
+      if (responseTv != null) {
+        this.responseTv = responseTv;
+      }
     }
   }
 

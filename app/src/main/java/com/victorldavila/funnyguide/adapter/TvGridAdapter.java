@@ -45,7 +45,7 @@ public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     if (viewType == TvGridAdapter.ITEM_TYPE) {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie_layout, parent, false);
+      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_poster_layout, parent, false);
       return new PosterViewHolder(view);
     } else{
       View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_poster_load, parent, false);

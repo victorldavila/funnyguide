@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/coordinator_layout_review"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/white"
+  tools:context="com.victorldavila.funnyguide.view.fragments.MovieFragment">
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_review"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+</android.support.design.widget.CoordinatorLayout>

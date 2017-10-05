@@ -7,15 +7,17 @@ import android.widget.RelativeLayout;
 
 import com.victorldavila.funnyguide.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LoadPosterViewHolder extends RecyclerView.ViewHolder {
 
-  public RelativeLayout relativeLayoutLoad;
-  public ProgressBar itemLoadPoster;
+  public @BindView(R.id.realtive_layout_load) RelativeLayout relativeLayoutLoad;
+  public @BindView(R.id.item_load_poster) ProgressBar itemLoadPoster;
 
   public LoadPosterViewHolder(View itemView) {
     super(itemView);
 
-    relativeLayoutLoad = (RelativeLayout) itemView.findViewById(R.id.realtive_layout_load);
-    itemLoadPoster = (ProgressBar) itemView.findViewById(R.id.item_load_poster);
+    ButterKnife.bind(this, itemView);
   }
 }

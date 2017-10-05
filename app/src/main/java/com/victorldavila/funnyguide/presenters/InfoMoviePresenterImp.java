@@ -1,5 +1,7 @@
 package com.victorldavila.funnyguide.presenters;
 
+import android.text.TextUtils;
+
 import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.repository.MovieRepository;
@@ -13,19 +15,16 @@ import rx.Observable;
 import rx.Subscription;
 
 public class InfoMoviePresenterImp extends BaseRxPresenter implements FragmentPresenter<InfoMovieFragment> {
+  private static final String DEFAULT_STRING = "Sem informação";
+
   private InfoMovieFragment view;
   private MovieRepository movieRepository;
-  private TvRepository tvRepository;
 
   private Subscription movieSubscription;
 
   public InfoMoviePresenterImp(MovieRepository movieRepository) {
     this.movieRepository = movieRepository;
   }
-
-  /*public InfoMoviePresenterImp(TvRepository tvRepository) {
-        this.tvRepository = tvRepository;
-    }*/
 
   @Override
   public void addView(InfoMovieFragment view) {
@@ -54,19 +53,9 @@ public class InfoMoviePresenterImp extends BaseRxPresenter implements FragmentPr
     }
   }
 
-  /*private void getTvInfo() {
-    ResponseTv responseTv = view.getResponseTv();
-
-    movieSubscription = tvRepository.getTv(responseTv.getId())
-      .subscribe(
-        this::resultTv,
-        throwable -> {}
-      );
+  private String resultInfo(String info) {
+    return TextUtils.isEmpty(info) ? DEFAULT_STRING : info;
   }
-
-  private void resultTv(ResponseTv responseTv) {
-
-  }*/
 
   private Subscription getMovieInfo() {
     ResponseMovie responseMovie = view.getResponseMovie();
@@ -79,30 +68,42 @@ public class InfoMoviePresenterImp extends BaseRxPresenter implements FragmentPr
   }
 
   private void resultMovie(ResponseMovie responseMovie) {
-    view.setTitleInfo(responseMovie.getTitle());
-    view.setOriginalTitleInfo(responseMovie.getOriginal_title());
-    view.setDateInfo(responseMovie.getRelease_date());
-    view.setRateInfo(String.valueOf(responseMovie.getVote_average()));
-    view.setStatus(responseMovie.getStatus());
+    view.setTitleInfo(resultInfo(responseMovie.getTitle()));
+    view.setOriginalTitleInfo(resultInfo(responseMovie.getOriginal_title()));
+    view.setDateInfo(resultInfo(responseMovie.getRelease_date()));
+    view.setRateInfo(resultInfo(String.valueOf(responseMovie.getVote_average())));
+    view.setStatus(resultInfo(responseMovie.getStatus()));
 
     Observable.from(responseMovie.getGenres())
-        .map(genre -> genre.getName())
-        .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setGenreInfo);
+      .map(genre -> genre.getName())
+      .reduce((name, accumulator) -> accumulator.concat(", " + name))
+      .subscribe(
+        view::setGenreInfo,
+        throwable -> view.setGenreInfo(resultInfo(""))
+      );
 
     Observable.from(responseMovie.getSpoken_languages())
-        .map(language -> language.getName())
-        .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setLanguageInfo);
+      .map(language -> language.getName())
+      .reduce((name, accumulator) -> accumulator.concat(", " + name))
+      .subscribe(
+        view::setLanguageInfo,
+        throwable -> view.setLanguageInfo(resultInfo(""))
+      );
 
     Observable.from(responseMovie.getProduction_companies())
-        .map(company -> company.getName())
-        .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setProductionCompanies);
+      .map(company -> company.getName())
+      .reduce((name, accumulator) -> accumulator.concat(", " + name))
+      .subscribe(
+        view::setProductionCompanies,
+        throwable -> view.setProductionCompanies(resultInfo(""))
+      );
 
     Observable.from(responseMovie.getProduction_countries())
-        .map(country -> country.getName())
-        .reduce((name, accumulator) -> accumulator.concat(", " + name))
-        .subscribe(view::setProductionCountries);
+      .map(country -> country.getName())
+      .reduce((name, accumulator) -> accumulator.concat(", " + name))
+      .subscribe(
+        view::setProductionCountries,
+        throwable -> view.setProductionCountries(resultInfo(""))
+      );
   }
 }
