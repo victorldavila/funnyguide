@@ -25,7 +25,7 @@ public class MovieRepositoryImp implements MovieRepository{
 
   @Override
   public Observable<ResponseListItem<ResponseMovie>> getMovieListGenre(int genreId, int page) {
-    return funnyApi.getAPI().getMoviesGenreObservable(genreId, funnyApi.getQueryStringList(page))
+    return funnyApi.getAPI().getMoviesGenreObservable(genreId, funnyApi.getQueryStringListPt(page))
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread());
   }

@@ -17,7 +17,7 @@ public class TvRepositoryImp implements TvRepository{
 
   @Override
   public Observable<ResponseListItem<ResponseTv>> getTvTopRated(int page) {
-    return funnyApi.getAPI().getSeriesTopRateObservable(funnyApi.getQueryStringList(page))
+    return funnyApi.getAPI().getSeriesTopRateObservable(funnyApi.getQueryStringListPt(page))
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread());
   }

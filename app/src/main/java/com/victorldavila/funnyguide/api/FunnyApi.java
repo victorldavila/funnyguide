@@ -98,8 +98,15 @@ public class FunnyApi {
     return options;
   }
 
-  public Map<String, String> getQueryStringList(int page){
+  public Map<String, String> getQueryStringListPt(int page){
     Map<String, String> options = getQueryString();
+    options.put(QueryString.PAGE, String.valueOf(page));
+
+    return options;
+  }
+
+  public Map<String, String> getQueryStringList(int page){
+    Map<String, String> options = new HashMap<>();
     options.put(QueryString.PAGE, String.valueOf(page));
 
     return options;
