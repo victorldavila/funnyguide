@@ -64,10 +64,4 @@ public class TvSeasonPresenterImp extends BaseRxPresenter implements FragmentPre
   private void resultSeasonTv(List<Season> seasonList) {
     view.onItemList(seasonList);
   }
-
-  public void verifyScroll(int visibleItemCount, int totalItemCount, int pastVisiblesItems, int dy) {
-    if(dy > 0)
-      if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
-        getTvSeason();
-  }
 }

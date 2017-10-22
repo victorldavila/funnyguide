@@ -105,16 +105,6 @@ public class TvSeasonsFragment extends Fragment implements TvSeasonFragmentView{
     tvSeasonGridAdapter =  new TvSeasonGridAdapter();
     seasonRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
     seasonRecyclerView.setAdapter(tvSeasonGridAdapter);
-
-    seasonRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override
-      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        presenter.verifyScroll(seasonRecyclerView.getLayoutManager().getChildCount()
-            , seasonRecyclerView.getLayoutManager().getItemCount()
-            , ((GridLayoutManager)seasonRecyclerView.getLayoutManager()).findFirstVisibleItemPosition()
-            , dy);
-      }
-    });
   }
 
   @Override

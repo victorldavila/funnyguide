@@ -54,7 +54,7 @@ public class TvSeasonGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
   @Override
   public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-    if (holder instanceof PosterViewHolder) {
+    if (holder instanceof PosterCardViewHolder) {
       PosterCardViewHolder posterCardViewHolder = (PosterCardViewHolder) holder;
       setInfoTv(posterCardViewHolder, items.get(position));
     } else if(holder instanceof LoadPosterViewHolder){
