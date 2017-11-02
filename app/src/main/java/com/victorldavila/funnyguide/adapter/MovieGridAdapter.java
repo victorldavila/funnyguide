@@ -78,6 +78,7 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     posterViewHolder.originalTitlePoster.setText(responseMovie.getTitle());
     posterViewHolder.countVotePoster.setText(String.valueOf(responseMovie.getVote_average()));
     posterViewHolder.yearReleasePoster.setText(DateUtil.getFormatDate(responseMovie.getRelease_date()));
+    posterViewHolder.imagePosterPoster.setLegacyVisibilityHandlingEnabled(true);
     posterViewHolder.imagePosterPoster.setController(FrescoUtil.loadImage(responseMovie.getPoster_path(), posterViewHolder.loadImagePoster));
     posterViewHolder.imagePosterPoster.setOnClickListener(v -> mainAction.call(responseMovie, posterViewHolder.imagePosterPoster));
   }

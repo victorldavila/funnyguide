@@ -137,6 +137,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
   @Override
   public void setImageUrlPoster(String urlPoster) {
+    imagePosterMovie.setLegacyVisibilityHandlingEnabled(true);
     imagePosterMovie.setController(FrescoUtil.loadImageTransition(urlPoster, null, () -> supportStartPostponedEnterTransition()));
   }
 

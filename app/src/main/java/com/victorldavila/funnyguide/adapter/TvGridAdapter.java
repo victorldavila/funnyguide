@@ -98,6 +98,7 @@ public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     posterViewHolder.originalTitlePoster.setText(responseTv.getOriginal_name());
     posterViewHolder.countVotePoster.setText(String.valueOf(responseTv.getVote_average()));
     posterViewHolder.yearReleasePoster.setText(DateUtil.getFormatDate(responseTv.getFirst_air_date()));
+    posterViewHolder.imagePosterPoster.setLegacyVisibilityHandlingEnabled(true);
     posterViewHolder.imagePosterPoster.setController(FrescoUtil.loadImage(responseTv.getPoster_path(), posterViewHolder.loadImagePoster));
     posterViewHolder.imagePosterPoster.setOnClickListener(v -> mainAction.call(responseTv, posterViewHolder.imagePosterPoster));
   }

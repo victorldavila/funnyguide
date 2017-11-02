@@ -105,6 +105,7 @@ public class TvSeasonGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
       posterCardViewHolder.posterCountSeason.setText("Temporada " + String.valueOf(season.getSeason_number()));
     }
 
+    posterCardViewHolder.imageSeasonPoster.setLegacyVisibilityHandlingEnabled(true);
     posterCardViewHolder.imageSeasonPoster.setController(FrescoUtil.loadImage(season.getPoster_path(),
         posterCardViewHolder.posterLoadImage));
   }
