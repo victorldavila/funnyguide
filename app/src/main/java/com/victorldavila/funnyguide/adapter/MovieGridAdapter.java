@@ -6,7 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.victorldavila.funnyguide.FrescoHelper;
+import com.victorldavila.funnyguide.Util.DateUtil;
+import com.victorldavila.funnyguide.Util.FrescoUtil;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
@@ -76,8 +77,8 @@ public class MovieGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
   private void setInfoMovie(PosterViewHolder posterViewHolder, ResponseMovie responseMovie) {
     posterViewHolder.originalTitlePoster.setText(responseMovie.getTitle());
     posterViewHolder.countVotePoster.setText(String.valueOf(responseMovie.getVote_average()));
-    posterViewHolder.yearReleasePoster.setText(responseMovie.getRelease_date());
-    posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(responseMovie.getPoster_path(), posterViewHolder.loadImagePoster));
+    posterViewHolder.yearReleasePoster.setText(DateUtil.getFormatDate(responseMovie.getRelease_date()));
+    posterViewHolder.imagePosterPoster.setController(FrescoUtil.loadImage(responseMovie.getPoster_path(), posterViewHolder.loadImagePoster));
     posterViewHolder.imagePosterPoster.setOnClickListener(v -> mainAction.call(responseMovie, posterViewHolder.imagePosterPoster));
   }
 

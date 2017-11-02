@@ -9,7 +9,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Slide;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,13 +16,12 @@ import android.view.WindowManager;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.DraweeTransition;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.victorldavila.funnyguide.FrescoHelper;
+import com.victorldavila.funnyguide.Util.FrescoUtil;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.DetailViewPagerAdapter;
 import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.models.ResponseTv;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -139,7 +137,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
   @Override
   public void setImageUrlPoster(String urlPoster) {
-    imagePosterMovie.setController(FrescoHelper.loadImageTransition(urlPoster, null, () -> supportStartPostponedEnterTransition()));
+    imagePosterMovie.setController(FrescoUtil.loadImageTransition(urlPoster, null, () -> supportStartPostponedEnterTransition()));
   }
 
   private void initView() {

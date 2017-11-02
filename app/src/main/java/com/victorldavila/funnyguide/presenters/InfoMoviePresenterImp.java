@@ -2,6 +2,7 @@ package com.victorldavila.funnyguide.presenters;
 
 import android.text.TextUtils;
 
+import com.victorldavila.funnyguide.Util.DateUtil;
 import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.repository.MovieRepository;
@@ -70,7 +71,7 @@ public class InfoMoviePresenterImp extends BaseRxPresenter implements FragmentPr
   private void resultMovie(ResponseMovie responseMovie) {
     view.setTitleInfo(resultInfo(responseMovie.getTitle()));
     view.setOriginalTitleInfo(resultInfo(responseMovie.getOriginal_title()));
-    view.setDateInfo(resultInfo(responseMovie.getRelease_date()));
+    view.setDateInfo(resultInfo(DateUtil.getFormatDate(responseMovie.getRelease_date())));
     view.setRateInfo(resultInfo(String.valueOf(responseMovie.getVote_average())));
     view.setStatus(resultInfo(responseMovie.getStatus()));
 

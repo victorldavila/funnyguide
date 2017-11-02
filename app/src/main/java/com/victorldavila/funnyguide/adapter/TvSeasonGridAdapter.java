@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.victorldavila.funnyguide.FrescoHelper;
+import com.victorldavila.funnyguide.Util.FrescoUtil;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterCardViewHolder;
-import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
 import com.victorldavila.funnyguide.models.Season;
 
 import java.util.ArrayList;
@@ -106,7 +105,7 @@ public class TvSeasonGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
       posterCardViewHolder.posterCountSeason.setText("Temporada " + String.valueOf(season.getSeason_number()));
     }
 
-    posterCardViewHolder.imageSeasonPoster.setController(FrescoHelper.loadImage(season.getPoster_path(),
+    posterCardViewHolder.imageSeasonPoster.setController(FrescoUtil.loadImage(season.getPoster_path(),
         posterCardViewHolder.posterLoadImage));
   }
 

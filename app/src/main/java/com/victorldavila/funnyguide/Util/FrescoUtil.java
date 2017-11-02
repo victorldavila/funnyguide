@@ -1,10 +1,9 @@
-package com.victorldavila.funnyguide;
+package com.victorldavila.funnyguide.Util;
 
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -19,7 +18,7 @@ import com.victorldavila.funnyguide.api.FunnyApi;
 
 import rx.functions.Action0;
 
-public class FrescoHelper {
+public class FrescoUtil {
 
   @NonNull
   private static BaseControllerListener<ImageInfo> getBaseControllerListener(final ProgressBar load) {
@@ -75,7 +74,7 @@ public class FrescoHelper {
 
     DraweeController controller = Fresco.newDraweeControllerBuilder()
       .setImageRequest(imageRequest)
-      .setControllerListener(FrescoHelper.getBaseControllerListener(progressBar))
+      .setControllerListener(FrescoUtil.getBaseControllerListener(progressBar))
       .setAutoPlayAnimations(true)
       .build();
 
@@ -88,7 +87,7 @@ public class FrescoHelper {
 
     DraweeController controller = Fresco.newDraweeControllerBuilder()
       .setImageRequest(imageRequest)
-      .setControllerListener(FrescoHelper.getTransitionControllerListener(progressBar, startPostponedEnterTransition))
+      .setControllerListener(FrescoUtil.getTransitionControllerListener(progressBar, startPostponedEnterTransition))
       .setAutoPlayAnimations(true)
       .build();
 

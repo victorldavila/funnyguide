@@ -2,6 +2,7 @@ package com.victorldavila.funnyguide.presenters;
 
 import android.text.TextUtils;
 
+import com.victorldavila.funnyguide.Util.DateUtil;
 import com.victorldavila.funnyguide.models.ResponseTv;
 import com.victorldavila.funnyguide.repository.TvRepository;
 import com.victorldavila.funnyguide.view.fragments.InfoTvFragmentView;
@@ -65,10 +66,10 @@ public class InfoTvPresenterImp extends BaseRxPresenter implements FragmentPrese
   private void resultTv(ResponseTv responseTv) {
     view.setTitleInfo(resultInfo(responseTv.getName()));
     view.setOriginalTitleInfo(resultInfo(responseTv.getOriginal_name()));
-    view.setDateInfo(resultInfo(responseTv.getFirst_air_date()));
+    view.setDateInfo(resultInfo(DateUtil.getFormatDate(responseTv.getFirst_air_date())));
     view.setRateInfo(resultInfo(String.valueOf(responseTv.getVote_average())));
     view.setStatus(resultInfo(responseTv.getStatus()));
-    view.setLastAirDate(resultInfo(responseTv.getLast_air_date()));
+    view.setLastAirDate(resultInfo(DateUtil.getFormatDate(responseTv.getLast_air_date())));
     view.setNumberOfEpisodes(responseTv.getNumber_of_episodes());
     view.setNumberOfSeason(responseTv.getNumber_of_seasons());
 

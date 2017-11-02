@@ -6,13 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.victorldavila.funnyguide.FrescoHelper;
+import com.victorldavila.funnyguide.Util.DateUtil;
+import com.victorldavila.funnyguide.Util.FrescoUtil;
 import com.victorldavila.funnyguide.R;
 import com.victorldavila.funnyguide.adapter.viewholders.LoadPosterViewHolder;
 import com.victorldavila.funnyguide.adapter.viewholders.PosterViewHolder;
-import com.victorldavila.funnyguide.models.ResponseMovie;
 import com.victorldavila.funnyguide.models.ResponseTv;
-import com.victorldavila.funnyguide.view.fragments.TvFragmentView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,8 +97,8 @@ public class TvGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   public void setInfoTv(PosterViewHolder posterViewHolder, ResponseTv responseTv) {
     posterViewHolder.originalTitlePoster.setText(responseTv.getOriginal_name());
     posterViewHolder.countVotePoster.setText(String.valueOf(responseTv.getVote_average()));
-    posterViewHolder.yearReleasePoster.setText(responseTv.getFirst_air_date());
-    posterViewHolder.imagePosterPoster.setController(FrescoHelper.loadImage(responseTv.getPoster_path(), posterViewHolder.loadImagePoster));
+    posterViewHolder.yearReleasePoster.setText(DateUtil.getFormatDate(responseTv.getFirst_air_date()));
+    posterViewHolder.imagePosterPoster.setController(FrescoUtil.loadImage(responseTv.getPoster_path(), posterViewHolder.loadImagePoster));
     posterViewHolder.imagePosterPoster.setOnClickListener(v -> mainAction.call(responseTv, posterViewHolder.imagePosterPoster));
   }
 
